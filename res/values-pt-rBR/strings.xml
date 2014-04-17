@@ -1,0 +1,7 @@
+<resources>
+
+    <string name="app_name">Rosa</string>
+    <string name="dummy_button">Botão Básico</string>
+    <string name="dummy_content">Conteúdo Básico</string>
+
+</resources>
