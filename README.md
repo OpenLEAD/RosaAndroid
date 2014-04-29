@@ -1,4 +1,0 @@
-RosaAndroid
-===========
-
-Rosa Android Interface

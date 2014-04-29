@@ -1,7 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">Rosa</string>
-    <string name="dummy_button">Botão Básico</string>
-    <string name="dummy_content">Conteúdo Básico</string>
-
+    <string name="mbsonar">INSPEÇÃO COM \nSONAR</string>
+    <string name="mbinser">INSERÇÃO \nDE STOPLOG</string>
+    <string name="mbremo">REMOÇÃO \nDE STOPLOG</string>
 </resources>
