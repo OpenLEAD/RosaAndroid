@@ -3,4 +3,6 @@
     <string name="mbsonar">INSPEÇÃO COM \nSONAR</string>
     <string name="mbinser">INSERÇÃO \nDE STOPLOG</string>
     <string name="mbremo">REMOÇÃO \nDE STOPLOG</string>
+    <string name="mbinser_desc">Inserção</string>
+    <string name="mbremo_desc">Remoção</string>
 </resources>

@@ -20,17 +20,17 @@
             style="@style/mbstyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="test"
             android:text="@string/mbsonar" />
 
         <ImageView
             android:id="@+id/imageView1"
+            style="@style/ButtonIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignRight="@+id/button1"
             android:layout_alignTop="@+id/button1"
-            android:layout_marginRight="22dp"
-            android:layout_marginTop="22dp"
-            android:src="@drawable/icone_sonar" />
+            android:src="@drawable/icone_sonar" android:contentDescription="@string/mbsonar_desc"/>
 
     </RelativeLayout>
 
@@ -44,16 +44,17 @@
             style="@style/mbstyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="inser"
             android:text="@string/mbinser" />
 
         <ImageView
             android:id="@+id/imageView2"
+            style="@style/ButtonIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignRight="@+id/button2"
             android:layout_alignTop="@+id/button2"
-            android:layout_marginRight="22dp"
-            android:layout_marginTop="22dp"
+            android:contentDescription="@string/mbinser_desc"
             android:src="@drawable/icone_inser" />
 
     </RelativeLayout>
@@ -72,12 +73,12 @@
 
         <ImageView
             android:id="@+id/imageView3"
+            style="@style/ButtonIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignRight="@+id/button3"
             android:layout_alignTop="@+id/button3"
-            android:layout_marginRight="22dp"
-            android:layout_marginTop="22dp"
+            android:contentDescription="@string/mbremo_desc"
             android:src="@drawable/icone_remo" />
 
     </RelativeLayout>
