@@ -33,7 +33,7 @@
                 android:value="com.lead.rosa.MainActivity" />
         </activity>
         <activity
-            android:name="com.lead.rosa.TestActivity"
+            android:name="com.lead.inser.InsertActivity"
             android:label="@string/title_activity_test" >
         </activity>
     </application>

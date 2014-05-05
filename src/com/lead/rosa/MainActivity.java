@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 
+import com.lead.inser.InsertActivity;
 import com.lead.rosa.R;
 
 public class MainActivity extends Activity {
@@ -22,12 +23,12 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	public void inser(View view){
-        startActivity(new Intent(this, com.lead.inser.MainInser.class));
+        startActivity(new Intent(this, InsertActivity.class));
 	}
 
 	public void test(View view){
-        startActivity(new Intent(this, TestActivity.class));
+        startActivity(new Intent(this, InsertActivity.class));
 	}
 }

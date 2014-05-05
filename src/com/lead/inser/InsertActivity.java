@@ -1,15 +1,15 @@
-package com.lead.rosa;
+package com.lead.inser;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
-public class TestActivity extends Activity {
+import com.lead.rosa.R;
+
+public class InsertActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_test);
+		setContentView(R.layout.activity_inser);
 	}
 }
