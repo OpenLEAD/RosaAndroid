@@ -34,7 +34,7 @@
         </activity>
         <activity
             android:name="com.lead.inser.InsertActivity"
-            android:label="@string/title_activity_test" >
+            android:label="@string/title_activity_test" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="sensorLandscape">
         </activity>
     </application>
 

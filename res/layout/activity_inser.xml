@@ -8,9 +8,9 @@
     tools:context="${packageName}.${activityClass}" >
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="10"
+        android:layout_marginTop="70dp"
         android:gravity="center" >
 
         <ImageView
@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+        	android:rotation="0"
             android:src="@drawable/viga_pescadora" />
 
     </RelativeLayout>
@@ -26,7 +27,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="6"
+        android:layout_marginBottom="32dp"
         android:gravity="bottom|center" >
 
         <RelativeLayout
@@ -40,6 +41,66 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="11dp"
                 android:src="@drawable/encoder_indutivo_corpo" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/relativeLayout1"
+                android:layout_alignLeft="@+id/relativeLayout1"
+                android:layout_alignRight="@+id/relativeLayout1"
+                android:layout_marginBottom="17dp"
+                android:gravity="center"
+                android:text="CONTATO"
+                android:textColor="#FFFFFFFF"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/imageView1"
+                android:layout_alignLeft="@id/imageView1"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="9dp" >
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/pocket" />
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/contato_cinza" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/ImageView01"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imageView1"
+                android:layout_alignRight="@+id/imageView1"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="9dp"
+                android:src="@drawable/pocket" />
+
+            <TextView
+                android:id="@+id/TextView02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/ImageView01"
+                android:layout_alignLeft="@id/ImageView01"
+                android:layout_alignRight="@id/ImageView01"
+                android:layout_marginBottom="17dp"
+                android:gravity="center"
+                android:text="GARRA"
+                android:textColor="#FFFFFFFF"
+                android:textSize="12sp" />
 
         </RelativeLayout>
 
@@ -55,6 +116,16 @@
                 android:layout_margin="11dp"
                 android:src="@drawable/inclinometro_corpo" />
 
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/imageView2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="56dp"
+        		android:rotation="5"
+                android:src="@drawable/nivel_verde" />
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -63,12 +134,71 @@
             android:gravity="center" >
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/ImageView06"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="11dp"
                 android:src="@drawable/encoder_indutivo_corpo" />
 
+            <TextView
+                android:id="@+id/TextView04"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/RelativeLayout02"
+                android:layout_alignLeft="@+id/RelativeLayout02"
+                android:layout_alignRight="@+id/RelativeLayout02"
+                android:layout_marginBottom="17dp"
+                android:gravity="center"
+                android:text="CONTATO"
+                android:textColor="#FFFFFFFF"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:id="@+id/RelativeLayout02"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/ImageView06"
+                android:layout_alignRight="@+id/ImageView06"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="9dp" >
+
+                <ImageView
+                    android:id="@+id/ImageView07"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/pocket" />
+
+                <ImageView
+                    android:id="@+id/ImageView08"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/contato_cinza" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/ImageView05"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/ImageView06"
+                android:layout_alignLeft="@+id/ImageView06"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="9dp"
+                android:src="@drawable/pocket" />
+
+            <TextView
+                android:id="@+id/TextView05"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/ImageView05"
+                android:layout_alignLeft="@+id/ImageView05"
+                android:layout_alignRight="@+id/ImageView05"
+                android:layout_marginBottom="17dp"
+                android:gravity="center"
+                android:text="GARRA"
+                android:textColor="#FFFFFFFF"
+                android:textSize="12sp" />
         </RelativeLayout>
 
     </LinearLayout>
