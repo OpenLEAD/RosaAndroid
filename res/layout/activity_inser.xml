@@ -3,23 +3,23 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:gravity="bottom|center_horizontal"
     android:orientation="vertical"
     tools:context="${packageName}.${activityClass}" >
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:gravity="center" >
+        android:background="@drawable/frame_border"
+        android:gravity="top"
+        android:padding="30dp" >
 
         <ImageView
             android:id="@+id/imageView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-        	android:rotation="0"
+            android:layout_marginBottom="70dp"
+            android:rotation="0"
             android:src="@drawable/viga_pescadora" />
 
     </RelativeLayout>
@@ -27,19 +27,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:gravity="bottom|center" >
+        android:gravity="bottom|center_horizontal" >
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center" >
+            android:gravity="center"
+            android:padding="11dp" >
 
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="11dp"
                 android:src="@drawable/encoder_indutivo_corpo" />
 
             <TextView
@@ -107,23 +106,23 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center" >
+            android:gravity="center"
+            android:padding="11dp" >
 
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="11dp"
+                android:layout_centerHorizontal="true"
                 android:src="@drawable/inclinometro_corpo" />
 
             <ImageView
-                android:id="@+id/imageView7"
+                android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/imageView2"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="56dp"
-        		android:rotation="5"
+                android:layout_marginTop="55dp"
                 android:src="@drawable/nivel_verde" />
 
         </RelativeLayout>
@@ -131,13 +130,13 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center" >
+            android:gravity="center"
+            android:padding="11dp" >
 
             <ImageView
                 android:id="@+id/ImageView06"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="11dp"
                 android:src="@drawable/encoder_indutivo_corpo" />
 
             <TextView
