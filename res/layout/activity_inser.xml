@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
     android:layout_gravity="center"
-    android:columnCount="3"
+    android:columnCount="5"
     android:keepScreenOn="true"
     android:orientation="horizontal"
     android:rowCount="2"
@@ -12,7 +12,7 @@
     tools:context="${packageName}.${activityClass}" >
 
     <RelativeLayout
-        android:layout_columnSpan="3"
+        android:layout_columnSpan="5"
         android:layout_gravity="fill"
         android:layout_row="0"
         android:background="@drawable/frame_border" >
@@ -32,23 +32,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="0"
-        android:layout_gravity="left"
+        android:layout_gravity="clip_horizontal"
         android:layout_row="0"
         android:padding="5dp"
         android:src="@drawable/corpo_regua" />
 
     <ImageView
+        android:id="@+id/imageView9"
+        android:layout_column="0"
+        android:layout_gravity="center"
+        android:layout_row="0"
+        android:src="@drawable/regua_esq" />
+
+    <ImageView
         android:id="@+id/imageView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_column="2"
-        android:layout_gravity="right"
+        android:layout_column="4"
+        android:layout_gravity="clip_horizontal"
         android:layout_row="0"
         android:padding="5dp"
         android:src="@drawable/corpo_regua" />
 
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_column="4"
+        android:layout_gravity="center"
+        android:layout_row="0"	    
+        android:src="@drawable/regua_dir" />
+
     <RelativeLayout
         android:layout_column="0"
+        android:layout_columnSpan="2"
         android:gravity="center" >
 
         <ImageView
@@ -130,16 +145,26 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:src="@drawable/inclinometro_corpo" />
-
-        <ImageView
+        
+		<View
+		    android:id="@+id/View3"
+		    android:layout_width="205dp"
+		    android:layout_height="3dip"
+		    android:layout_alignTop="@+id/imageView2"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginTop="56dp"
+		    android:background="#FF41E020"
+		    android:tag="green" />
+		
+<!--         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/imageView2"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="56dp"
-            android:src="@drawable/nivel_verde"
-            android:tag="green" />
+            android:src="@drawable/inc_line"
+            android:tag="green" /> -->
 
         <TextView
             android:id="@+id/textView2"
@@ -159,7 +184,9 @@
 
     </RelativeLayout>
 
-    <RelativeLayout android:gravity="center" >
+    <RelativeLayout
+        android:layout_columnSpan="2"
+        android:gravity="center" >
 
         <ImageView
             android:id="@+id/ImageView06"

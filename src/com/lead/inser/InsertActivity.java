@@ -19,7 +19,7 @@ public class InsertActivity extends Activity implements SensorEventListener {
 	private SensorManager Smg;
 	private Sensor gravity;
 	private float[] gdir;
-	private ImageView level;
+	private View level;
 	private TextView txt_level;
 	private ImageView viga;
 	private final float lvlmin = 2*SensorManager.STANDARD_GRAVITY/3;
@@ -29,7 +29,7 @@ public class InsertActivity extends Activity implements SensorEventListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inser);
 
-		level = (ImageView) findViewById(R.id.imageView3);
+		level = findViewById(R.id.View3);
 		
 		txt_level = (TextView) findViewById(R.id.textView2);
 		
@@ -105,14 +105,16 @@ public class InsertActivity extends Activity implements SensorEventListener {
 		
 		if(abs_theta>10 && level.getTag().equals("green"))
 		{
-			level.setImageResource(R.drawable.nivel_vermelho);
+			//level.setImageResource(R.drawable.nivel_vermelho);
+			level.setBackgroundColor(0xFFFF4444);
 			txt_level.setTextColor(0xFFFF4444);
 			level.setTag("red");
 			}
 		
 		if(abs_theta<10 && level.getTag().equals("red"))
 		{
-			level.setImageResource(R.drawable.nivel_verde);
+			//level.setImageResource(R.drawable.nivel_verde);
+			level.setBackgroundColor(0xFF41E020);
 			txt_level.setTextColor(0xFF41E020);
 			level.setTag("green");
 			}
