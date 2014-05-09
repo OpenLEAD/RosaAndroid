@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lead.rosa.R;
@@ -21,7 +22,7 @@ public class InsertActivity extends Activity implements SensorEventListener {
 	private float[] gdir;
 	private View level;
 	private TextView txt_level;
-	private ImageView viga;
+	private RelativeLayout viga;
 	private final float lvlmin = 2*SensorManager.STANDARD_GRAVITY/3;
 	
 	@Override
@@ -33,7 +34,8 @@ public class InsertActivity extends Activity implements SensorEventListener {
 		
 		txt_level = (TextView) findViewById(R.id.textView2);
 		
-		viga = (ImageView) findViewById(R.id.imageView4);
+		viga = (RelativeLayout) findViewById(R.id.relativelayoutgarra);
+		
 		viga.post(new Runnable(){
 
 			@Override
@@ -121,7 +123,7 @@ public class InsertActivity extends Activity implements SensorEventListener {
 
 		
 		level.setRotation(theta);
-		
+
 		viga.setRotation(theta);
 		
 	}
