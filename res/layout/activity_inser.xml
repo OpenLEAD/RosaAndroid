@@ -18,10 +18,27 @@
         android:background="@drawable/frame_border" >
 
         <ImageView
+            android:id="@+id/imageView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView4"
+            android:layout_alignLeft="@+id/imageView4"
+            android:layout_marginLeft="150dp"
+            android:src="@drawable/garra_dir" />
+
+        <ImageView
+            android:id="@+id/imageView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView4"
+            android:layout_alignRight="@+id/imageView4"
+            android:layout_marginRight="150dp"
+            android:src="@drawable/garra_esq" />
+
+        <ImageView
             android:id="@+id/imageView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:src="@drawable/viga_pescadora" />
 
@@ -122,6 +139,17 @@
             android:layout_marginBottom="20dp"
             android:layout_marginRight="9dp"
             android:src="@drawable/pocket" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/ImageView01"
+            android:layout_alignLeft="@id/ImageView01"
+            android:layout_alignRight="@id/ImageView01"
+            android:layout_alignTop="@id/ImageView01"
+            android:scaleType="center"
+            android:src="@drawable/garra_view_dir" />
 
         <TextView
             android:id="@+id/TextView02"
@@ -244,6 +272,17 @@
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="9dp"
             android:src="@drawable/pocket" />
+
+        <ImageView
+            android:id="@+id/imageView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/ImageView05"
+            android:layout_alignLeft="@id/ImageView05"
+            android:layout_alignRight="@id/ImageView05"
+            android:layout_alignTop="@id/ImageView05"
+            android:scaleType="center"
+            android:src="@drawable/garra_view_esq" />
 
         <TextView
             android:id="@+id/TextView05"
