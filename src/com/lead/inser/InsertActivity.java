@@ -16,12 +16,14 @@ import com.lead.rosa.R;
 
 public class InsertActivity extends Activity implements SensorEventListener {
 
-
+	private float theta=0;
 	private SensorManager Smg;
 	private Sensor gravity;
 	private float[] gdir;
 	private View level;
 	private TextView txt_level;
+	private ImageView garra_dir;
+	private ImageView garra_esq;
 	private RelativeLayout viga;
 	private final float lvlmin = 2*SensorManager.STANDARD_GRAVITY/3;
 	
@@ -35,6 +37,8 @@ public class InsertActivity extends Activity implements SensorEventListener {
 		txt_level = (TextView) findViewById(R.id.textView2);
 		
 		viga = (RelativeLayout) findViewById(R.id.relativelayoutgarra);
+		garra_esq = (ImageView) findViewById(R.id.imageView12);
+		garra_dir = (ImageView) findViewById(R.id.imageView13);
 		
 		viga.post(new Runnable(){
 
@@ -42,6 +46,27 @@ public class InsertActivity extends Activity implements SensorEventListener {
 			public void run() {
 				viga.setPivotX(viga.getMeasuredWidth()/2);
 				viga.setPivotY(0);
+			}
+			
+		});
+		
+		garra_esq.post(new Runnable(){
+
+			@Override
+			public void run() {
+				garra_esq.setPivotX((int) (garra_esq.getMeasuredWidth()*0.357));
+				garra_esq.setPivotY((int) (garra_esq.getMeasuredHeight()*0.175));
+				
+			}
+			
+		});
+		
+		garra_dir.post(new Runnable(){
+
+			@Override
+			public void run() {
+				garra_dir.setPivotX((int) (garra_dir.getMeasuredWidth()*0.643));
+				garra_dir.setPivotY((int) (garra_dir.getMeasuredHeight()*0.175));
 			}
 			
 		});
@@ -64,7 +89,19 @@ public class InsertActivity extends Activity implements SensorEventListener {
 		Smg.registerListener(this, gravity,SensorManager.SENSOR_DELAY_GAME);
 	}
 
-	
+	public void rot_garra_esq(View view){
+		theta+=5;
+		garra_esq.setRotation(-theta);
+		garra_dir.setRotation(theta);
+		
+	}
+
+	public void rot_garra_dir(View view){
+		theta-=5;
+		garra_esq.setRotation(-theta);
+		garra_dir.setRotation(theta);
+		
+	}
 	public void change_induc(View view){
 		if(view.getTag().equals("grey"))
 		{

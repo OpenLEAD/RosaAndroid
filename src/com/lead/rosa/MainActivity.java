@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
         startActivity(new Intent(this, InsertActivity.class));
 	}
 
-	public void test(View view){
+	public void remo(View view){
         startActivity(new Intent(this, InsertActivity.class));
 	}
 }
