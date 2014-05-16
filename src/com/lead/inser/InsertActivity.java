@@ -1,6 +1,13 @@
 package com.lead.inser;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Matrix;
+import android.graphics.Shader.TileMode;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,6 +16,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,6 +31,7 @@ public class InsertActivity extends Activity implements SensorEventListener {
 	private View level;
 	private TextView txt_level;
 	private ImageView garra_dir;
+	private ImageView regua_dir;
 	private ImageView garra_esq;
 	private RelativeLayout viga;
 	private final float lvlmin = 2*SensorManager.STANDARD_GRAVITY/3;
@@ -35,6 +44,8 @@ public class InsertActivity extends Activity implements SensorEventListener {
 		level = findViewById(R.id.View3);
 		
 		txt_level = (TextView) findViewById(R.id.textView2);
+		
+		regua_dir = (ImageView) findViewById(R.id.imageView10);
 		
 		viga = (RelativeLayout) findViewById(R.id.relativelayoutgarra);
 		garra_esq = (ImageView) findViewById(R.id.imageView12);
@@ -77,6 +88,7 @@ public class InsertActivity extends Activity implements SensorEventListener {
 		
 	}
 	
+	
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -101,7 +113,19 @@ public class InsertActivity extends Activity implements SensorEventListener {
 		garra_esq.setRotation(-theta);
 		garra_dir.setRotation(theta);
 		
+		BitmapDrawable bitmapDrawable  = new BitmapDrawable(getResources(),BitmapFactory.decodeResource(getResources(), R.drawable.regua_unity_dir));
+		bitmapDrawable.setTileModeY(TileMode.REPEAT);
+		
+		Matrix roll = new Matrix();
+		roll.postTranslate(0, theta);
+		regua_dir.setScaleType(ScaleType.MATRIX);
+		regua_dir.setScaleType(ScaleType.FIT_XY);
+		regua_dir.setImageMatrix(roll);
+		regua_dir.setImageDrawable(bitmapDrawable);
+		
 	}
+	
+	
 	public void change_induc(View view){
 		if(view.getTag().equals("grey"))
 		{
