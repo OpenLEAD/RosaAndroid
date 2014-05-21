@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.lead.inser.InsertActivity;
 import com.lead.rosa.R;
+import com.lead.sonar.SonarActivity;
 
 public class MainActivity extends Activity {
 
@@ -30,5 +31,9 @@ public class MainActivity extends Activity {
 
 	public void remo(View view){
         startActivity(new Intent(this, InsertActivity.class));
+	}
+
+	public void sonar(View view){
+        startActivity(new Intent(this, SonarActivity.class));
 	}
 }

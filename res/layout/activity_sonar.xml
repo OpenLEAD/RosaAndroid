@@ -1,0 +1,201 @@
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/GridLayout1"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center"
+    android:columnCount="5"
+    android:keepScreenOn="true"
+    android:orientation="horizontal"
+    android:rowCount="2"
+    android:useDefaultMargins="true"
+    tools:context="${packageName}.${activityClass}" >
+
+    <FrameLayout
+        android:id="@+id/animationFrame"
+        android:layout_columnSpan="5"
+        android:layout_gravity="fill"
+        android:layout_row="0"
+        android:background="@drawable/frame_border" >
+
+        <RelativeLayout
+            android:id="@+id/relativelayoutgarra"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal" >
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/viga_pescadora_garra" />
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/imageView4"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="241dp"
+                android:src="@drawable/sonar_inativo"
+                android:tag="ok" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="2"
+        android:layout_gravity="center_vertical|fill_horizontal"
+        android:layout_row="0"
+        android:alpha="0"
+        android:max="100"
+        android:progress="0" />
+
+    <TextView
+        android:id="@+id/carregando"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="2"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:layout_row="0"
+        android:alpha="0"
+        android:text="CARREGANDO 0%"
+        android:textColor="#FF33B5E5"
+        android:textSize="10sp"
+        android:textStyle="bold" />
+
+    <FrameLayout
+        android:id="@+id/water"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_column="0"
+        android:layout_columnSpan="5"
+        android:layout_gravity="bottom|fill_horizontal"
+        android:layout_row="0"
+        android:alpha="0.35"
+        android:background="#FF2B547E"
+        android:tag="empty" >
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="3"
+        android:layout_gravity="right"
+        android:layout_row="0"
+        android:onClick="activate"
+        android:paddingTop="5dp"
+        android:src="@drawable/btn_sonar" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_gravity="clip_horizontal"
+        android:layout_row="0"
+        android:padding="5dp"
+        android:src="@drawable/corpo_regua" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_column="0"
+        android:layout_gravity="fill_vertical|center_horizontal"
+        android:layout_row="0"
+        android:padding="8dp"
+        android:scaleType="matrix"
+        android:src="@drawable/regua_esq_dr" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="4"
+        android:layout_gravity="clip_horizontal"
+        android:layout_row="0"
+        android:padding="5dp"
+        android:src="@drawable/corpo_regua" />
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_column="4"
+        android:layout_gravity="fill_vertical|center_horizontal"
+        android:layout_row="0"
+        android:padding="8dp"
+        android:src="@drawable/regua_dir_dr" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="2"
+        android:src="@drawable/encoder_indutivo_corpo"
+        android:visibility="invisible" />
+
+    <RelativeLayout android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/inclinometro_corpo" />
+
+        <View
+            android:id="@+id/View3"
+            android:layout_width="205dp"
+            android:layout_height="3dip"
+            android:layout_alignTop="@+id/imageView2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="56dp"
+            android:background="#FF41E020"
+            android:tag="green" />
+
+
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView2"
+            android:layout_alignLeft="@+id/imageView2"
+            android:layout_alignRight="@+id/imageView2"
+            android:layout_marginBottom="27dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="155dp"
+            android:gravity="center"
+            android:text="0°"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#41E020"
+            android:textSize="22sp" />
+
+        <ImageView
+            android:id="@+id/imageView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/imageView2"
+            android:layout_alignTop="@+id/textView2"
+            android:layout_marginRight="67dp"
+            android:onClick="submerge"
+            android:src="@drawable/profundidade" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/ImageView06"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="2"
+        android:src="@drawable/encoder_indutivo_corpo"
+        android:visibility="invisible" />
+
+</GridLayout>

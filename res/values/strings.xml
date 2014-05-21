@@ -7,5 +7,7 @@
     <string name="mbsonar_desc">Sonar</string>
     <string name="title_activity_main_inser">MainInser</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_sonar">SonarActivity</string>
+    <string name="title_activity_sonar_view">SonarViewActivity</string>
 
 </resources>

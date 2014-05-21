@@ -26,7 +26,17 @@
         </activity>
         <activity
             android:name="com.lead.inser.InsertActivity"
-            android:label="@string/title_activity_test" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="sensorLandscape">
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_test"
+            android:screenOrientation="sensorLandscape" >
+        </activity>
+        <activity
+            android:name="com.lead.sonar.SonarActivity"
+            android:label="@string/title_activity_sonar" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="sensorLandscape">
+        </activity>
+        <activity
+            android:name="com.lead.sonar.SonarViewActivity"
+            android:label="@string/title_activity_sonar_view" android:parentActivityName="com.lead.rosa.MainActivity">
         </activity>
     </application>
 

@@ -12,6 +12,7 @@
     tools:context="${packageName}.${activityClass}" >
 
     <FrameLayout
+        android:id="@+id/animationFrame"
         android:layout_columnSpan="5"
         android:layout_gravity="fill"
         android:layout_row="0"
@@ -47,6 +48,16 @@
 	            android:layout_height="wrap_content"
 	            android:layout_centerHorizontal="true"
 	            android:src="@drawable/viga_pescadora" />
+
+	        <ImageView
+	            android:id="@+id/ImageView02"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_below="@+id/imageView4"
+	            android:layout_centerHorizontal="true"
+	            android:layout_marginTop="-30dp"
+	            android:alpha="0"
+	            android:src="@drawable/stoplog" />
         
         </RelativeLayout>
 
@@ -56,7 +67,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="-50dp"
+            android:alpha="1"
             android:src="@drawable/stoplog" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/water"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_column="0"
+        android:layout_columnSpan="5"
+        android:layout_gravity="bottom|fill_horizontal"
+        android:layout_row="0"
+        android:alpha="0.35"
+        android:background="#FF2B547E" >
 
     </FrameLayout>
 
@@ -95,7 +120,6 @@
         android:layout_gravity="fill_vertical|center_horizontal"
         android:layout_row="0"
         android:padding="8dp"
-        android:scaleType="matrix"
         android:src="@drawable/regua_dir_dr" />
 
     <RelativeLayout
@@ -110,7 +134,7 @@
             android:src="@drawable/encoder_indutivo_corpo" />
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/carregando"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/imageView5"
@@ -234,7 +258,9 @@
             android:layout_alignRight="@+id/imageView2"
             android:layout_alignTop="@+id/textView2"
             android:layout_marginRight="67dp"
-            android:src="@drawable/profundidade" />
+            android:onClick="submerge"
+            android:src="@drawable/profundidade"
+            android:tag="empty" />
 
     </RelativeLayout>
 

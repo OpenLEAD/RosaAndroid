@@ -20,6 +20,7 @@
             style="@style/mbstyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="sonar"
             android:text="@string/mbsonar" />
 
         <ImageView

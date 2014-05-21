@@ -1,11 +1,19 @@
 package com.lead.inser;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.graphics.Shader.TileMode;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
@@ -15,6 +23,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
@@ -31,8 +40,18 @@ public class InsertActivity extends Activity implements SensorEventListener {
 	private View level;
 	private TextView txt_level;
 	private ImageView garra_dir;
+	private ImageView stoplog_still;
+	private ObjectAnimator anim_fade;
+	private ObjectAnimator anim_appear;
+	private AnimatorSet stoplog_move;
+	private ObjectAnimator submerge1;
+	private ObjectAnimator submerge2;
+	private AnimatorSet submerge;
+	private ImageView stoplog_moving;
 	private ImageView regua_dir;
 	private ImageView garra_esq;
+	private FrameLayout display;
+	private FrameLayout water;
 	private RelativeLayout viga;
 	private final float lvlmin = 2*SensorManager.STANDARD_GRAVITY/3;
 	
@@ -42,6 +61,27 @@ public class InsertActivity extends Activity implements SensorEventListener {
 		setContentView(R.layout.activity_inser);
 
 		level = findViewById(R.id.View3);
+		
+		
+		display = (FrameLayout) findViewById(R.id.animationFrame);
+		water = (FrameLayout) findViewById(R.id.water);
+		
+		stoplog_still = (ImageView) findViewById(R.id.imageView14);
+		stoplog_moving = (ImageView) findViewById(R.id.ImageView02);
+
+		anim_fade = ObjectAnimator.ofFloat(null, "alpha", 0f).setDuration(1000);
+		anim_appear = ObjectAnimator.ofFloat(null, "alpha", 1f).setDuration(1000);
+
+		stoplog_move = new AnimatorSet();
+		stoplog_move.play(anim_fade).with(anim_appear);
+
+		
+		submerge1 = ObjectAnimator.ofFloat(water, "ScaleY",1).setDuration(2000);
+		submerge2 = ObjectAnimator.ofFloat(water, "TranslationY",0).setDuration(2000);
+		
+		submerge = new AnimatorSet();
+		submerge.play(submerge1).with(submerge2);
+		
 		
 		txt_level = (TextView) findViewById(R.id.textView2);
 		
@@ -67,7 +107,6 @@ public class InsertActivity extends Activity implements SensorEventListener {
 			public void run() {
 				garra_esq.setPivotX((int) (garra_esq.getMeasuredWidth()*0.357));
 				garra_esq.setPivotY((int) (garra_esq.getMeasuredHeight()*0.175));
-				
 			}
 			
 		});
@@ -89,6 +128,64 @@ public class InsertActivity extends Activity implements SensorEventListener {
 	}
 	
 	
+	
+	private void initAnimation() {
+//      R.drawable.tile1 is PNG
+        Bitmap b = BitmapFactory.decodeResource(getResources(),R.drawable.regua_unity_dir);
+        AnimationDrawable shiftedAnimation = getAnimation(b);
+
+//      R.id.img_3 is ImageView in my application
+        View v = findViewById(R.id.imageView10);
+        v.setBackground(shiftedAnimation);
+        shiftedAnimation.start();
+}
+
+private Bitmap getShiftedBitmap(Bitmap bitmap, int shiftY) {
+    Bitmap newBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+    Canvas newBitmapCanvas = new Canvas(newBitmap);
+
+    Rect srcRect1 = new Rect(0, shiftY, bitmap.getWidth(), bitmap.getHeight());
+    Rect destRect1 = new Rect(srcRect1);
+    destRect1.offset(0,-shiftY);
+    newBitmapCanvas.drawBitmap(bitmap, srcRect1, destRect1, null);
+
+    Rect srcRect2 = new Rect(0, 0, bitmap.getWidth(), shiftY);
+    Rect destRect2 = new Rect(srcRect2);
+    destRect2.offset(0, bitmap.getHeight() - shiftY);
+    newBitmapCanvas.drawBitmap(bitmap, srcRect2, destRect2, null);
+
+    return newBitmap;
+}
+
+private List<Bitmap> getShiftedBitmaps(Bitmap bitmap) {
+    List<Bitmap> shiftedBitmaps = new ArrayList<Bitmap>();
+    int fragments = 10;
+    int shiftLength = bitmap.getWidth() / fragments;
+
+    for(int i = 0 ; i < fragments; ++i){
+        shiftedBitmaps.add( getShiftedBitmap(bitmap,shiftLength * i));
+    }
+
+    return shiftedBitmaps;
+}
+
+private AnimationDrawable getAnimation(Bitmap bitmap) {
+    AnimationDrawable animation = new AnimationDrawable();
+    animation.setOneShot(false);
+
+    List<Bitmap> shiftedBitmaps = getShiftedBitmaps(bitmap);
+    int duration = 50;
+
+    for(Bitmap image: shiftedBitmaps){
+        BitmapDrawable navigationBackground = new BitmapDrawable(getResources(), image);
+        navigationBackground.setTileModeX(TileMode.REPEAT);
+
+        animation.addFrame(navigationBackground, duration);
+    }
+    return animation;
+}
+
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -127,16 +224,31 @@ public class InsertActivity extends Activity implements SensorEventListener {
 	
 	
 	public void change_induc(View view){
+
+		if(stoplog_move.isRunning())
+			stoplog_move.cancel();
+		
 		if(view.getTag().equals("grey"))
 		{
+			anim_fade.setTarget(stoplog_still);
+			anim_appear.setTarget(stoplog_moving);
+			//anim_fade.getValues()[0]
+			
 			((ImageView) view).setImageResource(R.drawable.contato_verde);
 			view.setTag("green");
 			}
 		else
 		{
+			anim_fade.setTarget(stoplog_moving);
+			anim_appear.setTarget(stoplog_still);
+			
 			view.setTag("grey");
 			((ImageView) view).setImageResource(R.drawable.contato_cinza);
 			}
+
+		anim_fade.setFloatValues(0);
+		anim_appear.setFloatValues(1);
+		stoplog_move.start();
 		
 	}
 
@@ -146,6 +258,30 @@ public class InsertActivity extends Activity implements SensorEventListener {
 		
 	}
 
+	public void submerge(View view){
+		
+		if(submerge.isRunning())
+			submerge.cancel();
+		
+		if(view.getTag().equals("full")){
+			view.setTag("empty");
+			
+			submerge1.setFloatValues(1);
+			submerge2.setFloatValues(0);
+			
+		}
+		else{
+			
+			view.setTag("full");
+			submerge1.setFloatValues(display.getMeasuredHeight()/2);
+			submerge2.setFloatValues(-display.getMeasuredHeight()/2);
+		}
+		
+		submerge.start();
+		
+		
+	}
+	
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		switch (event.sensor.getType()) {
