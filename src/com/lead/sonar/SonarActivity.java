@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 public class SonarActivity extends Activity {
 
+
 	private FrameLayout display;
 	private FrameLayout water;
 	private ObjectAnimator submerge1;
@@ -63,6 +64,16 @@ public class SonarActivity extends Activity {
 		submerge = new AnimatorSet();
 		submerge.play(submerge1).with(submerge2);
 	}
+
+	@Override
+	protected void onResume() {
+        sonar_progress.setAlpha(0);
+        sonar_loading_text.setAlpha(0);
+		viga.setAlpha(1);
+        sonar_progress.setProgress(0);
+       	sonar_loading_text.setText("CARREGANDO 0%");
+		super.onResume();
+	}
 	
 	public void activate(View view){
 		viga.animate().alpha(0.15f).setDuration(400).start();
@@ -86,9 +97,6 @@ public class SonarActivity extends Activity {
 		               } catch (java.lang.InterruptedException e) {
 		                   // if something fails do something smart
 		               }
-		            sonar_progress.setAlpha(0);
-		            sonar_progress.setProgress(0);
-		           	sonar_loading_text.setText("CARREGANDO 0%");
            	    	startActivity(new Intent (SonarActivity.this, SonarViewActivity.class));
 		           }
 		        });
