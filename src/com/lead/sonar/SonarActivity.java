@@ -31,6 +31,7 @@ public class SonarActivity extends Activity {
 	private ObjectAnimator submerge2;
 	private AnimatorSet submerge;
 	private ImageView sonar;
+	private ImageView sonarbtn;
 	private ProgressBar sonar_progress;
 	private TextView sonar_loading_text;
 	private RelativeLayout viga;
@@ -48,6 +49,7 @@ public class SonarActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sonar);
+		sonarbtn = (ImageView) findViewById(R.id.imageView3);
 		display = (FrameLayout) findViewById(R.id.animationFrame);
 		water = (FrameLayout) findViewById(R.id.water);
 		sonar = (ImageView) findViewById(R.id.imageView5);
@@ -84,7 +86,9 @@ public class SonarActivity extends Activity {
 		               } catch (java.lang.InterruptedException e) {
 		                   // if something fails do something smart
 		               }
-
+		            sonar_progress.setAlpha(0);
+		            sonar_progress.setProgress(0);
+		           	sonar_loading_text.setText("CARREGANDO 0%");
            	    	startActivity(new Intent (SonarActivity.this, SonarViewActivity.class));
 		           }
 		        });
@@ -121,11 +125,14 @@ public class SonarActivity extends Activity {
 
 			@Override
 			public void onAnimationEnd(Animator animation) {
-				if(water.getTag().equals("full"))
+				if(water.getTag().equals("full")){
 					sonar.setImageResource(R.drawable.sonar_ativo);
-				
-				else
+					sonarbtn.animate().alpha(1).setDuration(200).start();
+				}
+				else{
 					sonar.setImageResource(R.drawable.sonar_inativo);
+					sonarbtn.animate().alpha(0).setDuration(200).start();
+				}
 			}
 			
 		});
