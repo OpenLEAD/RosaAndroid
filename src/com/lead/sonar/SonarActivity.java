@@ -31,6 +31,7 @@ public class SonarActivity extends Activity {
 	private ObjectAnimator submerge2;
 	private AnimatorSet submerge;
 	private ImageView sonar;
+	private ImageView sonar_btn;
 	private ProgressBar sonar_progress;
 	private TextView sonar_loading_text;
 	private RelativeLayout viga;
@@ -54,6 +55,7 @@ public class SonarActivity extends Activity {
 		viga = (RelativeLayout) findViewById(R.id.relativelayoutgarra);
 		sonar_progress = (ProgressBar) findViewById(R.id.progressBar1);
 		sonar_loading_text = (TextView) findViewById(R.id.carregando);
+		sonar_btn = (ImageView) findViewById(R.id.SonarBtn);
 		
 		submerge1 = ObjectAnimator.ofFloat(water, "ScaleY",1).setDuration(2000);
 		submerge2 = ObjectAnimator.ofFloat(water, "TranslationY",0).setDuration(2000);
@@ -121,11 +123,14 @@ public class SonarActivity extends Activity {
 
 			@Override
 			public void onAnimationEnd(Animator animation) {
-				if(water.getTag().equals("full"))
+				if(water.getTag().equals("full")){
 					sonar.setImageResource(R.drawable.sonar_ativo);
-				
-				else
+					sonar_btn.animate().alpha(1).setDuration(200).start();
+				}
+				else{
 					sonar.setImageResource(R.drawable.sonar_inativo);
+					sonar_btn.animate().alpha(0).setDuration(200).start();
+				}
 			}
 			
 		});

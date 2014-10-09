@@ -6,6 +6,7 @@ import java.util.List;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
@@ -50,6 +51,7 @@ public class InsertActivity extends Activity implements SensorEventListener {
 	private ImageView stoplog_moving;
 	private ImageView regua_dir;
 	private ImageView garra_esq;
+	private ImageView Inductive2;
 	private FrameLayout display;
 	private FrameLayout water;
 	private RelativeLayout viga;
@@ -90,6 +92,10 @@ public class InsertActivity extends Activity implements SensorEventListener {
 		viga = (RelativeLayout) findViewById(R.id.relativelayoutgarra);
 		garra_esq = (ImageView) findViewById(R.id.imageView12);
 		garra_dir = (ImageView) findViewById(R.id.imageView13);
+		
+		Inductive2 = (ImageView) findViewById(R.id.Inductive2);
+/*		Intent mServiceIntent = new Intent(this, BGJreader.class);
+		mServiceIntent.putExtra("url","http://192.168.1.75:9292/api/tasks/localhost/bus1/ports/inductive2/read.json");*/
 		
 		viga.post(new Runnable(){
 

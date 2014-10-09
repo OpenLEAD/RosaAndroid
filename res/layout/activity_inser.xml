@@ -181,7 +181,7 @@
             android:src="@drawable/pocket" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/SonarBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/ImageView01"
@@ -298,7 +298,7 @@
             android:src="@drawable/pocket" />
 
         <ImageView
-            android:id="@+id/ImageView08"
+            android:id="@+id/Inductive2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/ImageView07"
