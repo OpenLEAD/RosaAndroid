@@ -101,7 +101,7 @@
         android:layout_gravity="fill_vertical|center_horizontal"
         android:layout_row="0"
         android:padding="8dp"
-        android:scaleType="matrix"
+        android:scaleType="fitXY"
         android:src="@drawable/regua_esq_dr" />
 
     <ImageView
@@ -120,6 +120,7 @@
         android:layout_gravity="fill_vertical|center_horizontal"
         android:layout_row="0"
         android:padding="8dp"
+        android:scaleType="fitXY"
         android:src="@drawable/regua_dir_dr" />
 
     <RelativeLayout
