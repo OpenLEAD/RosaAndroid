@@ -30,6 +30,7 @@ import android.widget.Toast;
 public class BGJloop extends Service {
 
 	private Looper mServiceLooper;
+	private boolean runningFlag;
 	private ServiceHandler mServiceHandler;
 	static final int JASON_FROM_URL = 1;
 
@@ -70,6 +71,7 @@ public class BGJloop extends Service {
 		Message msg = mServiceHandler.obtainMessage();
 		msg.arg1 = startId;
 		msg.arg2 = JASON_FROM_URL;
+		runningFlag = true;
 		mServiceHandler.sendMessage(msg);
 
 		// If we get killed, after returning from here, restart
@@ -79,6 +81,7 @@ public class BGJloop extends Service {
 	@Override
 	public void onDestroy() {
 		Toast.makeText(this, "service destroying", Toast.LENGTH_SHORT).show();
+		runningFlag = false;
 		mServiceLooper.quit();
 	}
 
@@ -201,7 +204,7 @@ public class BGJloop extends Service {
 			// Normally we would do some work here, like download a file.
 			// For our sample, we just sleep for 5 seconds.
 			if(msg.arg2==JASON_FROM_URL)
-				while (true) {
+				while (runningFlag) {
 					
 					Intent localIntent = new Intent(MonitoringDisplay.NEW_MONITOR_DATA);
 					
@@ -215,6 +218,10 @@ public class BGJloop extends Service {
 								InputStream instream = entity.getContent();
 
 								switch (httpsensor.second){
+
+								case MonitoringDisplay.INDUCTIVE1:
+									localIntent.putExtra(MonitoringDisplay.INDUCTIVE1, decodeInductive(instream));
+									break;
 
 								case MonitoringDisplay.INDUCTIVE2:
 									localIntent.putExtra(MonitoringDisplay.INDUCTIVE2, decodeInductive(instream));

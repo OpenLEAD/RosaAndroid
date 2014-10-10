@@ -55,12 +55,15 @@ public class InsertActivity extends Activity implements SensorEventListener, Mon
 	private ImageView garra_esq;
 	private ImageView Inductive2;
 	private boolean Inductive2value;
+	private ImageView Inductive1;
+	private boolean Inductive1value;
 	private FrameLayout display;
 	private FrameLayout water;
 	private RelativeLayout viga;
 	private final float lvlmin = 2*SensorManager.STANDARD_GRAVITY/3;
 	
 	private RockDataReceiver Monitorreceiver;
+	private Intent mServiceStartIntent;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +104,9 @@ public class InsertActivity extends Activity implements SensorEventListener, Mon
 		
 		Inductive2 = (ImageView) findViewById(R.id.Inductive2);
 		Inductive2value = false;		
+		Inductive1 = (ImageView) findViewById(R.id.Inductive1);
+		Inductive1value = false;		
+		
 		
 		
 		Monitorreceiver = new RockDataReceiver(this);
@@ -108,11 +114,11 @@ public class InsertActivity extends Activity implements SensorEventListener, Mon
 		LocalBroadcastManager.getInstance(this).registerReceiver(Monitorreceiver, mStatusIntentFilter);
 
 		
-		Intent mServiceIntent = new Intent(this, BGJloop.class);
-		mServiceIntent.putExtra("url","http://192.168.1.75:9292/api/tasks/localhost/");
-		mServiceIntent.putExtra(INDUCTIVE2,"bus1/ports/inductive2/read.json");
-		mServiceIntent.putExtra(INCLINATION,"inclination/ports/angle/read.json");
-		startService(mServiceIntent);
+		mServiceStartIntent = new Intent(this, BGJloop.class);
+		mServiceStartIntent.putExtra("url","http://192.168.1.75:9292/api/tasks/localhost/");
+		mServiceStartIntent.putExtra(INDUCTIVE1,"bus1/ports/inductive1/read.json");
+		mServiceStartIntent.putExtra(INDUCTIVE2,"bus1/ports/inductive2/read.json");
+		mServiceStartIntent.putExtra(INCLINATION,"inclination/ports/angle/read.json");
 		
 		
 		
@@ -216,13 +222,14 @@ private AnimationDrawable getAnimation(Bitmap bitmap) {
 		super.onPause();
 		Intent mServiceIntent = new Intent(this, BGJloop.class);
 		stopService(mServiceIntent);
-		Smg.unregisterListener(this);
+		//Smg.unregisterListener(this);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Smg.registerListener(this, gravity,SensorManager.SENSOR_DELAY_GAME);
+		//Smg.registerListener(this, gravity,SensorManager.SENSOR_DELAY_GAME);
+		startService(mServiceStartIntent);
 	}
 
 	public void rot_garra_esq(View view){
@@ -396,6 +403,17 @@ private AnimationDrawable getAnimation(Bitmap bitmap) {
 			txt_level.setTextColor(0xFF41E020);
 			level.setTag("green");
 			}
+		
+	}
+
+
+
+	@Override
+	public void inductive1(boolean value) {
+		if (Inductive1value ^ value){
+			Inductive1value = value;
+			change_induc(Inductive1);
+		}
 		
 	}
 }

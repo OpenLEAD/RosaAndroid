@@ -14,6 +14,9 @@ public class RockDataReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
+		boolean inductive1_value = intent.getBooleanExtra(MonitoringDisplay.INDUCTIVE1, false);
+		display.inductive1(inductive1_value);
+		
 		boolean inductive2_value = intent.getBooleanExtra(MonitoringDisplay.INDUCTIVE2, false);
 		display.inductive2(inductive2_value);
 		

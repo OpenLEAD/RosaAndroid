@@ -158,7 +158,7 @@
             android:src="@drawable/pocket" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/Inductive1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/imageView5"
@@ -166,7 +166,6 @@
             android:layout_alignRight="@id/imageView5"
             android:layout_alignTop="@id/imageView5"
             android:clickable="true"
-            android:onClick="change_induc"
             android:scaleType="center"
             android:src="@drawable/contato_cinza"
             android:tag="grey" />
@@ -307,7 +306,6 @@
             android:layout_alignRight="@id/ImageView07"
             android:layout_alignTop="@id/ImageView07"
             android:clickable="true"
-            android:onClick="change_induc"
             android:scaleType="center"
             android:src="@drawable/contato_cinza"
             android:tag="grey" />
