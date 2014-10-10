@@ -1,12 +1,9 @@
 package com.lead.sonar;
 
-import com.lead.rosa.R;
-import com.lead.rosa.R.layout;
-
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+
+import com.lead.rosa.R;
 
 public class SonarViewActivity extends Activity {
 

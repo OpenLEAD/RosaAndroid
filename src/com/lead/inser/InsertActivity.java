@@ -10,20 +10,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.Shader.TileMode;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -38,6 +35,7 @@ public class InsertActivity extends Activity implements SensorEventListener, Mon
 
 	private float theta=0;
 	private SensorManager Smg;
+	@SuppressWarnings("unused")
 	private Sensor gravity;
 	private float[] gdir;
 	private View level;
@@ -160,6 +158,7 @@ public class InsertActivity extends Activity implements SensorEventListener, Mon
 	
 	
 	
+	@SuppressWarnings("unused")
 	private void initAnimation() {
 //      R.drawable.tile1 is PNG
         Bitmap b = BitmapFactory.decodeResource(getResources(),R.drawable.regua_unity_dir);

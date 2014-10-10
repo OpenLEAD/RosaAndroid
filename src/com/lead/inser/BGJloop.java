@@ -1,14 +1,13 @@
 package com.lead.inser;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -26,6 +25,10 @@ import android.util.JsonReader;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.lead.sensor.AngleJson;
+import com.lead.sensor.InductiveJson;
 
 public class BGJloop extends Service {
 
@@ -85,6 +88,7 @@ public class BGJloop extends Service {
 		mServiceLooper.quit();
 	}
 
+	@SuppressWarnings("unused")
 	private double decodeInclinometer(InputStream instream) throws IOException{
 		JsonReader reader = new JsonReader(new InputStreamReader(instream, "UTF-8"));
 		reader.beginArray();
@@ -139,6 +143,7 @@ public class BGJloop extends Service {
 
 	}
 
+	@SuppressWarnings("unused")
 	private boolean decodeInductive(InputStream instream) throws IOException{
 		JsonReader reader = new JsonReader(new InputStreamReader(instream, "UTF-8"));
 		reader.beginArray();
@@ -199,13 +204,13 @@ public class BGJloop extends Service {
 		}
 		@Override
 		public void handleMessage(Message msg) {
-			HttpClient httpclient = new DefaultHttpClient(); 
+			final HttpClient httpclient = new DefaultHttpClient(); 
+			final Gson gson = new Gson();
 
 			// Normally we would do some work here, like download a file.
 			// For our sample, we just sleep for 5 seconds.
 			if(msg.arg2==JASON_FROM_URL)
 				while (runningFlag) {
-					
 					Intent localIntent = new Intent(MonitoringDisplay.NEW_MONITOR_DATA);
 					
 					for(Pair<HttpGet, String> httpsensor: httpGetpair){
@@ -216,19 +221,23 @@ public class BGJloop extends Service {
 							HttpEntity entity = response.getEntity();
 							if (entity != null) {
 								InputStream instream = entity.getContent();
+								final BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
 
 								switch (httpsensor.second){
 
 								case MonitoringDisplay.INDUCTIVE1:
-									localIntent.putExtra(MonitoringDisplay.INDUCTIVE1, decodeInductive(instream));
+									InductiveJson[] inductive1 = gson.fromJson(reader, InductiveJson[].class);
+									localIntent.putExtra(MonitoringDisplay.INDUCTIVE1, inductive1[0].value.data);
 									break;
 
 								case MonitoringDisplay.INDUCTIVE2:
-									localIntent.putExtra(MonitoringDisplay.INDUCTIVE2, decodeInductive(instream));
+									InductiveJson[] inductive2 = gson.fromJson(reader, InductiveJson[].class);
+									localIntent.putExtra(MonitoringDisplay.INDUCTIVE2, inductive2[0].value.data);
 									break;
 
 								case MonitoringDisplay.INCLINATION:
-									localIntent.putExtra(MonitoringDisplay.INCLINATION, decodeInclinometer(instream));
+									AngleJson[] inclination = gson.fromJson(reader, AngleJson[].class);
+									localIntent.putExtra(MonitoringDisplay.INCLINATION, inclination[0].value.rad);
 									break;
 									
 								default:

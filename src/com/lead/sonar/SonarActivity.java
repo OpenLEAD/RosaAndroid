@@ -1,9 +1,5 @@
 package com.lead.sonar;
 
-import com.lead.inser.InsertActivity;
-import com.lead.rosa.R;
-import com.lead.rosa.R.layout;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -12,16 +8,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.lead.rosa.R;
 
 public class SonarActivity extends Activity {
 
