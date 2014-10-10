@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -14,13 +15,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.JsonReader;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Toast;
 
 public class BGJloop extends Service {
@@ -28,13 +32,14 @@ public class BGJloop extends Service {
 	private Looper mServiceLooper;
 	private ServiceHandler mServiceHandler;
 	static final int JASON_FROM_URL = 1;
- 
+
 	String urlString;
-	
-	
+	ArrayList<Pair<HttpGet, String>> httpGetpair;
+
+
 	@Override
 	public void onCreate() {
-		
+
 		HandlerThread thread = new HandlerThread("BGJloopThread", android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
 		thread.start();
@@ -49,22 +54,35 @@ public class BGJloop extends Service {
 		// For each start request, send a message to start a job and deliver the
 		// start ID so we know which request we're stopping when we finish the job
 		urlString = intent.getStringExtra("url");
+		intent.removeExtra("url");
+
+		Bundle sensors_bundle = intent.getExtras();
 		
+		httpGetpair = new ArrayList<Pair<HttpGet, String>>();
+
+		for (String sensor : sensors_bundle.keySet()) {
+			Object address = sensors_bundle.get(sensor);
+			httpGetpair.add(new Pair<HttpGet, String>(
+					new HttpGet(urlString+address.toString()),	
+					sensor));
+		}
+
 		Message msg = mServiceHandler.obtainMessage();
 		msg.arg1 = startId;
 		msg.arg2 = JASON_FROM_URL;
 		mServiceHandler.sendMessage(msg);
 
 		// If we get killed, after returning from here, restart
-		return START_NOT_STICKY;
+		return START_STICKY;
 	}
 
 	@Override
 	public void onDestroy() {
+		Toast.makeText(this, "service destroying", Toast.LENGTH_SHORT).show();
 		mServiceLooper.quit();
 	}
-	
-	private boolean inductivereader(InputStream instream) throws IOException{
+
+	private double decodeInclinometer(InputStream instream) throws IOException{
 		JsonReader reader = new JsonReader(new InputStreamReader(instream, "UTF-8"));
 		reader.beginArray();
 		while (reader.hasNext()) {
@@ -79,10 +97,15 @@ public class BGJloop extends Service {
 
 					while (reader.hasNext()) {
 						String valuename = reader.nextName();
-						
-						if (valuename.equals("data")){
+
+						if (valuename.equals("rad")){
+							double value = reader.nextDouble();
 							reader.close();
-							return reader.nextBoolean();
+							return value;
+						} 
+						else {
+							reader.skipValue();
+
 						}
 
 
@@ -91,6 +114,10 @@ public class BGJloop extends Service {
 
 					reader.endObject();
 
+
+				} 
+				else {
+					reader.skipValue();
 
 				}
 
@@ -104,9 +131,63 @@ public class BGJloop extends Service {
 		reader.endArray();
 
 		reader.close();
-		
+
 		throw new IllegalArgumentException("No boolean data to read.");
-		
+
+	}
+
+	private boolean decodeInductive(InputStream instream) throws IOException{
+		JsonReader reader = new JsonReader(new InputStreamReader(instream, "UTF-8"));
+		reader.beginArray();
+		while (reader.hasNext()) {
+			reader.beginObject();
+
+			while (reader.hasNext()) {
+				String propertyname = reader.nextName();
+
+				if (propertyname.equals("value")){
+
+					reader.beginObject();
+
+					while (reader.hasNext()) {
+						String valuename = reader.nextName();
+
+						if (valuename.equals("data")){
+							boolean value = reader.nextBoolean();
+							reader.close();
+							return value;
+						} 
+						else {
+							reader.skipValue();
+
+						}
+
+
+					}
+
+
+					reader.endObject();
+
+
+				} 
+				else {
+					reader.skipValue();
+
+				}
+
+
+
+			}
+
+			reader.endObject();
+		}
+
+		reader.endArray();
+
+		reader.close();
+
+		throw new IllegalArgumentException("No boolean data to read.");
+
 	}
 
 	private final class ServiceHandler extends Handler {
@@ -116,31 +197,47 @@ public class BGJloop extends Service {
 		@Override
 		public void handleMessage(Message msg) {
 			HttpClient httpclient = new DefaultHttpClient(); 
-			HttpGet httpget = new HttpGet(urlString); 
 
 			// Normally we would do some work here, like download a file.
 			// For our sample, we just sleep for 5 seconds.
 			if(msg.arg2==JASON_FROM_URL)
 				while (true) {
-					boolean inductive2;
-					try {
-						HttpResponse response = httpclient.execute(httpget);
+					
+					Intent localIntent = new Intent(MonitoringDisplay.NEW_MONITOR_DATA);
+					
+					for(Pair<HttpGet, String> httpsensor: httpGetpair){
 
-						HttpEntity entity = response.getEntity();
-						if (entity != null) { 
-							InputStream instream = entity.getContent(); 
-							inductive2 = inductivereader(instream);
-							
+						try {
+							HttpResponse response = httpclient.execute(httpsensor.first);
+
+							HttpEntity entity = response.getEntity();
+							if (entity != null) {
+								InputStream instream = entity.getContent();
+
+								switch (httpsensor.second){
+
+								case MonitoringDisplay.INDUCTIVE2:
+									localIntent.putExtra(MonitoringDisplay.INDUCTIVE2, decodeInductive(instream));
+									break;
+
+								case MonitoringDisplay.INCLINATION:
+									localIntent.putExtra(MonitoringDisplay.INCLINATION, decodeInclinometer(instream));
+									break;
+									
+								default:
+									break;
+
+								}
+							}
+
+
+						} catch (Exception e) {
+							Log.e("Rosa WebService","Cannot access/read webservice.",e);
+							e.printStackTrace();
 						}
-
-
-
-
-
-					} catch (Exception e) {
-						Log.e("Rosa WebService","Cannot access/read webservice.",e);
-						e.printStackTrace();
 					}
+
+					LocalBroadcastManager.getInstance(BGJloop.this).sendBroadcast(localIntent);
 
 
 

@@ -7,6 +7,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
@@ -23,6 +24,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -32,7 +34,7 @@ import android.widget.TextView;
 
 import com.lead.rosa.R;
 
-public class InsertActivity extends Activity implements SensorEventListener {
+public class InsertActivity extends Activity implements SensorEventListener, MonitoringDisplay {
 
 	private float theta=0;
 	private SensorManager Smg;
@@ -52,10 +54,13 @@ public class InsertActivity extends Activity implements SensorEventListener {
 	private ImageView regua_dir;
 	private ImageView garra_esq;
 	private ImageView Inductive2;
+	private boolean Inductive2value;
 	private FrameLayout display;
 	private FrameLayout water;
 	private RelativeLayout viga;
 	private final float lvlmin = 2*SensorManager.STANDARD_GRAVITY/3;
+	
+	private RockDataReceiver Monitorreceiver;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +98,23 @@ public class InsertActivity extends Activity implements SensorEventListener {
 		garra_esq = (ImageView) findViewById(R.id.imageView12);
 		garra_dir = (ImageView) findViewById(R.id.imageView13);
 		
+		
 		Inductive2 = (ImageView) findViewById(R.id.Inductive2);
-/*		Intent mServiceIntent = new Intent(this, BGJreader.class);
-		mServiceIntent.putExtra("url","http://192.168.1.75:9292/api/tasks/localhost/bus1/ports/inductive2/read.json");*/
+		Inductive2value = false;		
+		
+		
+		Monitorreceiver = new RockDataReceiver(this);
+		IntentFilter mStatusIntentFilter = new IntentFilter(MonitoringDisplay.NEW_MONITOR_DATA);
+		LocalBroadcastManager.getInstance(this).registerReceiver(Monitorreceiver, mStatusIntentFilter);
+
+		
+		Intent mServiceIntent = new Intent(this, BGJloop.class);
+		mServiceIntent.putExtra("url","http://192.168.1.75:9292/api/tasks/localhost/");
+		mServiceIntent.putExtra(INDUCTIVE2,"bus1/ports/inductive2/read.json");
+		mServiceIntent.putExtra(INCLINATION,"inclination/ports/angle/read.json");
+		startService(mServiceIntent);
+		
+		
 		
 		viga.post(new Runnable(){
 
@@ -195,6 +214,8 @@ private AnimationDrawable getAnimation(Bitmap bitmap) {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		Intent mServiceIntent = new Intent(this, BGJloop.class);
+		stopService(mServiceIntent);
 		Smg.unregisterListener(this);
 	}
 
@@ -328,6 +349,53 @@ private AnimationDrawable getAnimation(Bitmap bitmap) {
 		level.setRotation(theta);
 
 		viga.setRotation(theta);
+		
+	}
+
+
+
+	@Override
+	public void inductive2(boolean value) {
+		if (Inductive2value ^ value){
+			Inductive2value = value;
+			change_induc(Inductive2);
+		}
+		
+	}
+
+
+
+	@Override
+	public void inclination(double value) {
+		
+		
+		
+		float inc = (float) Math.toDegrees(value);
+
+				
+		level.setRotation(inc);
+	
+		viga.setRotation(inc);
+		
+		inc = Math.abs(inc);
+
+		txt_level.setText(String.valueOf((int) inc)+"°");
+		
+		if(inc>10 && level.getTag().equals("green"))
+		{
+			//level.setImageResource(R.drawable.nivel_vermelho);
+			level.setBackgroundColor(0xFFFF4444);
+			txt_level.setTextColor(0xFFFF4444);
+			level.setTag("red");
+			}
+		
+		if(inc<10 && level.getTag().equals("red"))
+		{
+			//level.setImageResource(R.drawable.nivel_verde);
+			level.setBackgroundColor(0xFF41E020);
+			txt_level.setTextColor(0xFF41E020);
+			level.setTag("green");
+			}
 		
 	}
 }

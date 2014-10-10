@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="17" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -47,6 +48,12 @@
             android:enabled="true"
             android:exported="false" >
         </service>
+
+        <receiver
+            android:name="com.lead.inser.RockDataReceiver"
+            android:enabled="true"
+            android:exported="false" >
+        </receiver>
     </application>
 
 </manifest>
