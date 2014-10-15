@@ -53,7 +53,7 @@ public class BGJloop extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
 
 		// For each start request, send a message to start a job and deliver the
 		// start ID so we know which request we're stopping when we finish the job
@@ -83,7 +83,7 @@ public class BGJloop extends Service {
 
 	@Override
 	public void onDestroy() {
-		Toast.makeText(this, "service destroying", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "service destroying", Toast.LENGTH_SHORT).show();
 		runningFlag = false;
 		mServiceLooper.quit();
 	}
@@ -260,7 +260,7 @@ public class BGJloop extends Service {
 				}
 			// Stop the service using the startId, so that we don't stop
 			// the service in the middle of handling another job
-			// stopSelf(msg.arg1);
+			stopSelf(msg.arg1);
 		}
 	}
 
