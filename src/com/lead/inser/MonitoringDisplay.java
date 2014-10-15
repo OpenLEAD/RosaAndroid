@@ -7,7 +7,9 @@ public interface MonitoringDisplay {
 	public static final String INCLINATION = "com.lead.inser.INCLINATION";
 
 	void inductive1(boolean value);
+
 	void inductive2(boolean value);
+
 	void inclination(double value);
-	
+
 }

@@ -24,8 +24,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.JsonReader;
 import android.util.Log;
 import android.util.Pair;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.lead.sensor.AngleJson;
 import com.lead.sensor.InductiveJson;
@@ -40,11 +38,11 @@ public class BGJloop extends Service {
 	String urlString;
 	ArrayList<Pair<HttpGet, String>> httpGetpair;
 
-
 	@Override
 	public void onCreate() {
 
-		HandlerThread thread = new HandlerThread("BGJloopThread", android.os.Process.THREAD_PRIORITY_BACKGROUND);
+		HandlerThread thread = new HandlerThread("BGJloopThread",
+				android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
 		thread.start();
 		mServiceLooper = thread.getLooper();
@@ -53,22 +51,22 @@ public class BGJloop extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		//Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
+		// Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
 
 		// For each start request, send a message to start a job and deliver the
-		// start ID so we know which request we're stopping when we finish the job
+		// start ID so we know which request we're stopping when we finish the
+		// job
 		urlString = intent.getStringExtra("url");
 		intent.removeExtra("url");
 
 		Bundle sensors_bundle = intent.getExtras();
-		
+
 		httpGetpair = new ArrayList<Pair<HttpGet, String>>();
 
 		for (String sensor : sensors_bundle.keySet()) {
 			Object address = sensors_bundle.get(sensor);
-			httpGetpair.add(new Pair<HttpGet, String>(
-					new HttpGet(urlString+address.toString()),	
-					sensor));
+			httpGetpair.add(new Pair<HttpGet, String>(new HttpGet(urlString
+					+ address.toString()), sensor));
 		}
 
 		Message msg = mServiceHandler.obtainMessage();
@@ -83,14 +81,16 @@ public class BGJloop extends Service {
 
 	@Override
 	public void onDestroy() {
-		//Toast.makeText(this, "service destroying", Toast.LENGTH_SHORT).show();
+		// Toast.makeText(this, "service destroying",
+		// Toast.LENGTH_SHORT).show();
 		runningFlag = false;
 		mServiceLooper.quit();
 	}
 
 	@SuppressWarnings("unused")
-	private double decodeInclinometer(InputStream instream) throws IOException{
-		JsonReader reader = new JsonReader(new InputStreamReader(instream, "UTF-8"));
+	private double decodeInclinometer(InputStream instream) throws IOException {
+		JsonReader reader = new JsonReader(new InputStreamReader(instream,
+				"UTF-8"));
 		reader.beginArray();
 		while (reader.hasNext()) {
 			reader.beginObject();
@@ -98,37 +98,30 @@ public class BGJloop extends Service {
 			while (reader.hasNext()) {
 				String propertyname = reader.nextName();
 
-				if (propertyname.equals("value")){
+				if (propertyname.equals("value")) {
 
 					reader.beginObject();
 
 					while (reader.hasNext()) {
 						String valuename = reader.nextName();
 
-						if (valuename.equals("rad")){
+						if (valuename.equals("rad")) {
 							double value = reader.nextDouble();
 							reader.close();
 							return value;
-						} 
-						else {
+						} else {
 							reader.skipValue();
 
 						}
 
-
 					}
-
 
 					reader.endObject();
 
-
-				} 
-				else {
+				} else {
 					reader.skipValue();
 
 				}
-
-
 
 			}
 
@@ -144,8 +137,9 @@ public class BGJloop extends Service {
 	}
 
 	@SuppressWarnings("unused")
-	private boolean decodeInductive(InputStream instream) throws IOException{
-		JsonReader reader = new JsonReader(new InputStreamReader(instream, "UTF-8"));
+	private boolean decodeInductive(InputStream instream) throws IOException {
+		JsonReader reader = new JsonReader(new InputStreamReader(instream,
+				"UTF-8"));
 		reader.beginArray();
 		while (reader.hasNext()) {
 			reader.beginObject();
@@ -153,37 +147,30 @@ public class BGJloop extends Service {
 			while (reader.hasNext()) {
 				String propertyname = reader.nextName();
 
-				if (propertyname.equals("value")){
+				if (propertyname.equals("value")) {
 
 					reader.beginObject();
 
 					while (reader.hasNext()) {
 						String valuename = reader.nextName();
 
-						if (valuename.equals("data")){
+						if (valuename.equals("data")) {
 							boolean value = reader.nextBoolean();
 							reader.close();
 							return value;
-						} 
-						else {
+						} else {
 							reader.skipValue();
 
 						}
 
-
 					}
-
 
 					reader.endObject();
 
-
-				} 
-				else {
+				} else {
 					reader.skipValue();
 
 				}
-
-
 
 			}
 
@@ -202,60 +189,72 @@ public class BGJloop extends Service {
 		public ServiceHandler(Looper looper) {
 			super(looper);
 		}
+
 		@Override
 		public void handleMessage(Message msg) {
-			final HttpClient httpclient = new DefaultHttpClient(); 
+			final HttpClient httpclient = new DefaultHttpClient();
 			final Gson gson = new Gson();
 
 			// Normally we would do some work here, like download a file.
 			// For our sample, we just sleep for 5 seconds.
-			if(msg.arg2==JASON_FROM_URL)
+			if (msg.arg2 == JASON_FROM_URL)
 				while (runningFlag) {
-					Intent localIntent = new Intent(MonitoringDisplay.NEW_MONITOR_DATA);
-					
-					for(Pair<HttpGet, String> httpsensor: httpGetpair){
+					Intent localIntent = new Intent(
+							MonitoringDisplay.NEW_MONITOR_DATA);
+
+					for (Pair<HttpGet, String> httpsensor : httpGetpair) {
 
 						try {
-							HttpResponse response = httpclient.execute(httpsensor.first);
+							HttpResponse response = httpclient
+									.execute(httpsensor.first);
 
 							HttpEntity entity = response.getEntity();
 							if (entity != null) {
 								InputStream instream = entity.getContent();
-								final BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
+								final BufferedReader reader = new BufferedReader(
+										new InputStreamReader(instream));
 
-								switch (httpsensor.second){
+								switch (httpsensor.second) {
 
 								case MonitoringDisplay.INDUCTIVE1:
-									InductiveJson[] inductive1 = gson.fromJson(reader, InductiveJson[].class);
-									localIntent.putExtra(MonitoringDisplay.INDUCTIVE1, inductive1[0].value.data);
+									InductiveJson[] inductive1 = gson.fromJson(
+											reader, InductiveJson[].class);
+									localIntent.putExtra(
+											MonitoringDisplay.INDUCTIVE1,
+											inductive1[0].value.data);
 									break;
 
 								case MonitoringDisplay.INDUCTIVE2:
-									InductiveJson[] inductive2 = gson.fromJson(reader, InductiveJson[].class);
-									localIntent.putExtra(MonitoringDisplay.INDUCTIVE2, inductive2[0].value.data);
+									InductiveJson[] inductive2 = gson.fromJson(
+											reader, InductiveJson[].class);
+									localIntent.putExtra(
+											MonitoringDisplay.INDUCTIVE2,
+											inductive2[0].value.data);
 									break;
 
 								case MonitoringDisplay.INCLINATION:
-									AngleJson[] inclination = gson.fromJson(reader, AngleJson[].class);
-									localIntent.putExtra(MonitoringDisplay.INCLINATION, inclination[0].value.rad);
+									AngleJson[] inclination = gson.fromJson(
+											reader, AngleJson[].class);
+									localIntent.putExtra(
+											MonitoringDisplay.INCLINATION,
+											inclination[0].value.rad);
 									break;
-									
+
 								default:
 									break;
 
 								}
 							}
 
-
 						} catch (Exception e) {
-							Log.e("Rosa WebService","Cannot access/read webservice.",e);
+							Log.e("Rosa WebService",
+									"Cannot access/read webservice.", e);
 							e.printStackTrace();
 						}
 					}
 
-					LocalBroadcastManager.getInstance(BGJloop.this).sendBroadcast(localIntent);
-
-
+					LocalBroadcastManager.getInstance(BGJloop.this)
+							.sendBroadcast(localIntent);
 
 				}
 			// Stop the service using the startId, so that we don't stop

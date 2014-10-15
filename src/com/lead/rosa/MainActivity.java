@@ -25,15 +25,15 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	public void inser(View view){
-        startActivity(new Intent(this, InsertActivity.class));
+	public void inser(View view) {
+		startActivity(new Intent(this, InsertActivity.class));
 	}
 
-	public void remo(View view){
-        startActivity(new Intent(this, InsertActivity.class));
+	public void remo(View view) {
+		startActivity(new Intent(this, InsertActivity.class));
 	}
 
-	public void sonar(View view){
-        startActivity(new Intent(this, SonarActivity.class));
+	public void sonar(View view) {
+		startActivity(new Intent(this, SonarActivity.class));
 	}
 }
