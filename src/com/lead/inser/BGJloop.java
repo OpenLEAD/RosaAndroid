@@ -24,14 +24,16 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.JsonReader;
 import android.util.Log;
 import android.util.Pair;
+
 import com.google.gson.Gson;
 import com.lead.sensor.AngleJson;
 import com.lead.sensor.InductiveJson;
+import com.lead.sensor.PressureJson;
 
 public class BGJloop extends Service {
 
 	private Looper mServiceLooper;
-	private boolean runningFlag;
+	private volatile boolean runningFlag;
 	private ServiceHandler mServiceHandler;
 	static final int JASON_FROM_URL = 1;
 
@@ -197,6 +199,9 @@ public class BGJloop extends Service {
 
 			// Normally we would do some work here, like download a file.
 			// For our sample, we just sleep for 5 seconds.
+			InductiveJson[] inductive;
+			AngleJson[] inclination;
+			PressureJson[] pressure;
 			if (msg.arg2 == JASON_FROM_URL)
 				while (runningFlag) {
 					Intent localIntent = new Intent(
@@ -216,28 +221,61 @@ public class BGJloop extends Service {
 
 								switch (httpsensor.second) {
 
-								case MonitoringDisplay.INDUCTIVE1:
-									InductiveJson[] inductive1 = gson.fromJson(
-											reader, InductiveJson[].class);
+								case MonitoringDisplay.INDUCTIVE_KEY:
+									inductive = gson.fromJson(reader,
+											InductiveJson[].class);
 									localIntent.putExtra(
-											MonitoringDisplay.INDUCTIVE1,
-											inductive1[0].value.data);
+											MonitoringDisplay.INDUCTIVE_KEY,
+											inductive[0].value.data);
 									break;
 
-								case MonitoringDisplay.INDUCTIVE2:
-									InductiveJson[] inductive2 = gson.fromJson(
-											reader, InductiveJson[].class);
+								case MonitoringDisplay.INDUCTIVE_LEFT:
+									inductive = gson.fromJson(reader,
+											InductiveJson[].class);
 									localIntent.putExtra(
-											MonitoringDisplay.INDUCTIVE2,
-											inductive2[0].value.data);
+											MonitoringDisplay.INDUCTIVE_LEFT,
+											inductive[0].value.data);
 									break;
 
-								case MonitoringDisplay.INCLINATION:
-									AngleJson[] inclination = gson.fromJson(
-											reader, AngleJson[].class);
+								case MonitoringDisplay.INDUCTIVE_RIGHT:
+									inductive = gson.fromJson(reader,
+											InductiveJson[].class);
 									localIntent.putExtra(
-											MonitoringDisplay.INCLINATION,
+											MonitoringDisplay.INDUCTIVE_RIGHT,
+											inductive[0].value.data);
+									break;
+
+								case MonitoringDisplay.INCLINATION_BODY:
+									inclination = gson.fromJson(reader,
+											AngleJson[].class);
+									localIntent.putExtra(
+											MonitoringDisplay.INCLINATION_BODY,
 											inclination[0].value.rad);
+									break;
+
+								case MonitoringDisplay.INCLINATION_RIGHT:
+									inclination = gson.fromJson(reader,
+											AngleJson[].class);
+									localIntent
+											.putExtra(
+													MonitoringDisplay.INCLINATION_RIGHT,
+													inclination[0].value.rad);
+									break;
+
+								case MonitoringDisplay.INCLINATION_KEY:
+									inclination = gson.fromJson(reader,
+											AngleJson[].class);
+									localIntent.putExtra(
+											MonitoringDisplay.INCLINATION_KEY,
+											inclination[0].value.rad);
+									break;
+
+								case MonitoringDisplay.PRESSURE:
+									pressure = gson.fromJson(reader,
+											PressureJson[].class);
+									localIntent.putExtra(
+											MonitoringDisplay.PRESSURE,
+											pressure[0].value.pascal);
 									break;
 
 								default:

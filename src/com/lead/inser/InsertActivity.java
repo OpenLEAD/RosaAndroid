@@ -6,6 +6,8 @@ import java.util.List;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -22,7 +24,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -34,7 +40,46 @@ import com.lead.rosa.R;
 public class InsertActivity extends Activity implements SensorEventListener,
 		MonitoringDisplay {
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main_inser, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("Set new ip");
+		alert.setMessage("IP address e.g. 192.168.1.75");
+
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		alert.setView(input);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+		  String ip = input.getText().toString();
+		  mServiceStartIntent.removeExtra("url");
+		  mServiceStartIntent.putExtra("url","http://"+ip+":9292/api/tasks/localhost/");
+			stopService(mServiceStartIntent);
+			startService(mServiceStartIntent);
+		  }
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+		    // Canceled.
+		  }
+		});
+
+		alert.show();
+		return super.onOptionsItemSelected(item);
+	}
+
 	private float theta = 0;
+	private double pressure = 100000;
 	private SensorManager Smg;
 	@SuppressWarnings("unused")
 	private Sensor gravity;
@@ -52,10 +97,13 @@ public class InsertActivity extends Activity implements SensorEventListener,
 	private ImageView stoplog_moving;
 	private ImageView regua_dir;
 	private ImageView garra_esq;
-	private ImageView Inductive2;
-	private boolean Inductive2value;
-	private ImageView Inductive1;
-	private boolean Inductive1value;
+	private ImageView inductive_right;
+	private ImageView still;
+	private ImageView move_up;
+	private ImageView move_down;
+	private boolean inductive_rightvalue;
+	private ImageView inductive_left;
+	private boolean inductive_leftvalue;
 	private FrameLayout display;
 	private FrameLayout water;
 	private RelativeLayout viga;
@@ -92,6 +140,10 @@ public class InsertActivity extends Activity implements SensorEventListener,
 		submerge = new AnimatorSet();
 		submerge.play(submerge1).with(submerge2);
 
+		still = (ImageView) findViewById(R.id.still_depth);
+		move_down = (ImageView) findViewById(R.id.move_down_depth);
+		move_up = (ImageView) findViewById(R.id.move_up_depth);
+
 		txt_level = (TextView) findViewById(R.id.textView2);
 
 		regua_dir = (ImageView) findViewById(R.id.imageView10);
@@ -100,10 +152,10 @@ public class InsertActivity extends Activity implements SensorEventListener,
 		garra_esq = (ImageView) findViewById(R.id.imageView12);
 		garra_dir = (ImageView) findViewById(R.id.imageView13);
 
-		Inductive2 = (ImageView) findViewById(R.id.Inductive2);
-		Inductive2value = false;
-		Inductive1 = (ImageView) findViewById(R.id.Inductive1);
-		Inductive1value = false;
+		inductive_right = (ImageView) findViewById(R.id.Inductive_right);
+		inductive_rightvalue = false;
+		inductive_left = (ImageView) findViewById(R.id.Inductive_left);
+		inductive_leftvalue = false;
 
 		Monitorreceiver = new RockDataReceiver(this);
 		IntentFilter mStatusIntentFilter = new IntentFilter(
@@ -114,12 +166,20 @@ public class InsertActivity extends Activity implements SensorEventListener,
 		mServiceStartIntent = new Intent(this, BGJloop.class);
 		mServiceStartIntent.putExtra("url",
 				"http://192.168.1.75:9292/api/tasks/localhost/");
-		mServiceStartIntent.putExtra(INDUCTIVE1,
-				"bus1/ports/inductive1/read.json");
-		mServiceStartIntent.putExtra(INDUCTIVE2,
-				"bus1/ports/inductive2/read.json");
-		mServiceStartIntent.putExtra(INCLINATION,
-				"inclination/ports/angle/read.json");
+		mServiceStartIntent.putExtra(INDUCTIVE_LEFT,
+				"bus1/ports/inductive_left/read.json");
+		mServiceStartIntent.putExtra(INDUCTIVE_RIGHT,
+				"bus1/ports/inductive_right/read.json");
+		mServiceStartIntent.putExtra(INDUCTIVE_KEY,
+				"bus1/ports/inductive_key/read.json");
+		mServiceStartIntent.putExtra(INCLINATION_BODY,
+				"inclination_body/ports/angle/read.json");
+		mServiceStartIntent.putExtra(INCLINATION_RIGHT,
+				"inclination_right/ports/angle/read.json");
+		mServiceStartIntent.putExtra(INCLINATION_KEY,
+				"inclination_key/ports/angle/read.json");
+		mServiceStartIntent.putExtra(PRESSURE,
+				"pressure/ports/pressure_samples/read.json");
 
 		viga.post(new Runnable() {
 
@@ -221,8 +281,8 @@ public class InsertActivity extends Activity implements SensorEventListener,
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Intent mServiceIntent = new Intent(this, BGJloop.class);
-		stopService(mServiceIntent);
+		//Intent mServiceIntent = new Intent(this, BGJloop.class);
+		stopService(mServiceStartIntent);
 		// Smg.unregisterListener(this);
 	}
 
@@ -269,23 +329,27 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 			((ImageView) view).setImageResource(R.drawable.contato_verde);
 			view.setTag("green");
-			if( Inductive1.getTag().equals("green") || Inductive2.getTag().equals("green") ){
+			if (inductive_left.getTag().equals("green")
+					|| inductive_right.getTag().equals("green")) {
 				anim_fade.setTarget(stoplog_still);
 				anim_appear.setTarget(stoplog_moving);
-				}
+
+				anim_fade.setFloatValues(0);
+				anim_appear.setFloatValues(1);
+			}
 		} else {
 
 			view.setTag("grey");
 			((ImageView) view).setImageResource(R.drawable.contato_cinza);
-			if( Inductive1.getTag().equals("grey") && Inductive2.getTag().equals("grey") ){
+			if (inductive_left.getTag().equals("grey")
+					&& inductive_right.getTag().equals("grey")) {
 				anim_fade.setTarget(stoplog_moving);
 				anim_appear.setTarget(stoplog_still);
-				}
+
+				anim_fade.setFloatValues(0);
+				anim_appear.setFloatValues(0.3f);
+			}
 		}
-		
-		
-		anim_fade.setFloatValues(0);
-		anim_appear.setFloatValues(1);
 		stoplog_move.start();
 
 	}
@@ -359,16 +423,16 @@ public class InsertActivity extends Activity implements SensorEventListener,
 	}
 
 	@Override
-	public void inductive2(boolean value) {
-		if (Inductive2value ^ value) {
-			Inductive2value = value;
-			change_induc(Inductive2);
+	public void inductive_right(boolean value) {
+		if (inductive_rightvalue ^ value) {
+			inductive_rightvalue = value;
+			change_induc(inductive_right);
 		}
 
 	}
 
 	@Override
-	public void inclination(double value) {
+	public void inclination_body(double value) {
 
 		float inc = (float) Math.toDegrees(value);
 
@@ -397,11 +461,66 @@ public class InsertActivity extends Activity implements SensorEventListener,
 	}
 
 	@Override
-	public void inductive1(boolean value) {
-		if (Inductive1value ^ value) {
-			Inductive1value = value;
-			change_induc(Inductive1);
+	public void inductive_left(boolean value) {
+		if (inductive_leftvalue ^ value) {
+			inductive_leftvalue = value;
+			change_induc(inductive_left);
 		}
+
+	}
+
+	@Override
+	public void inductive_key(boolean value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void inclination_right(double value) {
+
+		float inc = (float) Math.toDegrees(value);
+		garra_esq.setRotation(-inc);
+		garra_dir.setRotation(inc);
+
+	}
+
+	@Override
+	public void inclination_key(double value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void pressure(double value) {
+		if (value == pressure) {
+			if(still.getVisibility() == View.INVISIBLE){
+				still.setVisibility(View.VISIBLE);
+				move_up.setVisibility(View.INVISIBLE);
+				move_down.setVisibility(View.INVISIBLE);
+			}
+		} else {
+			if (value > pressure) {
+				if(move_down.getVisibility() == View.INVISIBLE){
+					still.setVisibility(View.INVISIBLE);
+					move_up.setVisibility(View.INVISIBLE);
+					move_down.setVisibility(View.VISIBLE);
+				}
+
+				if (pressure < 100200 && value >= 100200)
+					submerge(water);
+			} else {
+				if(move_up.getVisibility() == View.INVISIBLE){
+					still.setVisibility(View.INVISIBLE);
+					move_up.setVisibility(View.VISIBLE);
+					move_down.setVisibility(View.INVISIBLE);
+				}
+
+				if (pressure > 100100 && value <= 100100)
+					submerge(water);
+			}
+		}
+
+		pressure = value;
 
 	}
 }

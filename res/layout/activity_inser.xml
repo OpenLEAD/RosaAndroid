@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="-200dp"
-            android:alpha="1"
+            android:alpha="0.3"
             android:src="@drawable/stoplog" />
 
     </FrameLayout>
@@ -85,7 +85,8 @@
         android:layout_gravity="bottom|fill_horizontal"
         android:layout_row="0"
         android:alpha="0.35"
-        android:background="#FF2B547E" >
+        android:background="#FF2B547E"
+        android:tag="empty" >
 
     </FrameLayout>
 
@@ -162,7 +163,7 @@
             android:src="@drawable/pocket" />
 
         <ImageView
-            android:id="@+id/Inductive1"
+            android:id="@+id/Inductive_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/imageView5"
@@ -256,15 +257,42 @@
             android:textSize="22sp" />
 
         <ImageView
-            android:id="@+id/imageView15"
+            android:id="@+id/move_down_depth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignRight="@+id/imageView2"
             android:layout_alignTop="@+id/textView2"
             android:layout_marginRight="67dp"
             android:onClick="submerge"
-            android:src="@drawable/profundidade"
-            android:tag="empty" />
+            android:src="@drawable/move_down"
+            android:tag="empty"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/move_up_depth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/imageView2"
+            android:layout_alignTop="@+id/textView2"
+            android:layout_marginRight="67dp"
+            android:onClick="submerge"
+            android:src="@drawable/move_up"
+            android:tag="empty"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/still_depth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/move_down_depth"
+            android:layout_alignLeft="@+id/move_down_depth"
+            android:layout_alignRight="@+id/move_down_depth"
+            android:layout_alignTop="@+id/move_down_depth"
+            android:onClick="submerge"
+            android:scaleType="center"
+            android:src="@drawable/still"
+            android:tag="empty"
+            android:visibility="visible" />
 
     </RelativeLayout>
 
@@ -302,7 +330,7 @@
             android:src="@drawable/pocket" />
 
         <ImageView
-            android:id="@+id/Inductive2"
+            android:id="@+id/Inductive_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/ImageView07"
