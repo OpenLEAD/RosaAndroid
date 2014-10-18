@@ -90,43 +90,51 @@
 
     </FrameLayout>
 
-    <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <FrameLayout
         android:layout_column="0"
         android:layout_gravity="clip_horizontal"
         android:layout_row="0"
-        android:padding="5dp"
-        android:src="@drawable/corpo_regua" />
+        android:padding="5dp" >
 
-    <ImageView
-        android:id="@+id/imageView9"
-        android:layout_column="0"
-        android:layout_gravity="fill_vertical|center_horizontal"
-        android:layout_row="0"
-        android:padding="8dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/regua_esq_dr" />
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/corpo_regua" />
 
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginBottom="-317dp"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/regua_esq_big" />
+
+    </FrameLayout>
+
+    <FrameLayout
         android:layout_column="4"
         android:layout_gravity="clip_horizontal"
         android:layout_row="0"
-        android:padding="5dp"
-        android:src="@drawable/corpo_regua" />
+        android:padding="5dp" >
 
-    <ImageView
-        android:id="@+id/imageView10"
-        android:layout_column="4"
-        android:layout_gravity="fill_vertical|center_horizontal"
-        android:layout_row="0"
-        android:padding="8dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/regua_dir_dr" />
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/corpo_regua" />
+
+        <ImageView
+            android:id="@+id/imageView10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginBottom="-317dp"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/regua_dir_big" />
+
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_column="0"

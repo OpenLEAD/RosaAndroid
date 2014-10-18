@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -78,8 +79,9 @@ public class InsertActivity extends Activity implements SensorEventListener,
 		return super.onOptionsItemSelected(item);
 	}
 
+	public static final double STD_PRESSURE = 100000;
 	private float theta = 0;
-	private double pressure = 100000;
+	private double pressure = STD_PRESSURE;
 	private SensorManager Smg;
 	@SuppressWarnings("unused")
 	private Sensor gravity;
@@ -96,6 +98,9 @@ public class InsertActivity extends Activity implements SensorEventListener,
 	private AnimatorSet submerge;
 	private ImageView stoplog_moving;
 	private ImageView regua_dir;
+	private ImageView regua_esq;
+
+	private MarginLayoutParams margins;
 	private ImageView garra_esq;
 	private ImageView inductive_right;
 	private ImageView still;
@@ -147,7 +152,9 @@ public class InsertActivity extends Activity implements SensorEventListener,
 		txt_level = (TextView) findViewById(R.id.textView2);
 
 		regua_dir = (ImageView) findViewById(R.id.imageView10);
-
+		regua_esq = (ImageView) findViewById(R.id.imageView9);
+		margins =  (MarginLayoutParams) regua_esq.getLayoutParams();
+		
 		viga = (RelativeLayout) findViewById(R.id.relativelayoutgarra);
 		garra_esq = (ImageView) findViewById(R.id.imageView12);
 		garra_dir = (ImageView) findViewById(R.id.imageView13);
@@ -506,7 +513,7 @@ public class InsertActivity extends Activity implements SensorEventListener,
 					move_down.setVisibility(View.VISIBLE);
 				}
 
-				if (pressure < 100200 && value >= 100200)
+				if (pressure < STD_PRESSURE*1.002 && value >= STD_PRESSURE*1.002)
 					submerge(water);
 			} else {
 				if(move_up.getVisibility() == View.INVISIBLE){
@@ -515,12 +522,16 @@ public class InsertActivity extends Activity implements SensorEventListener,
 					move_down.setVisibility(View.INVISIBLE);
 				}
 
-				if (pressure > 100100 && value <= 100100)
+				if (pressure > STD_PRESSURE*1.001 && value <= STD_PRESSURE*1.001)
 					submerge(water);
 			}
 		}
 
 		pressure = value;
 
+		margins.topMargin = (int) (STD_PRESSURE - pressure)/1000;
+		regua_esq.setLayoutParams(margins);
+		regua_dir.setLayoutParams(margins);
+		
 	}
 }
