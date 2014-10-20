@@ -43,8 +43,8 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.main_inser, menu);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_inser, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -55,32 +55,34 @@ public class InsertActivity extends Activity implements SensorEventListener,
 		alert.setTitle("Set new ip");
 		alert.setMessage("IP address e.g. 192.168.1.75");
 
-		// Set an EditText view to get user input 
+		// Set an EditText view to get user input
 		final EditText input = new EditText(this);
 		alert.setView(input);
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int whichButton) {
-		  String ip = input.getText().toString();
-		  mServiceStartIntent.removeExtra("url");
-		  mServiceStartIntent.putExtra("url","http://"+ip+":9292/api/tasks/localhost/");
-			stopService(mServiceStartIntent);
-			startService(mServiceStartIntent);
-		  }
+			public void onClick(DialogInterface dialog, int whichButton) {
+				String ip = input.getText().toString();
+				mServiceStartIntent.removeExtra("url");
+				mServiceStartIntent.putExtra("url", "http://" + ip
+						+ ":9292/api/tasks/localhost/");
+				stopService(mServiceStartIntent);
+				startService(mServiceStartIntent);
+			}
 		});
 
-		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-		  public void onClick(DialogInterface dialog, int whichButton) {
-		    // Canceled.
-		  }
-		});
+		alert.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Canceled.
+					}
+				});
 
 		alert.show();
 		return super.onOptionsItemSelected(item);
 	}
 
 	public static final double STD_PRESSURE = 100000;
-	private float theta = 0;
+	private float theta;
 	private double pressure = STD_PRESSURE;
 	private SensorManager Smg;
 	@SuppressWarnings("unused")
@@ -106,6 +108,7 @@ public class InsertActivity extends Activity implements SensorEventListener,
 	private ImageView still;
 	private ImageView move_up;
 	private ImageView move_down;
+	private TextView pressure_value;
 	private boolean inductive_rightvalue;
 	private ImageView inductive_left;
 	private boolean inductive_leftvalue;
@@ -148,17 +151,20 @@ public class InsertActivity extends Activity implements SensorEventListener,
 		still = (ImageView) findViewById(R.id.still_depth);
 		move_down = (ImageView) findViewById(R.id.move_down_depth);
 		move_up = (ImageView) findViewById(R.id.move_up_depth);
+		pressure_value = (TextView) findViewById(R.id.Profund_text);
 
 		txt_level = (TextView) findViewById(R.id.textView2);
 
 		regua_dir = (ImageView) findViewById(R.id.imageView10);
 		regua_esq = (ImageView) findViewById(R.id.imageView9);
-		margins =  (MarginLayoutParams) regua_esq.getLayoutParams();
-		
+		margins = (MarginLayoutParams) regua_esq.getLayoutParams();
+
 		viga = (RelativeLayout) findViewById(R.id.relativelayoutgarra);
 		garra_esq = (ImageView) findViewById(R.id.imageView12);
 		garra_dir = (ImageView) findViewById(R.id.imageView13);
 
+		theta = 0;
+		
 		inductive_right = (ImageView) findViewById(R.id.Inductive_right);
 		inductive_rightvalue = false;
 		inductive_left = (ImageView) findViewById(R.id.Inductive_left);
@@ -288,7 +294,7 @@ public class InsertActivity extends Activity implements SensorEventListener,
 	@Override
 	protected void onPause() {
 		super.onPause();
-		//Intent mServiceIntent = new Intent(this, BGJloop.class);
+		// Intent mServiceIntent = new Intent(this, BGJloop.class);
 		stopService(mServiceStartIntent);
 		// Smg.unregisterListener(this);
 	}
@@ -337,27 +343,28 @@ public class InsertActivity extends Activity implements SensorEventListener,
 			((ImageView) view).setImageResource(R.drawable.contato_verde);
 			view.setTag("green");
 			if (inductive_left.getTag().equals("green")
-					|| inductive_right.getTag().equals("green")) {
+					&& inductive_right.getTag().equals("green")) {
 				anim_fade.setTarget(stoplog_still);
 				anim_appear.setTarget(stoplog_moving);
 
 				anim_fade.setFloatValues(0);
 				anim_appear.setFloatValues(1);
+				stoplog_move.start();
 			}
 		} else {
 
 			view.setTag("grey");
 			((ImageView) view).setImageResource(R.drawable.contato_cinza);
 			if (inductive_left.getTag().equals("grey")
-					&& inductive_right.getTag().equals("grey")) {
+					|| inductive_right.getTag().equals("grey")) {
 				anim_fade.setTarget(stoplog_moving);
 				anim_appear.setTarget(stoplog_still);
 
 				anim_fade.setFloatValues(0);
-				anim_appear.setFloatValues(0.3f);
+				anim_appear.setFloatValues(0);
+				stoplog_move.start();
 			}
 		}
-		stoplog_move.start();
 
 	}
 
@@ -433,7 +440,38 @@ public class InsertActivity extends Activity implements SensorEventListener,
 	public void inductive_right(boolean value) {
 		if (inductive_rightvalue ^ value) {
 			inductive_rightvalue = value;
-			change_induc(inductive_right);
+
+			if (stoplog_move.isRunning())
+				stoplog_move.cancel();
+
+			if (inductive_rightvalue) {
+
+				inductive_right.setImageResource(R.drawable.contato_verde);
+				if (inductive_leftvalue) {
+					anim_fade.setTarget(stoplog_still);
+					anim_appear.setTarget(stoplog_moving);
+
+					anim_fade.setFloatValues(0);
+					anim_appear.setFloatValues(1);
+					stoplog_move.start();
+				}
+				else
+					inductive_left.setImageResource(R.drawable.contato_amarelo);
+				
+			} else {
+				if (!inductive_leftvalue) {
+					anim_fade.setTarget(stoplog_moving);
+					anim_appear.setTarget(stoplog_still);
+
+					anim_fade.setFloatValues(0);
+					anim_appear.setFloatValues(0);
+					stoplog_move.start();
+					inductive_right.setImageResource(R.drawable.contato_cinza);
+					inductive_left.setImageResource(R.drawable.contato_cinza);
+				}
+				else
+					inductive_right.setImageResource(R.drawable.contato_amarelo);
+			}
 		}
 
 	}
@@ -471,7 +509,38 @@ public class InsertActivity extends Activity implements SensorEventListener,
 	public void inductive_left(boolean value) {
 		if (inductive_leftvalue ^ value) {
 			inductive_leftvalue = value;
-			change_induc(inductive_left);
+
+			if (stoplog_move.isRunning())
+				stoplog_move.cancel();
+
+			if (inductive_leftvalue) {
+
+				inductive_left.setImageResource(R.drawable.contato_verde);
+				if (inductive_rightvalue) {
+					anim_fade.setTarget(stoplog_still);
+					anim_appear.setTarget(stoplog_moving);
+
+					anim_fade.setFloatValues(0);
+					anim_appear.setFloatValues(1);
+					stoplog_move.start();
+				}
+				else
+					inductive_right.setImageResource(R.drawable.contato_amarelo);
+				
+			} else {
+				if (!inductive_rightvalue) {
+					anim_fade.setTarget(stoplog_moving);
+					anim_appear.setTarget(stoplog_still);
+
+					anim_fade.setFloatValues(0);
+					anim_appear.setFloatValues(0);
+					stoplog_move.start();
+					inductive_right.setImageResource(R.drawable.contato_cinza);
+					inductive_left.setImageResource(R.drawable.contato_cinza);
+				}
+				else
+					inductive_left.setImageResource(R.drawable.contato_amarelo);
+			}
 		}
 
 	}
@@ -499,39 +568,62 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 	@Override
 	public void pressure(double value) {
+
+		if (pressure < STD_PRESSURE * 1.002
+				&& value >= STD_PRESSURE * 1.002){
+			submerge(water);
+			still.setVisibility(View.INVISIBLE);
+			pressure_value.setVisibility(View.VISIBLE);
+		} else if (pressure > STD_PRESSURE * 1.001
+				&& value <= STD_PRESSURE * 1.001){
+			submerge(water);
+			still.setVisibility(View.VISIBLE);
+			pressure_value.setVisibility(View.INVISIBLE);
+			
+		}
+		
+		pressure_value.setText(String.format("%.1f m", (value - STD_PRESSURE)/100000));
+		
+		pressure = value;
+
+	}
+
+	public void old_presure(double value) {
 		if (value == pressure) {
-			if(still.getVisibility() == View.INVISIBLE){
+			if (still.getVisibility() == View.INVISIBLE) {
 				still.setVisibility(View.VISIBLE);
 				move_up.setVisibility(View.INVISIBLE);
 				move_down.setVisibility(View.INVISIBLE);
 			}
 		} else {
 			if (value > pressure) {
-				if(move_down.getVisibility() == View.INVISIBLE){
+				if (move_down.getVisibility() == View.INVISIBLE) {
 					still.setVisibility(View.INVISIBLE);
 					move_up.setVisibility(View.INVISIBLE);
 					move_down.setVisibility(View.VISIBLE);
 				}
 
-				if (pressure < STD_PRESSURE*1.002 && value >= STD_PRESSURE*1.002)
+				if (pressure < STD_PRESSURE * 1.002
+						&& value >= STD_PRESSURE * 1.002)
 					submerge(water);
 			} else {
-				if(move_up.getVisibility() == View.INVISIBLE){
+				if (move_up.getVisibility() == View.INVISIBLE) {
 					still.setVisibility(View.INVISIBLE);
 					move_up.setVisibility(View.VISIBLE);
 					move_down.setVisibility(View.INVISIBLE);
 				}
 
-				if (pressure > STD_PRESSURE*1.001 && value <= STD_PRESSURE*1.001)
+				if (pressure > STD_PRESSURE * 1.001
+						&& value <= STD_PRESSURE * 1.001)
 					submerge(water);
 			}
 		}
 
 		pressure = value;
 
-		margins.topMargin = (int) (STD_PRESSURE - pressure)/1000;
+		margins.topMargin = (int) (STD_PRESSURE - pressure) / 1000;
 		regua_esq.setLayoutParams(margins);
 		regua_dir.setLayoutParams(margins);
-		
+
 	}
 }

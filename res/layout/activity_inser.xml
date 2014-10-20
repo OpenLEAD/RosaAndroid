@@ -44,7 +44,7 @@
 	            android:layout_alignLeft="@+id/imageView4"
 	            android:layout_marginBottom="-14dp"
 	            android:layout_marginLeft="189dp"
-	            android:src="@drawable/garra_esq" />
+	            android:src="@drawable/garra_esq_2" />
 	
 	        <ImageView
 	            android:id="@+id/imageView13"
@@ -54,14 +54,14 @@
 	            android:layout_alignRight="@+id/imageView4"
 	            android:layout_marginBottom="-14dp"
 	            android:layout_marginRight="172dp"
-	            android:src="@drawable/garra_dir" />
+	            android:src="@drawable/garra_dir_2" />
 	
 	        <ImageView
 	            android:id="@+id/imageView4"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_centerHorizontal="true"
-	            android:src="@drawable/viga_pescadora" />
+	            android:src="@drawable/viga_pescadora_amarela" />
         
         </RelativeLayout>
 
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="-200dp"
-            android:alpha="0.3"
+            android:alpha="0"
             android:src="@drawable/stoplog" />
 
     </FrameLayout>
@@ -100,6 +100,7 @@
             android:id="@+id/imageView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:alpha="0"
             android:src="@drawable/corpo_regua" />
 
         <ImageView
@@ -109,6 +110,7 @@
             android:layout_gravity="top|center_horizontal"
             android:layout_marginBottom="-317dp"
             android:layout_marginTop="0dp"
+            android:alpha="0"
             android:src="@drawable/regua_esq_big" />
 
     </FrameLayout>
@@ -123,6 +125,7 @@
             android:id="@+id/imageView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:alpha="0"
             android:src="@drawable/corpo_regua" />
 
         <ImageView
@@ -132,6 +135,7 @@
             android:layout_gravity="top|center_horizontal"
             android:layout_marginBottom="-317dp"
             android:layout_marginTop="0dp"
+            android:alpha="0"
             android:src="@drawable/regua_dir_big" />
 
     </FrameLayout>
@@ -201,7 +205,6 @@
             android:layout_alignLeft="@id/ImageView01"
             android:layout_alignRight="@id/ImageView01"
             android:layout_alignTop="@id/ImageView01"
-            android:onClick="rot_garra_esq"
             android:scaleType="center"
             android:src="@drawable/garra_view_esq" />
 
@@ -271,7 +274,6 @@
             android:layout_alignRight="@+id/imageView2"
             android:layout_alignTop="@+id/textView2"
             android:layout_marginRight="67dp"
-            android:onClick="submerge"
             android:src="@drawable/move_down"
             android:tag="empty"
             android:visibility="invisible" />
@@ -283,7 +285,6 @@
             android:layout_alignRight="@+id/imageView2"
             android:layout_alignTop="@+id/textView2"
             android:layout_marginRight="67dp"
-            android:onClick="submerge"
             android:src="@drawable/move_up"
             android:tag="empty"
             android:visibility="invisible" />
@@ -296,11 +297,27 @@
             android:layout_alignLeft="@+id/move_down_depth"
             android:layout_alignRight="@+id/move_down_depth"
             android:layout_alignTop="@+id/move_down_depth"
-            android:onClick="submerge"
             android:scaleType="center"
             android:src="@drawable/still"
             android:tag="empty"
             android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/Profund_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView2"
+            android:layout_alignLeft="@+id/imageView2"
+            android:layout_alignRight="@+id/imageView2"
+            android:layout_marginBottom="27dp"
+            android:layout_marginLeft="155dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center"
+            android:text="0"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:visibility="invisible" />
 
     </RelativeLayout>
 
@@ -368,9 +385,9 @@
             android:layout_alignLeft="@id/ImageView05"
             android:layout_alignRight="@id/ImageView05"
             android:layout_alignTop="@id/ImageView05"
-            android:onClick="rot_garra_dir"
             android:scaleType="center"
-            android:src="@drawable/garra_view_dir" />
+            android:src="@drawable/garra_view_dir"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/TextView05"
@@ -381,7 +398,7 @@
             android:layout_alignRight="@+id/ImageView05"
             android:layout_marginBottom="17dp"
             android:gravity="center"
-            android:text="GARRA"
+            android:text="CHAVE"
             android:textColor="#FFFFFFFF"
             android:textSize="12sp" />
     </RelativeLayout>

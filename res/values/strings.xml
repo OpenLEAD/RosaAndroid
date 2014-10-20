@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Rosa</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Configuração IP</string>
     <string name="hello_world">Hello world!</string>
     <string name="mbsonar_desc">Sonar</string>
     <string name="title_activity_main_inser">MainInser</string>
