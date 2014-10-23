@@ -1,16 +1,11 @@
 package com.lead.inser;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Service;
 import android.content.Intent;
@@ -23,12 +18,7 @@ import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.JsonReader;
 import android.util.Log;
-import android.util.Pair;
-
-import com.google.gson.Gson;
-import com.lead.sensor.AngleJson;
-import com.lead.sensor.InductiveJson;
-import com.lead.sensor.PressureJson;
+import android.util.TimingLogger;
 
 public class BGJloop extends Service {
 
@@ -36,9 +26,10 @@ public class BGJloop extends Service {
 	private volatile boolean runningFlag;
 	private ServiceHandler mServiceHandler;
 	static final int JASON_FROM_URL = 1;
+	public static final String TIMETAG = "ReadingThread";
 
 	String urlString;
-	ArrayList<Pair<HttpGet, String>> httpGetpair;
+	ArrayList<WebSensor> httpGetpair;
 
 	@Override
 	public void onCreate() {
@@ -63,12 +54,38 @@ public class BGJloop extends Service {
 
 		Bundle sensors_bundle = intent.getExtras();
 
-		httpGetpair = new ArrayList<Pair<HttpGet, String>>();
+		httpGetpair = new ArrayList<WebSensor>();
 
 		for (String sensor : sensors_bundle.keySet()) {
 			Object address = sensors_bundle.get(sensor);
-			httpGetpair.add(new Pair<HttpGet, String>(new HttpGet(urlString
-					+ address.toString()), sensor));
+
+			switch (sensor) {
+			case MonitoringDisplay.INDUCTIVE_RIGHT:
+			case MonitoringDisplay.INDUCTIVE_LEFT:
+			case MonitoringDisplay.INDUCTIVE_KEY:
+				httpGetpair.add(new WebInductive(
+						new HttpGet(urlString + address.toString()
+								+ "?timeout=0.2&poll_period=0.01"), sensor, 1,
+						1));
+				break;
+
+			case MonitoringDisplay.INCLINATION_BODY:
+			case MonitoringDisplay.INCLINATION_KEY:
+			case MonitoringDisplay.INCLINATION_RIGHT:
+				httpGetpair.add(new WebInclination(
+						new HttpGet(urlString + address.toString()
+								+ "?timeout=0.2&poll_period=0.01"), sensor, 1,
+						1));
+				break;
+
+			case MonitoringDisplay.PRESSURE:
+				httpGetpair.add(new WebPressure(
+						new HttpGet(urlString + address.toString()
+								+ "?timeout=0.2&poll_period=0.01"), sensor, 1,
+						1));
+				break;
+
+			}
 		}
 
 		Message msg = mServiceHandler.obtainMessage();
@@ -87,6 +104,57 @@ public class BGJloop extends Service {
 		// Toast.LENGTH_SHORT).show();
 		runningFlag = false;
 		mServiceLooper.quit();
+	}
+
+	private final class ServiceHandler extends Handler {
+		public ServiceHandler(Looper looper) {
+			super(looper);
+		}
+
+		@Override
+		public void handleMessage(Message msg) {
+
+			// Normally we would do some work here, like download a file.
+			// For our sample, we just sleep for 5 seconds.
+
+			if (msg.arg2 == JASON_FROM_URL)
+				while (runningFlag) {
+					TimingLogger timings = new TimingLogger(TIMETAG,
+							"WebReading");
+
+					Intent localIntent = new Intent(
+							MonitoringDisplay.NEW_MONITOR_DATA);
+
+					for (WebSensor httpsensor : httpGetpair) {
+
+						try {
+							if(httpsensor.ready())
+								httpsensor.readToIntent(localIntent);
+							timings.addSplit(httpsensor.getSensor());
+
+						} catch (Exception e) {
+							Log.e("Rosa WebService",
+									"Cannot access/read webservice.", e);
+							e.printStackTrace();
+						}
+					}
+
+					LocalBroadcastManager.getInstance(BGJloop.this)
+							.sendBroadcast(localIntent);
+
+					timings.dumpToLog();
+
+				}
+			// Stop the service using the startId, so that we don't stop
+			// the service in the middle of handling another job
+			stopSelf(msg.arg1);
+		}
+	}
+
+	@Override
+	public IBinder onBind(Intent intent) {
+		// TODO: Return the communication channel to the service.
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	@SuppressWarnings("unused")
@@ -185,125 +253,5 @@ public class BGJloop extends Service {
 
 		throw new IllegalArgumentException("No boolean data to read.");
 
-	}
-
-	private final class ServiceHandler extends Handler {
-		public ServiceHandler(Looper looper) {
-			super(looper);
-		}
-
-		@Override
-		public void handleMessage(Message msg) {
-			final HttpClient httpclient = new DefaultHttpClient();
-			final Gson gson = new Gson();
-
-			// Normally we would do some work here, like download a file.
-			// For our sample, we just sleep for 5 seconds.
-			InductiveJson[] inductive;
-			AngleJson[] inclination;
-			PressureJson[] pressure;
-			if (msg.arg2 == JASON_FROM_URL)
-				while (runningFlag) {
-					Intent localIntent = new Intent(
-							MonitoringDisplay.NEW_MONITOR_DATA);
-
-					for (Pair<HttpGet, String> httpsensor : httpGetpair) {
-
-						try {
-							HttpResponse response = httpclient
-									.execute(httpsensor.first);
-
-							HttpEntity entity = response.getEntity();
-							if (entity != null) {
-								InputStream instream = entity.getContent();
-								final BufferedReader reader = new BufferedReader(
-										new InputStreamReader(instream));
-
-								switch (httpsensor.second) {
-
-								case MonitoringDisplay.INDUCTIVE_KEY:
-									inductive = gson.fromJson(reader,
-											InductiveJson[].class);
-									localIntent.putExtra(
-											MonitoringDisplay.INDUCTIVE_KEY,
-											inductive[0].value.data);
-									break;
-
-								case MonitoringDisplay.INDUCTIVE_LEFT:
-									inductive = gson.fromJson(reader,
-											InductiveJson[].class);
-									localIntent.putExtra(
-											MonitoringDisplay.INDUCTIVE_LEFT,
-											inductive[0].value.data);
-									break;
-
-								case MonitoringDisplay.INDUCTIVE_RIGHT:
-									inductive = gson.fromJson(reader,
-											InductiveJson[].class);
-									localIntent.putExtra(
-											MonitoringDisplay.INDUCTIVE_RIGHT,
-											inductive[0].value.data);
-									break;
-
-								case MonitoringDisplay.INCLINATION_BODY:
-									inclination = gson.fromJson(reader,
-											AngleJson[].class);
-									localIntent.putExtra(
-											MonitoringDisplay.INCLINATION_BODY,
-											inclination[0].value.rad);
-									break;
-
-								case MonitoringDisplay.INCLINATION_RIGHT:
-									inclination = gson.fromJson(reader,
-											AngleJson[].class);
-									localIntent
-											.putExtra(
-													MonitoringDisplay.INCLINATION_RIGHT,
-													inclination[0].value.rad);
-									break;
-
-								case MonitoringDisplay.INCLINATION_KEY:
-									inclination = gson.fromJson(reader,
-											AngleJson[].class);
-									localIntent.putExtra(
-											MonitoringDisplay.INCLINATION_KEY,
-											inclination[0].value.rad);
-									break;
-
-								case MonitoringDisplay.PRESSURE:
-									pressure = gson.fromJson(reader,
-											PressureJson[].class);
-									localIntent.putExtra(
-											MonitoringDisplay.PRESSURE,
-											pressure[0].value.pascal);
-									break;
-
-								default:
-									break;
-
-								}
-							}
-
-						} catch (Exception e) {
-							Log.e("Rosa WebService",
-									"Cannot access/read webservice.", e);
-							e.printStackTrace();
-						}
-					}
-
-					LocalBroadcastManager.getInstance(BGJloop.this)
-							.sendBroadcast(localIntent);
-
-				}
-			// Stop the service using the startId, so that we don't stop
-			// the service in the middle of handling another job
-			stopSelf(msg.arg1);
-		}
-	}
-
-	@Override
-	public IBinder onBind(Intent intent) {
-		// TODO: Return the communication channel to the service.
-		throw new UnsupportedOperationException("Not yet implemented");
 	}
 }
