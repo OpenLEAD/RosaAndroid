@@ -1,13 +1,11 @@
 package com.lead.rosa;
 
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.view.Menu;
+import android.os.Bundle;
 import android.view.View;
 
 import com.lead.inser.InsertActivity;
-import com.lead.rosa.R;
 import com.lead.sonar.SonarActivity;
 
 public class MainActivity extends Activity {

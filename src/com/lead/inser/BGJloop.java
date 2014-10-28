@@ -19,6 +19,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.JsonReader;
 import android.util.Log;
 import android.util.TimingLogger;
+import android.widget.Toast;
 
 public class BGJloop extends Service {
 
@@ -130,6 +131,8 @@ public class BGJloop extends Service {
 						try {
 							if(httpsensor.ready())
 								httpsensor.readToIntent(localIntent);
+							else
+								Toast.makeText(BGJloop.this, "Bad Connection", Toast.LENGTH_SHORT).show();
 							timings.addSplit(httpsensor.getSensor());
 
 						} catch (Exception e) {

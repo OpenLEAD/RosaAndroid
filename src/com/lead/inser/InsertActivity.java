@@ -1,8 +1,5 @@
 package com.lead.inser;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -10,13 +7,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Rect;
 import android.graphics.Shader.TileMode;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -134,8 +127,7 @@ public class InsertActivity extends Activity implements SensorEventListener,
 		stoplog_moving = (ImageView) findViewById(R.id.ImageView02);
 
 		anim_fade = ObjectAnimator.ofFloat(null, "alpha", 0f).setDuration(1000);
-		anim_appear = ObjectAnimator.ofFloat(null, "alpha", 1f).setDuration(
-				1000);
+		anim_appear = ObjectAnimator.ofFloat(null, "alpha", 1f).setDuration(1000);
 
 		stoplog_move = new AnimatorSet();
 		stoplog_move.play(anim_fade).with(anim_appear);
@@ -228,67 +220,6 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 		gravity = Smg.getDefaultSensor(Sensor.TYPE_GRAVITY);
 
-	}
-
-	@SuppressWarnings("unused")
-	private void initAnimation() {
-		// R.drawable.tile1 is PNG
-		Bitmap b = BitmapFactory.decodeResource(getResources(),
-				R.drawable.regua_unity_dir);
-		AnimationDrawable shiftedAnimation = getAnimation(b);
-
-		// R.id.img_3 is ImageView in my application
-		View v = findViewById(R.id.imageView10);
-		v.setBackground(shiftedAnimation);
-		shiftedAnimation.start();
-	}
-
-	private Bitmap getShiftedBitmap(Bitmap bitmap, int shiftY) {
-		Bitmap newBitmap = Bitmap.createBitmap(bitmap.getWidth(),
-				bitmap.getHeight(), bitmap.getConfig());
-		Canvas newBitmapCanvas = new Canvas(newBitmap);
-
-		Rect srcRect1 = new Rect(0, shiftY, bitmap.getWidth(),
-				bitmap.getHeight());
-		Rect destRect1 = new Rect(srcRect1);
-		destRect1.offset(0, -shiftY);
-		newBitmapCanvas.drawBitmap(bitmap, srcRect1, destRect1, null);
-
-		Rect srcRect2 = new Rect(0, 0, bitmap.getWidth(), shiftY);
-		Rect destRect2 = new Rect(srcRect2);
-		destRect2.offset(0, bitmap.getHeight() - shiftY);
-		newBitmapCanvas.drawBitmap(bitmap, srcRect2, destRect2, null);
-
-		return newBitmap;
-	}
-
-	private List<Bitmap> getShiftedBitmaps(Bitmap bitmap) {
-		List<Bitmap> shiftedBitmaps = new ArrayList<Bitmap>();
-		int fragments = 10;
-		int shiftLength = bitmap.getWidth() / fragments;
-
-		for (int i = 0; i < fragments; ++i) {
-			shiftedBitmaps.add(getShiftedBitmap(bitmap, shiftLength * i));
-		}
-
-		return shiftedBitmaps;
-	}
-
-	private AnimationDrawable getAnimation(Bitmap bitmap) {
-		AnimationDrawable animation = new AnimationDrawable();
-		animation.setOneShot(false);
-
-		List<Bitmap> shiftedBitmaps = getShiftedBitmaps(bitmap);
-		int duration = 50;
-
-		for (Bitmap image : shiftedBitmaps) {
-			BitmapDrawable navigationBackground = new BitmapDrawable(
-					getResources(), image);
-			navigationBackground.setTileModeX(TileMode.REPEAT);
-
-			animation.addFrame(navigationBackground, duration);
-		}
-		return animation;
 	}
 
 	@Override
@@ -480,14 +411,17 @@ public class InsertActivity extends Activity implements SensorEventListener,
 	public void inclination_body(double value) {
 
 		float inc = (float) Math.toDegrees(value);
+		
 
-		level.setRotation(inc);
-
-		viga.setRotation(inc);
+		level.animate().rotation(inc).setDuration(200).start();
+		viga.animate().rotation(inc).setDuration(200).start();
+		
+//		level.setRotation(inc);
+//		viga.setRotation(inc);
 
 		inc = Math.abs(inc);
 
-		txt_level.setText(String.valueOf((int) inc) + "°");
+		txt_level.setText(String.format("%.1f°", inc));
 
 		if (inc > 10 && level.getTag().equals("green")) {
 			// level.setImageResource(R.drawable.nivel_vermelho);

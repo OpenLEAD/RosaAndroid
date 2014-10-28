@@ -47,15 +47,23 @@ public abstract class WebSensor {
 			try {
 				writeOnIntent(reader,i);
 			} catch (JsonSyntaxException e) {
+				
+//				char[] loger = new char[10];
+//				InputStreamReader instreamTester = new InputStreamReader(entity.getContent(),"UTF-8");
+//				instreamTester.read(loger, 0, 10);
+//				Log.d("Good Json",new String(loger));
+
 				Log.e("Bad Json",
-						"Assuming error, rising sample period.", e);
-				e.printStackTrace();
+						"Assuming error, rising sample period of "+sensor+".", e);
+				//e.printStackTrace();
 
 				Random n = new Random();
 				counter = base_frequency + 10 + n.nextInt(10);
+				entity.consumeContent();
 				return false;
 			}
 			
+			entity.consumeContent();
 			reset();
 			return true;
 		}
