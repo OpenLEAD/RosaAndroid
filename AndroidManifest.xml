@@ -28,7 +28,7 @@
         <activity
             android:name="com.lead.inser.InsertActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/title_activity_test"
+            android:label="@string/title_activity_main_inser"
             android:screenOrientation="sensorLandscape" >
         </activity>
         <activity

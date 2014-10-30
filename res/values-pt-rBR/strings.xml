@@ -5,4 +5,5 @@
     <string name="mbremo">REMOÇÃO \nDE STOPLOG</string>
     <string name="mbinser_desc">Inserção</string>
     <string name="mbremo_desc">Remoção</string>
+    <string name="action_zero">Posição zero</string>
 </resources>

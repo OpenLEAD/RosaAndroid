@@ -26,10 +26,10 @@
             android:layout_marginBottom="-130dp" >
 
 	        <ImageView
-	            android:id="@+id/ImageView02"
+	            android:id="@+id/stoplog_base"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:layout_below="@+id/imageView4"
+	            android:layout_below="@+id/viga_pescadora"
 	            android:layout_centerHorizontal="true"
 	            android:layout_marginLeft="2dp"
 	            android:layout_marginTop="-30dp"
@@ -37,31 +37,53 @@
 	            android:src="@drawable/stoplog" />
 
 	        <ImageView
-	            android:id="@+id/imageView12"
+	            android:id="@+id/claw_left"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:layout_alignBottom="@+id/imageView4"
-	            android:layout_alignLeft="@+id/imageView4"
+	            android:layout_alignBottom="@+id/viga_pescadora"
+	            android:layout_alignLeft="@+id/viga_pescadora"
 	            android:layout_marginBottom="-14dp"
 	            android:layout_marginLeft="189dp"
 	            android:src="@drawable/garra_esq_2" />
 	
 	        <ImageView
-	            android:id="@+id/imageView13"
+	            android:id="@+id/claw_right"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:layout_alignBottom="@+id/imageView4"
-	            android:layout_alignRight="@+id/imageView4"
+	            android:layout_alignBottom="@+id/viga_pescadora"
+	            android:layout_alignRight="@+id/viga_pescadora"
 	            android:layout_marginBottom="-14dp"
 	            android:layout_marginRight="172dp"
 	            android:src="@drawable/garra_dir_2" />
+
+	        <ImageView
+	            android:id="@+id/key"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignBottom="@id/viga_pescadora"
+	            android:layout_alignRight="@id/viga_pescadora"
+	            android:layout_marginBottom="100dp"
+	            android:layout_marginRight="125dp"
+	            android:src="@drawable/chave_final" />
 	
 	        <ImageView
-	            android:id="@+id/imageView4"
+	            android:id="@+id/viga_pescadora"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_centerHorizontal="true"
 	            android:src="@drawable/viga_pescadora_amarela" />
+
+	        <ImageView
+	            android:id="@+id/stoplog_travas"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignLeft="@id/stoplog_base"
+	            android:layout_alignRight="@id/stoplog_base"
+	            android:layout_alignTop="@id/stoplog_base"
+	            android:layout_marginRight="3dp"
+	            android:layout_marginTop="4dp"
+	            android:alpha="0"
+	            android:src="@drawable/travas_stoplog_separadas" />
         
         </RelativeLayout>
 
@@ -175,7 +197,7 @@
             android:src="@drawable/pocket" />
 
         <ImageView
-            android:id="@+id/Inductive_left"
+            android:id="@+id/inductive_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/imageView5"
@@ -355,14 +377,13 @@
             android:src="@drawable/pocket" />
 
         <ImageView
-            android:id="@+id/Inductive_right"
+            android:id="@+id/inductive_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/ImageView07"
             android:layout_alignLeft="@id/ImageView07"
             android:layout_alignRight="@id/ImageView07"
             android:layout_alignTop="@id/ImageView07"
-            android:clickable="true"
             android:scaleType="center"
             android:src="@drawable/contato_cinza"
             android:tag="grey" />
@@ -401,6 +422,20 @@
             android:text="CHAVE"
             android:textColor="#FFFFFFFF"
             android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/inductive_key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/ImageView05"
+            android:layout_alignLeft="@id/ImageView05"
+            android:layout_alignRight="@id/ImageView05"
+            android:layout_alignTop="@id/ImageView05"
+            android:clickable="true"
+            android:scaleType="center"
+            android:src="@drawable/contato_cinza"
+            android:tag="grey" />
+
     </RelativeLayout>
 
 </GridLayout>

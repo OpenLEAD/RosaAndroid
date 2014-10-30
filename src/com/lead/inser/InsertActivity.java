@@ -32,7 +32,7 @@ import android.widget.TextView;
 import com.lead.rosa.R;
 
 public class InsertActivity extends Activity implements SensorEventListener,
-		MonitoringDisplay {
+MonitoringDisplay {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -43,47 +43,81 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-		alert.setTitle("Set new ip");
-		alert.setMessage("IP address e.g. 192.168.1.75");
+		switch (item.getItemId()){
 
-		// Set an EditText view to get user input
-		final EditText input = new EditText(this);
-		alert.setView(input);
+		case R.id.action_zero:
+			AlertDialog.Builder alert_zero = new AlertDialog.Builder(this);
 
-		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				String ip = input.getText().toString();
-				mServiceStartIntent.removeExtra("url");
-				mServiceStartIntent.putExtra("url", "http://" + ip
-						+ ":9292/api/tasks/localhost/");
-				stopService(mServiceStartIntent);
-				startService(mServiceStartIntent);
-			}
-		});
+			alert_zero.setTitle("Configurar tara");
+			alert_zero.setMessage("Usar os valores atuais como posição zero?");
 
-		alert.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						// Canceled.
-					}
-				});
+			alert_zero.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					key_offset += key.getRotation();
+					claw_offset += claw_right.getRotation();
+					liftbeam_offset += liftbeam.getRotation();
+					pressure_offset = pressure;
+				}
+			});
 
-		alert.show();
+			alert_zero.setNegativeButton("Cancel",
+					new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					// Canceled.
+				}
+			});
+
+			alert_zero.show();
+			
+			
+			break;
+
+
+		case R.id.action_settings:
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+			alert.setTitle("Set new ip");
+			alert.setMessage("IP address e.g. 192.168.1.75");
+
+			// Set an EditText view to get user input
+			final EditText input = new EditText(this);
+			alert.setView(input);
+
+			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					String ip = input.getText().toString();
+					mServiceStartIntent.removeExtra("url");
+					mServiceStartIntent.putExtra("url", "http://" + ip
+							+ ":9292/api/tasks/localhost/");
+					stopService(mServiceStartIntent);
+					startService(mServiceStartIntent);
+				}
+			});
+
+			alert.setNegativeButton("Cancel",
+					new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					// Canceled.
+				}
+			});
+
+			alert.show();
+			break;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
 	public static final double STD_PRESSURE = 100000;
 	private float theta;
-	private double pressure = STD_PRESSURE;
+	private double pressure;
+	private double pressure_offset;
 	private SensorManager Smg;
 	@SuppressWarnings("unused")
 	private Sensor gravity;
 	private float[] gdir;
 	private View level;
 	private TextView txt_level;
-	private ImageView garra_dir;
 	private ImageView stoplog_still;
 	private ObjectAnimator anim_fade;
 	private ObjectAnimator anim_appear;
@@ -92,22 +126,30 @@ public class InsertActivity extends Activity implements SensorEventListener,
 	private ObjectAnimator submerge2;
 	private AnimatorSet submerge;
 	private ImageView stoplog_moving;
+	private ImageView stoplog_moving_trava;
 	private ImageView regua_dir;
 	private ImageView regua_esq;
 
 	private MarginLayoutParams margins;
-	private ImageView garra_esq;
+	private ImageView claw_left;
+	private ImageView claw_right;
+	private float claw_offset;
+	private RelativeLayout liftbeam;
+	private float liftbeam_offset;
+	private ImageView key;
+	private float key_offset;
+	private ImageView inductive_key;
+	private boolean inductive_keyvalue;
 	private ImageView inductive_right;
+	private boolean inductive_rightvalue;
+	private ImageView inductive_left;
+	private boolean inductive_leftvalue;
 	private ImageView still;
 	private ImageView move_up;
 	private ImageView move_down;
 	private TextView pressure_value;
-	private boolean inductive_rightvalue;
-	private ImageView inductive_left;
-	private boolean inductive_leftvalue;
 	private FrameLayout display;
 	private FrameLayout water;
-	private RelativeLayout viga;
 	private final float lvlmin = 2 * SensorManager.STANDARD_GRAVITY / 3;
 
 	private RockDataReceiver Monitorreceiver;
@@ -118,13 +160,16 @@ public class InsertActivity extends Activity implements SensorEventListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inser);
 
+		pressure = STD_PRESSURE;
+		pressure_offset = STD_PRESSURE;
 		level = findViewById(R.id.View3);
 
 		display = (FrameLayout) findViewById(R.id.animationFrame);
 		water = (FrameLayout) findViewById(R.id.water);
 
 		stoplog_still = (ImageView) findViewById(R.id.imageView14);
-		stoplog_moving = (ImageView) findViewById(R.id.ImageView02);
+		stoplog_moving = (ImageView) findViewById(R.id.stoplog_base);
+		stoplog_moving_trava = (ImageView) findViewById(R.id.stoplog_travas);
 
 		anim_fade = ObjectAnimator.ofFloat(null, "alpha", 0f).setDuration(1000);
 		anim_appear = ObjectAnimator.ofFloat(null, "alpha", 1f).setDuration(1000);
@@ -151,16 +196,22 @@ public class InsertActivity extends Activity implements SensorEventListener,
 		regua_esq = (ImageView) findViewById(R.id.imageView9);
 		margins = (MarginLayoutParams) regua_esq.getLayoutParams();
 
-		viga = (RelativeLayout) findViewById(R.id.relativelayoutgarra);
-		garra_esq = (ImageView) findViewById(R.id.imageView12);
-		garra_dir = (ImageView) findViewById(R.id.imageView13);
+		liftbeam = (RelativeLayout) findViewById(R.id.relativelayoutgarra);
+		liftbeam_offset = 0;
+		claw_left = (ImageView) findViewById(R.id.claw_left);
+		claw_right = (ImageView) findViewById(R.id.claw_right);
+		claw_offset = 0;
+		key = (ImageView) findViewById(R.id.key);
+		key_offset = 45;
 
 		theta = 0;
-		
-		inductive_right = (ImageView) findViewById(R.id.Inductive_right);
+
+		inductive_right = (ImageView) findViewById(R.id.inductive_right);
 		inductive_rightvalue = false;
-		inductive_left = (ImageView) findViewById(R.id.Inductive_left);
+		inductive_left = (ImageView) findViewById(R.id.inductive_left);
 		inductive_leftvalue = false;
+		inductive_key = (ImageView) findViewById(R.id.inductive_key);
+		inductive_keyvalue = false;
 
 		Monitorreceiver = new RockDataReceiver(this);
 		IntentFilter mStatusIntentFilter = new IntentFilter(
@@ -186,32 +237,43 @@ public class InsertActivity extends Activity implements SensorEventListener,
 		mServiceStartIntent.putExtra(PRESSURE,
 				"pressure/ports/pressure_samples/read.json");
 
-		viga.post(new Runnable() {
+
+		key.post(new Runnable() {
 
 			@Override
 			public void run() {
-				viga.setPivotX(viga.getMeasuredWidth() / 2);
-				viga.setPivotY(0);
+				key.setPivotX((float) (key.getMeasuredWidth() * 7.0 / 82) );
+				key.setPivotY((float) (key.getMeasuredHeight() * 26.0 / 34) );
 			}
 
 		});
 
-		garra_esq.post(new Runnable() {
+		liftbeam.post(new Runnable() {
 
 			@Override
 			public void run() {
-				garra_esq.setPivotX((int) (garra_esq.getMeasuredWidth() * 0.357));
-				garra_esq.setPivotY((int) (garra_esq.getMeasuredHeight() * 0.175));
+				liftbeam.setPivotX((float) (liftbeam.getMeasuredWidth() / 2.0));
+				liftbeam.setPivotY(0);
 			}
 
 		});
 
-		garra_dir.post(new Runnable() {
+		claw_left.post(new Runnable() {
 
 			@Override
 			public void run() {
-				garra_dir.setPivotX((int) (garra_dir.getMeasuredWidth() * 0.643));
-				garra_dir.setPivotY((int) (garra_dir.getMeasuredHeight() * 0.175));
+				claw_left.setPivotX((float) (claw_left.getMeasuredWidth() * 31.5 / 77));
+				claw_left.setPivotY((float) (claw_left.getMeasuredHeight() * 19.5 / 213));
+			}
+
+		});
+
+		claw_right.post(new Runnable() {
+
+			@Override
+			public void run() {
+				claw_right.setPivotX((float) (claw_right.getMeasuredWidth() * 42.0 / 74));
+				claw_right.setPivotY((float) (claw_right.getMeasuredHeight() * 21.0 / 213));
 			}
 
 		});
@@ -239,15 +301,15 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 	public void rot_garra_esq(View view) {
 		theta += 5;
-		garra_esq.setRotation(-theta);
-		garra_dir.setRotation(theta);
+		claw_left.setRotation(-theta);
+		claw_right.setRotation(theta);
 
 	}
 
 	public void rot_garra_dir(View view) {
 		theta -= 5;
-		garra_esq.setRotation(-theta);
-		garra_dir.setRotation(theta);
+		claw_left.setRotation(-theta);
+		claw_right.setRotation(theta);
 
 		BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(),
 				BitmapFactory.decodeResource(getResources(),
@@ -280,6 +342,7 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 				anim_fade.setFloatValues(0);
 				anim_appear.setFloatValues(1);
+				stoplog_moving_trava.animate().alpha(1).setDuration(2000).start();
 				stoplog_move.start();
 			}
 		} else {
@@ -293,6 +356,7 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 				anim_fade.setFloatValues(0);
 				anim_appear.setFloatValues(0);
+				stoplog_moving_trava.animate().alpha(0).setDuration(2000).start();
 				stoplog_move.start();
 			}
 		}
@@ -363,7 +427,7 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 		level.setRotation(theta);
 
-		viga.setRotation(theta);
+		liftbeam.setRotation(theta);
 
 	}
 
@@ -384,11 +448,12 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 					anim_fade.setFloatValues(0);
 					anim_appear.setFloatValues(1);
+					stoplog_moving_trava.animate().alpha(1).setDuration(1000).start();
 					stoplog_move.start();
 				}
 				else
 					inductive_left.setImageResource(R.drawable.contato_amarelo);
-				
+
 			} else {
 				if (!inductive_leftvalue) {
 					anim_fade.setTarget(stoplog_moving);
@@ -396,6 +461,7 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 					anim_fade.setFloatValues(0);
 					anim_appear.setFloatValues(0);
+					stoplog_moving_trava.animate().alpha(0).setDuration(1000).start();
 					stoplog_move.start();
 					inductive_right.setImageResource(R.drawable.contato_cinza);
 					inductive_left.setImageResource(R.drawable.contato_cinza);
@@ -410,14 +476,11 @@ public class InsertActivity extends Activity implements SensorEventListener,
 	@Override
 	public void inclination_body(double value) {
 
-		float inc = (float) Math.toDegrees(value);
-		
+		float inc = (float) Math.toDegrees(value) - liftbeam_offset;
+
 
 		level.animate().rotation(inc).setDuration(200).start();
-		viga.animate().rotation(inc).setDuration(200).start();
-		
-//		level.setRotation(inc);
-//		viga.setRotation(inc);
+		liftbeam.animate().rotation(inc).setDuration(200).start();
 
 		inc = Math.abs(inc);
 
@@ -456,11 +519,12 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 					anim_fade.setFloatValues(0);
 					anim_appear.setFloatValues(1);
+					stoplog_moving_trava.animate().alpha(1).setDuration(1000).start();
 					stoplog_move.start();
 				}
 				else
 					inductive_right.setImageResource(R.drawable.contato_amarelo);
-				
+
 			} else {
 				if (!inductive_rightvalue) {
 					anim_fade.setTarget(stoplog_moving);
@@ -468,6 +532,7 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 					anim_fade.setFloatValues(0);
 					anim_appear.setFloatValues(0);
+					stoplog_moving_trava.animate().alpha(0).setDuration(1000).start();
 					stoplog_move.start();
 					inductive_right.setImageResource(R.drawable.contato_cinza);
 					inductive_left.setImageResource(R.drawable.contato_cinza);
@@ -481,43 +546,53 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 	@Override
 	public void inductive_key(boolean value) {
-		// TODO Auto-generated method stub
+
+		if(inductive_keyvalue ^ value){
+			inductive_keyvalue = value;
+			if(inductive_keyvalue)
+				inductive_key.setImageResource(R.drawable.contato_azul);
+			else
+				inductive_key.setImageResource(R.drawable.contato_cinza);
+
+		}
 
 	}
 
 	@Override
 	public void inclination_right(double value) {
 
-		float inc = (float) Math.toDegrees(value);
-		garra_esq.setRotation(-inc);
-		garra_dir.setRotation(inc);
+		float inc = (float) Math.toDegrees(value) - claw_offset;
+		claw_left.animate().rotation(-inc).setDuration(200).start();
+		claw_right.animate().rotation(inc).setDuration(200).start();
 
 	}
 
 	@Override
 	public void inclination_key(double value) {
-		// TODO Auto-generated method stub
+
+		float inc = (float) Math.toDegrees(value) - key_offset;
+		key.animate().rotation(inc).setDuration(200).start();
 
 	}
 
 	@Override
 	public void pressure(double value) {
 
-		if (pressure < STD_PRESSURE * 1.002
-				&& value >= STD_PRESSURE * 1.002){
+		if (pressure < pressure_offset * 1.002
+				&& value >= pressure_offset * 1.002){
 			submerge(water);
 			still.setVisibility(View.INVISIBLE);
 			pressure_value.setVisibility(View.VISIBLE);
-		} else if (pressure > STD_PRESSURE * 1.001
-				&& value <= STD_PRESSURE * 1.001){
+		} else if (pressure > pressure_offset * 1.001
+				&& value <= pressure_offset * 1.001){
 			submerge(water);
 			still.setVisibility(View.VISIBLE);
 			pressure_value.setVisibility(View.INVISIBLE);
-			
+
 		}
-		
-		pressure_value.setText(String.format("%.1f m", (value - STD_PRESSURE)/100000));
-		
+
+		pressure_value.setText(String.format("%.1f m", (value - pressure_offset)/100000));
+
 		pressure = value;
 
 	}

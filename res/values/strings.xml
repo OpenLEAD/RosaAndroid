@@ -5,9 +5,9 @@
     <string name="action_settings">Configuração IP</string>
     <string name="hello_world">Hello world!</string>
     <string name="mbsonar_desc">Sonar</string>
-    <string name="title_activity_main_inser">MainInser</string>
+    <string name="title_activity_main_inser">Monitoração</string>
     <string name="title_activity_test">TestActivity</string>
-    <string name="title_activity_sonar">SonarActivity</string>
-    <string name="title_activity_sonar_view">SonarViewActivity</string>
+    <string name="title_activity_sonar">Sonar</string>
+    <string name="title_activity_sonar_view">Vizualização Sonar</string>
 
 </resources>
