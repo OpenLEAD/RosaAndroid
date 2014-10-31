@@ -51,7 +51,7 @@ public class SonarActivity extends Activity {
 		viga = (RelativeLayout) findViewById(R.id.relativelayoutgarra);
 		sonar_progress = (ProgressBar) findViewById(R.id.progressBar1);
 		sonar_loading_text = (TextView) findViewById(R.id.carregando);
-		sonar_btn = (ImageView) findViewById(R.id.SonarBtn);
+		sonar_btn = (ImageView) findViewById(R.id.ClawReference);
 
 		submerge1 = ObjectAnimator.ofFloat(water, "ScaleY", 1)
 				.setDuration(2000);

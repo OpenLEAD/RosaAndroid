@@ -73,7 +73,7 @@
             android:text="@string/mbremo" />
 
         <ImageView
-            android:id="@+id/SonarBtn"
+            android:id="@+id/ClawReference"
             style="@style/ButtonIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

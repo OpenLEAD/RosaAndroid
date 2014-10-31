@@ -58,6 +58,11 @@ MonitoringDisplay {
 					claw_offset += claw_right.getRotation();
 					liftbeam_offset += liftbeam.getRotation();
 					pressure_offset = pressure;
+					if (still.getVisibility() == View.INVISIBLE){
+						submerge(water);
+						still.setVisibility(View.VISIBLE);
+						pressure_value.setVisibility(View.INVISIBLE);
+					}
 				}
 			});
 

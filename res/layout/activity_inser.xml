@@ -220,15 +220,72 @@
             android:src="@drawable/pocket" />
 
         <ImageView
-            android:id="@+id/SonarBtn"
+            android:id="@+id/ClawReference"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/ImageView01"
             android:layout_alignLeft="@id/ImageView01"
             android:layout_alignRight="@id/ImageView01"
             android:layout_alignTop="@id/ImageView01"
+            android:alpha="0.5"
             android:scaleType="center"
-            android:src="@drawable/garra_view_esq" />
+            android:src="@drawable/garra_cinza" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/ImageView01"
+            android:layout_alignRight="@id/ImageView01"
+            android:layout_alignTop="@id/ClawReference"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="28dp"
+            android:src="@drawable/linha_reta" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/ImageView01"
+            android:layout_alignLeft="@id/ImageView01"
+            android:layout_alignRight="@id/ImageView01"
+            android:layout_alignTop="@id/ImageView01" >
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp" >
+
+                <ImageView
+                    android:id="@+id/ClawAngle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerInParent="false"
+                    android:scaleType="center"
+                    android:src="@drawable/garra_cinza" />
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/ClawAngle"
+                    android:layout_alignTop="@id/ClawAngle"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="12dp"
+                    android:src="@drawable/linha_reta" />
+            </RelativeLayout>
+
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/imageView4"
+            android:layout_alignRight="@id/imageView4"
+            android:layout_alignTop="@id/imageView4"
+            android:src="@drawable/centro_angulo" />
 
         <TextView
             android:id="@+id/TextView02"
