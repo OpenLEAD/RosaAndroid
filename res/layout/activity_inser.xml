@@ -168,167 +168,21 @@
         android:gravity="center" >
 
         <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/encoder_indutivo_corpo" />
-
-        <TextView
-            android:id="@+id/carregando"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/imageView5"
-            android:layout_alignLeft="@+id/imageView5"
-            android:layout_alignRight="@+id/imageView5"
-            android:layout_marginBottom="17dp"
-            android:gravity="center"
-            android:text="CONTATO"
-            android:textColor="#FFFFFFFF"
-            android:textSize="12sp" />
-
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/imageView1"
-            android:layout_alignLeft="@id/imageView1"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="9dp"
-            android:src="@drawable/pocket" />
-
-        <ImageView
-            android:id="@+id/inductive_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/imageView5"
-            android:layout_alignLeft="@id/imageView5"
-            android:layout_alignRight="@id/imageView5"
-            android:layout_alignTop="@id/imageView5"
-            android:clickable="true"
-            android:scaleType="center"
-            android:src="@drawable/contato_cinza"
-            android:tag="grey" />
-
-        <ImageView
-            android:id="@+id/ImageView01"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/imageView1"
-            android:layout_alignRight="@+id/imageView1"
-            android:layout_marginBottom="20dp"
-            android:layout_marginRight="9dp"
-            android:src="@drawable/pocket" />
-
-        <ImageView
-            android:id="@+id/ClawReference"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/ImageView01"
-            android:layout_alignLeft="@id/ImageView01"
-            android:layout_alignRight="@id/ImageView01"
-            android:layout_alignTop="@id/ImageView01"
-            android:alpha="0.5"
-            android:scaleType="center"
-            android:src="@drawable/garra_cinza" />
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/ImageView01"
-            android:layout_alignRight="@id/ImageView01"
-            android:layout_alignTop="@id/ClawReference"
-            android:layout_marginRight="2dp"
-            android:layout_marginTop="28dp"
-            android:src="@drawable/linha_reta" />
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/ImageView01"
-            android:layout_alignLeft="@id/ImageView01"
-            android:layout_alignRight="@id/ImageView01"
-            android:layout_alignTop="@id/ImageView01" >
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp" >
-
-                <ImageView
-                    android:id="@+id/ClawAngle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerInParent="false"
-                    android:scaleType="center"
-                    android:src="@drawable/garra_cinza" />
-
-                <ImageView
-                    android:id="@+id/imageView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/ClawAngle"
-                    android:layout_alignTop="@id/ClawAngle"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="12dp"
-                    android:src="@drawable/linha_reta" />
-            </RelativeLayout>
-
-        </FrameLayout>
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/imageView4"
-            android:layout_alignRight="@id/imageView4"
-            android:layout_alignTop="@id/imageView4"
-            android:src="@drawable/centro_angulo" />
-
-        <TextView
-            android:id="@+id/TextView02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/ImageView01"
-            android:layout_alignLeft="@id/ImageView01"
-            android:layout_alignRight="@id/ImageView01"
-            android:layout_marginBottom="17dp"
-            android:gravity="center"
-            android:text="GARRA"
-            android:textColor="#FFFFFFFF"
-            android:textSize="12sp" />
-    </RelativeLayout>
-
-    <RelativeLayout android:gravity="center" >
-
-        <ImageView
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:src="@drawable/inclinometro_corpo" />
-        
-		<View
-		    android:id="@+id/View3"
-		    android:layout_width="205dp"
-		    android:layout_height="3dip"
-		    android:layout_alignTop="@+id/imageView2"
-		    android:layout_centerHorizontal="true"
-		    android:layout_marginTop="56dp"
-		    android:background="#FF41E020"
-		    android:tag="green" />
-		
-<!--         <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
+        <View
+            android:id="@+id/View3"
+            android:layout_width="205dp"
+            android:layout_height="3dip"
             android:layout_alignTop="@+id/imageView2"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="56dp"
-            android:src="@drawable/inc_line"
-            android:tag="green" /> -->
+            android:background="#FF41E020"
+            android:tag="green" />
 
         <TextView
             android:id="@+id/textView2"
@@ -397,7 +251,86 @@
             android:textColor="#FFFFFF"
             android:textSize="22sp"
             android:visibility="invisible" />
+    </RelativeLayout>
 
+    <RelativeLayout android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/encoder_indutivo_corpo" />
+
+        <TextView
+            android:id="@+id/carregando"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/imageView5"
+            android:layout_alignLeft="@+id/imageView5"
+            android:layout_alignRight="@+id/imageView5"
+            android:layout_marginBottom="17dp"
+            android:gravity="center"
+            android:text="GARRA ESQUERDA"
+            android:textColor="#FFFFFFFF"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/imageView1"
+            android:layout_alignLeft="@id/imageView1"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="9dp"
+            android:src="@drawable/pocket" />
+
+        <ImageView
+            android:id="@+id/inductive_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/imageView5"
+            android:layout_alignLeft="@id/imageView5"
+            android:layout_alignRight="@id/imageView5"
+            android:layout_alignTop="@id/imageView5"
+            android:clickable="true"
+            android:scaleType="center"
+            android:src="@drawable/contato_cinza"
+            android:tag="grey" />
+
+        <ImageView
+            android:id="@+id/ImageView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView1"
+            android:layout_alignRight="@+id/imageView1"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="9dp"
+            android:src="@drawable/pocket" />
+
+        <ImageView
+            android:id="@+id/inductive_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/ImageView01"
+            android:layout_alignLeft="@id/ImageView01"
+            android:layout_alignRight="@id/ImageView01"
+            android:layout_alignTop="@id/ImageView01"
+            android:scaleType="center"
+            android:src="@drawable/contato_cinza"
+            android:tag="grey" />
+
+        <TextView
+            android:id="@+id/TextView02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/ImageView01"
+            android:layout_alignLeft="@id/ImageView01"
+            android:layout_alignRight="@id/ImageView01"
+            android:layout_marginBottom="17dp"
+            android:gravity="center"
+            android:text="GARRA DIREITA"
+            android:textColor="#FFFFFFFF"
+            android:textSize="12sp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -410,88 +343,89 @@
             android:layout_height="wrap_content"
             android:src="@drawable/encoder_indutivo_corpo" />
 
-        <TextView
-            android:id="@+id/TextView04"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/ImageView07"
-            android:layout_alignLeft="@+id/ImageView07"
-            android:layout_alignRight="@+id/ImageView07"
-            android:layout_marginBottom="17dp"
-            android:gravity="center"
-            android:text="CONTATO"
-            android:textColor="#FFFFFFFF"
-            android:textSize="12sp" />
-
         <ImageView
-            android:id="@+id/ImageView07"
+            android:id="@+id/imageView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/ImageView06"
-            android:layout_alignRight="@id/ImageView06"
+            android:layout_alignLeft="@id/ImageView06"
             android:layout_marginBottom="20dp"
-            android:layout_marginRight="9dp"
-            android:src="@drawable/pocket" />
+            android:layout_marginLeft="11dp"
+            android:src="@drawable/retangulo_interno" />
 
-        <ImageView
-            android:id="@+id/inductive_right"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/ImageView07"
-            android:layout_alignLeft="@id/ImageView07"
-            android:layout_alignRight="@id/ImageView07"
-            android:layout_alignTop="@id/ImageView07"
-            android:scaleType="center"
-            android:src="@drawable/contato_cinza"
-            android:tag="grey" />
+            android:layout_alignTop="@id/imageView3"
+            android:layout_centerHorizontal="true" >
+
+            <ImageView
+                android:id="@+id/desengatado_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:src="@drawable/btn_desativado_desengatado" />
+
+            <ImageView
+                android:id="@+id/desengate_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:src="@drawable/btn_desativado_desengate" />
+
+            <ImageView
+                android:id="@+id/engate_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:src="@drawable/btn_engate" />
+
+        </LinearLayout>
 
         <ImageView
-            android:id="@+id/ImageView05"
+            android:id="@+id/engate_fig"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/ImageView06"
-            android:layout_alignLeft="@+id/ImageView06"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="9dp"
-            android:src="@drawable/pocket" />
+            android:layout_alignBottom="@id/imageView3"
+            android:layout_alignLeft="@id/imageView3"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="135dp"
+            android:src="@drawable/chave_engate" />
 
         <ImageView
-            android:id="@+id/imageView11"
+            android:id="@+id/desengate_fig"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/ImageView05"
-            android:layout_alignLeft="@id/ImageView05"
-            android:layout_alignRight="@id/ImageView05"
-            android:layout_alignTop="@id/ImageView05"
-            android:scaleType="center"
-            android:src="@drawable/garra_view_dir"
-            android:visibility="invisible" />
+            android:layout_alignBottom="@id/imageView3"
+            android:layout_alignLeft="@id/imageView3"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="108dp"
+            android:alpha="0.3"
+            android:src="@drawable/chave_desengate" />
+
+        <ImageView
+            android:id="@+id/desengatado_fig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/imageView3"
+            android:layout_alignLeft="@id/imageView3"
+            android:layout_marginBottom="7dp"
+            android:layout_marginLeft="79dp"
+            android:alpha="0.3"
+            android:src="@drawable/chave_desengatada" />
 
         <TextView
             android:id="@+id/TextView05"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/ImageView05"
-            android:layout_alignLeft="@+id/ImageView05"
-            android:layout_alignRight="@+id/ImageView05"
+            android:layout_above="@id/imageView3"
+            android:layout_alignLeft="@id/imageView3"
+            android:layout_alignRight="@id/imageView3"
             android:layout_marginBottom="17dp"
             android:gravity="center"
-            android:text="CHAVE"
+            android:text="POSIÇÃO CHAVE"
             android:textColor="#FFFFFFFF"
             android:textSize="12sp" />
-
-        <ImageView
-            android:id="@+id/inductive_key"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/ImageView05"
-            android:layout_alignLeft="@id/ImageView05"
-            android:layout_alignRight="@id/ImageView05"
-            android:layout_alignTop="@id/ImageView05"
-            android:clickable="true"
-            android:scaleType="center"
-            android:src="@drawable/contato_cinza"
-            android:tag="grey" />
 
     </RelativeLayout>
 

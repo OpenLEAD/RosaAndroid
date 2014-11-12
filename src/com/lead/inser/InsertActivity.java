@@ -32,7 +32,7 @@ import android.widget.TextView;
 import com.lead.rosa.R;
 
 public class InsertActivity extends Activity implements SensorEventListener,
-MonitoringDisplay {
+		MonitoringDisplay {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -44,40 +44,41 @@ MonitoringDisplay {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
-		switch (item.getItemId()){
+		switch (item.getItemId()) {
 
 		case R.id.action_zero:
 			AlertDialog.Builder alert_zero = new AlertDialog.Builder(this);
 
 			alert_zero.setTitle("Configurar tara");
-			alert_zero.setMessage("Usar os valores atuais como posição zero?");
+			alert_zero.setMessage("Usar os valores atuais como posicao zero?");
 
-			alert_zero.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-					key_offset += key.getRotation();
-					claw_offset += claw_right.getRotation();
-					liftbeam_offset += liftbeam.getRotation();
-					pressure_offset = pressure;
-					if (still.getVisibility() == View.INVISIBLE){
-						submerge(water);
-						still.setVisibility(View.VISIBLE);
-						pressure_value.setVisibility(View.INVISIBLE);
-					}
-				}
-			});
+			alert_zero.setPositiveButton("Ok",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							key_offset += key.getRotation();
+							claw_offset += claw_right.getRotation();
+							liftbeam_offset += liftbeam.getRotation();
+							pressure_offset = pressure;
+							if (still.getVisibility() == View.INVISIBLE) {
+								submerge(water);
+								still.setVisibility(View.VISIBLE);
+								pressure_value.setVisibility(View.INVISIBLE);
+							}
+						}
+					});
 
 			alert_zero.setNegativeButton("Cancel",
 					new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-					// Canceled.
-				}
-			});
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							// Canceled.
+						}
+					});
 
 			alert_zero.show();
-			
-			
-			break;
 
+			break;
 
 		case R.id.action_settings:
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -89,23 +90,26 @@ MonitoringDisplay {
 			final EditText input = new EditText(this);
 			alert.setView(input);
 
-			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-					String ip = input.getText().toString();
-					mServiceStartIntent.removeExtra("url");
-					mServiceStartIntent.putExtra("url", "http://" + ip
-							+ ":9292/api/tasks/localhost/");
-					stopService(mServiceStartIntent);
-					startService(mServiceStartIntent);
-				}
-			});
+			alert.setPositiveButton("Ok",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							String ip = input.getText().toString();
+							mServiceStartIntent.removeExtra("url");
+							mServiceStartIntent.putExtra("url", "http://" + ip
+									+ ":9292/api/tasks/localhost/");
+							stopService(mServiceStartIntent);
+							startService(mServiceStartIntent);
+						}
+					});
 
 			alert.setNegativeButton("Cancel",
 					new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-					// Canceled.
-				}
-			});
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							// Canceled.
+						}
+					});
 
 			alert.show();
 			break;
@@ -143,8 +147,13 @@ MonitoringDisplay {
 	private float liftbeam_offset;
 	private ImageView key;
 	private float key_offset;
-	private ImageView inductive_key;
-	private boolean inductive_keyvalue;
+	private ImageView engate_btn;
+	private ImageView engate_fig;
+	private ImageView desengate_btn;
+	private ImageView desengate_fig;
+	private ImageView desengatado_btn;
+	private ImageView desengatado_fig;
+	private int inductive_keyvalue;
 	private ImageView inductive_right;
 	private boolean inductive_rightvalue;
 	private ImageView inductive_left;
@@ -177,7 +186,8 @@ MonitoringDisplay {
 		stoplog_moving_trava = (ImageView) findViewById(R.id.stoplog_travas);
 
 		anim_fade = ObjectAnimator.ofFloat(null, "alpha", 0f).setDuration(1000);
-		anim_appear = ObjectAnimator.ofFloat(null, "alpha", 1f).setDuration(1000);
+		anim_appear = ObjectAnimator.ofFloat(null, "alpha", 1f).setDuration(
+				1000);
 
 		stoplog_move = new AnimatorSet();
 		stoplog_move.play(anim_fade).with(anim_appear);
@@ -207,16 +217,22 @@ MonitoringDisplay {
 		claw_right = (ImageView) findViewById(R.id.claw_right);
 		claw_offset = 0;
 		key = (ImageView) findViewById(R.id.key);
-		key_offset = 45;
+		key_offset = 0;
 
 		theta = 0;
 
+
+		engate_btn = (ImageView) findViewById(R.id.engate_btn);
+		engate_fig = (ImageView) findViewById(R.id.engate_fig);
+		desengate_btn = (ImageView) findViewById(R.id.desengate_btn);
+		desengate_fig = (ImageView) findViewById(R.id.desengate_fig);
+		desengatado_btn = (ImageView) findViewById(R.id.desengatado_btn);
+		desengatado_fig = (ImageView) findViewById(R.id.desengatado_fig);
 		inductive_right = (ImageView) findViewById(R.id.inductive_right);
 		inductive_rightvalue = false;
 		inductive_left = (ImageView) findViewById(R.id.inductive_left);
 		inductive_leftvalue = false;
-		inductive_key = (ImageView) findViewById(R.id.inductive_key);
-		inductive_keyvalue = false;
+		inductive_keyvalue = 0;
 
 		Monitorreceiver = new RockDataReceiver(this);
 		IntentFilter mStatusIntentFilter = new IntentFilter(
@@ -242,13 +258,12 @@ MonitoringDisplay {
 		mServiceStartIntent.putExtra(PRESSURE,
 				"pressure/ports/pressure_samples/read.json");
 
-
 		key.post(new Runnable() {
 
 			@Override
 			public void run() {
-				key.setPivotX((float) (key.getMeasuredWidth() * 7.0 / 82) );
-				key.setPivotY((float) (key.getMeasuredHeight() * 26.0 / 34) );
+				key.setPivotX((float) (key.getMeasuredWidth() * 7.0 / 82));
+				key.setPivotY((float) (key.getMeasuredHeight() * 26.0 / 34));
 			}
 
 		});
@@ -347,7 +362,8 @@ MonitoringDisplay {
 
 				anim_fade.setFloatValues(0);
 				anim_appear.setFloatValues(1);
-				stoplog_moving_trava.animate().alpha(1).setDuration(2000).start();
+				stoplog_moving_trava.animate().alpha(1).setDuration(2000)
+						.start();
 				stoplog_move.start();
 			}
 		} else {
@@ -361,7 +377,8 @@ MonitoringDisplay {
 
 				anim_fade.setFloatValues(0);
 				anim_appear.setFloatValues(0);
-				stoplog_moving_trava.animate().alpha(0).setDuration(2000).start();
+				stoplog_moving_trava.animate().alpha(0).setDuration(2000)
+						.start();
 				stoplog_move.start();
 			}
 		}
@@ -453,10 +470,10 @@ MonitoringDisplay {
 
 					anim_fade.setFloatValues(0);
 					anim_appear.setFloatValues(1);
-					stoplog_moving_trava.animate().alpha(1).setDuration(1000).start();
+					stoplog_moving_trava.animate().alpha(1).setDuration(1000)
+							.start();
 					stoplog_move.start();
-				}
-				else
+				} else
 					inductive_left.setImageResource(R.drawable.contato_amarelo);
 
 			} else {
@@ -466,13 +483,14 @@ MonitoringDisplay {
 
 					anim_fade.setFloatValues(0);
 					anim_appear.setFloatValues(0);
-					stoplog_moving_trava.animate().alpha(0).setDuration(1000).start();
+					stoplog_moving_trava.animate().alpha(0).setDuration(1000)
+							.start();
 					stoplog_move.start();
 					inductive_right.setImageResource(R.drawable.contato_cinza);
 					inductive_left.setImageResource(R.drawable.contato_cinza);
-				}
-				else
-					inductive_right.setImageResource(R.drawable.contato_amarelo);
+				} else
+					inductive_right
+							.setImageResource(R.drawable.contato_amarelo);
 			}
 		}
 
@@ -483,13 +501,12 @@ MonitoringDisplay {
 
 		float inc = (float) Math.toDegrees(value) - liftbeam_offset;
 
-
 		level.animate().rotation(inc).setDuration(200).start();
 		liftbeam.animate().rotation(inc).setDuration(200).start();
 
 		inc = Math.abs(inc);
 
-		txt_level.setText(String.format("%.1f°", inc));
+		txt_level.setText(String.format("%.1f¡", inc));
 
 		if (inc > 10 && level.getTag().equals("green")) {
 			// level.setImageResource(R.drawable.nivel_vermelho);
@@ -524,11 +541,12 @@ MonitoringDisplay {
 
 					anim_fade.setFloatValues(0);
 					anim_appear.setFloatValues(1);
-					stoplog_moving_trava.animate().alpha(1).setDuration(1000).start();
+					stoplog_moving_trava.animate().alpha(1).setDuration(1000)
+							.start();
 					stoplog_move.start();
-				}
-				else
-					inductive_right.setImageResource(R.drawable.contato_amarelo);
+				} else
+					inductive_right
+							.setImageResource(R.drawable.contato_amarelo);
 
 			} else {
 				if (!inductive_rightvalue) {
@@ -537,12 +555,12 @@ MonitoringDisplay {
 
 					anim_fade.setFloatValues(0);
 					anim_appear.setFloatValues(0);
-					stoplog_moving_trava.animate().alpha(0).setDuration(1000).start();
+					stoplog_moving_trava.animate().alpha(0).setDuration(1000)
+							.start();
 					stoplog_move.start();
 					inductive_right.setImageResource(R.drawable.contato_cinza);
 					inductive_left.setImageResource(R.drawable.contato_cinza);
-				}
-				else
+				} else
 					inductive_left.setImageResource(R.drawable.contato_amarelo);
 			}
 		}
@@ -552,14 +570,14 @@ MonitoringDisplay {
 	@Override
 	public void inductive_key(boolean value) {
 
-		if(inductive_keyvalue ^ value){
-			inductive_keyvalue = value;
-			if(inductive_keyvalue)
-				inductive_key.setImageResource(R.drawable.contato_azul);
-			else
-				inductive_key.setImageResource(R.drawable.contato_cinza);
-
-		}
+//		if (inductive_keyvalue ^ value) {
+//			inductive_keyvalue = value;
+//			if (inductive_keyvalue)
+//				inductive_key.setImageResource(R.drawable.contato_azul);
+//			else
+//				inductive_key.setImageResource(R.drawable.contato_cinza);
+//
+//		}
 
 	}
 
@@ -577,26 +595,74 @@ MonitoringDisplay {
 
 		float inc = (float) Math.toDegrees(value) - key_offset;
 		key.animate().rotation(inc).setDuration(200).start();
+		int position=-1;
+		
+		inc = Math.abs(inc);
+		if (inc < 90)
+			position = 0;
+		else if(inc < 118)
+			position = 1;
+		else if(inc < 180)
+			position = 2;
+		else 
+			return;
+		
+		if (position == inductive_keyvalue)
+			return;
 
+		switch (inductive_keyvalue){
+		case 0:
+			engate_fig.animate().alpha(0.3f).setDuration(500).start();
+			engate_btn.setImageResource(R.drawable.btn_desativado_engate);
+			break;
+		case 1:
+			desengate_fig.animate().alpha(0.3f).setDuration(500).start();
+			desengate_btn.setImageResource(R.drawable.btn_desativado_desengate);
+			break;
+		case 2:
+			desengatado_fig.animate().alpha(0.3f).setDuration(500).start();
+			desengatado_btn.setImageResource(R.drawable.btn_desativado_desengatado);
+			break;
+		}
+
+		switch (position){
+		case 0:
+			engate_fig.animate().alpha(1f).setDuration(500).start();
+			engate_btn.setImageResource(R.drawable.btn_engate);
+			break;
+		case 1:
+			desengate_fig.animate().alpha(1f).setDuration(500).start();
+			desengate_btn.setImageResource(R.drawable.btn_desengate);
+			break;
+		case 2:
+			desengatado_fig.animate().alpha(1f).setDuration(500).start();
+			desengatado_btn.setImageResource(R.drawable.btn_desengatada);
+			break;
+		}
+		
+		inductive_keyvalue = position;
+		
 	}
+	
 
 	@Override
 	public void pressure(double value) {
 
 		if (pressure < pressure_offset * 1.002
-				&& value >= pressure_offset * 1.002){
+				&& value >= pressure_offset * 1.002) {
 			submerge(water);
 			still.setVisibility(View.INVISIBLE);
 			pressure_value.setVisibility(View.VISIBLE);
 		} else if (pressure > pressure_offset * 1.001
-				&& value <= pressure_offset * 1.001){
+				&& value <= pressure_offset * 1.001) {
 			submerge(water);
 			still.setVisibility(View.VISIBLE);
 			pressure_value.setVisibility(View.INVISIBLE);
 
 		}
 
-		pressure_value.setText(String.format("%.1f m", (value - pressure_offset)/100000));
+		pressure_value.setText(String.format("%.1f m",
+				(value - pressure_offset) / 100000));
 
 		pressure = value;
 
