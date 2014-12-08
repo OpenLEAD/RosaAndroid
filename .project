@@ -34,7 +34,7 @@
 		<link>
 			<name>Gson</name>
 			<type>2</type>
-			<location>/Users/juliacampana/Downloads/Gson</location>
+			<locationURI>PROJECT_LOC/Gson</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
