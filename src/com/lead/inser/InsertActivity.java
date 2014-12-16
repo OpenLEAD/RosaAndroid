@@ -54,6 +54,7 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 			alert_zero.setPositiveButton("Ok",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog,
 								int whichButton) {
 							key_offset += key.getRotation();
@@ -70,6 +71,7 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 			alert_zero.setNegativeButton("Cancel",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog,
 								int whichButton) {
 							// Canceled.
@@ -92,6 +94,7 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 			alert.setPositiveButton("Ok",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog,
 								int whichButton) {
 							String ip = input.getText().toString();
@@ -105,6 +108,7 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 			alert.setNegativeButton("Cancel",
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog,
 								int whichButton) {
 							// Canceled.
