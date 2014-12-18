@@ -185,9 +185,9 @@ public class InsertActivity extends Activity implements SensorEventListener,
 		display = (FrameLayout) findViewById(R.id.animationFrame);
 		water = (FrameLayout) findViewById(R.id.water);
 
-		stoplog_still = (ImageView) findViewById(R.id.imageView14);
-		stoplog_moving = (ImageView) findViewById(R.id.stoplog_base);
-		stoplog_moving_trava = (ImageView) findViewById(R.id.stoplog_travas);
+//		stoplog_still = (ImageView) findViewById(R.id.imageView14);
+//		stoplog_moving = (ImageView) findViewById(R.id.stoplog_base);
+//		stoplog_moving_trava = (ImageView) findViewById(R.id.stoplog_travas);
 
 		anim_fade = ObjectAnimator.ofFloat(null, "alpha", 0f).setDuration(1000);
 		anim_appear = ObjectAnimator.ofFloat(null, "alpha", 1f).setDuration(
@@ -206,7 +206,7 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 		still = (ImageView) findViewById(R.id.still_depth);
 		move_down = (ImageView) findViewById(R.id.move_down_depth);
-		move_up = (ImageView) findViewById(R.id.move_up_depth);
+//		move_up = (ImageView) findViewById(R.id.move_up_depth);
 		pressure_value = (TextView) findViewById(R.id.Profund_text);
 
 		txt_level = (TextView) findViewById(R.id.textView2);
@@ -220,11 +220,10 @@ public class InsertActivity extends Activity implements SensorEventListener,
 		claw_left = (ImageView) findViewById(R.id.claw_left);
 		claw_right = (ImageView) findViewById(R.id.claw_right);
 		claw_offset = 0;
-		key = (ImageView) findViewById(R.id.key);
+//		key = (ImageView) findViewById(R.id.key);
 		key_offset = 0;
 
 		theta = 0;
-
 
 		engate_btn = (ImageView) findViewById(R.id.engate_btn);
 		engate_fig = (ImageView) findViewById(R.id.engate_fig);
@@ -574,14 +573,14 @@ public class InsertActivity extends Activity implements SensorEventListener,
 	@Override
 	public void inductive_key(boolean value) {
 
-//		if (inductive_keyvalue ^ value) {
-//			inductive_keyvalue = value;
-//			if (inductive_keyvalue)
-//				inductive_key.setImageResource(R.drawable.contato_azul);
-//			else
-//				inductive_key.setImageResource(R.drawable.contato_cinza);
-//
-//		}
+		// if (inductive_keyvalue ^ value) {
+		// inductive_keyvalue = value;
+		// if (inductive_keyvalue)
+		// inductive_key.setImageResource(R.drawable.contato_azul);
+		// else
+		// inductive_key.setImageResource(R.drawable.contato_cinza);
+		//
+		// }
 
 	}
 
@@ -599,22 +598,22 @@ public class InsertActivity extends Activity implements SensorEventListener,
 
 		float inc = (float) Math.toDegrees(value) - key_offset;
 		key.animate().rotation(inc).setDuration(200).start();
-		int position=-1;
-		
+		int position = -1;
+
 		inc = Math.abs(inc);
 		if (inc < 90)
 			position = 0;
-		else if(inc < 118)
+		else if (inc < 118)
 			position = 1;
-		else if(inc < 180)
+		else if (inc < 180)
 			position = 2;
-		else 
+		else
 			return;
-		
+
 		if (position == inductive_keyvalue)
 			return;
 
-		switch (inductive_keyvalue){
+		switch (inductive_keyvalue) {
 		case 0:
 			engate_fig.animate().alpha(0.3f).setDuration(500).start();
 			engate_btn.setImageResource(R.drawable.btn_desativado_engate);
@@ -625,11 +624,12 @@ public class InsertActivity extends Activity implements SensorEventListener,
 			break;
 		case 2:
 			desengatado_fig.animate().alpha(0.3f).setDuration(500).start();
-			desengatado_btn.setImageResource(R.drawable.btn_desativado_desengatado);
+			desengatado_btn
+					.setImageResource(R.drawable.btn_desativado_desengatado);
 			break;
 		}
 
-		switch (position){
+		switch (position) {
 		case 0:
 			engate_fig.animate().alpha(1f).setDuration(500).start();
 			engate_btn.setImageResource(R.drawable.btn_engate);
@@ -643,11 +643,10 @@ public class InsertActivity extends Activity implements SensorEventListener,
 			desengatado_btn.setImageResource(R.drawable.btn_desengatada);
 			break;
 		}
-		
+
 		inductive_keyvalue = position;
-		
+
 	}
-	
 
 	@Override
 	public void pressure(double value) {

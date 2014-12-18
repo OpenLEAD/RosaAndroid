@@ -129,10 +129,12 @@ public class BGJloop extends Service {
 					for (WebSensor httpsensor : httpGetpair) {
 
 						try {
-							if(httpsensor.ready())
+							if (httpsensor.ready())
 								httpsensor.readToIntent(localIntent);
 							else
-								Toast.makeText(getApplicationContext(), "Bad Connection", Toast.LENGTH_SHORT).show();
+								Toast.makeText(getApplicationContext(),
+										"Bad Connection", Toast.LENGTH_SHORT)
+										.show();
 							timings.addSplit(httpsensor.getSensor());
 
 						} catch (Exception e) {

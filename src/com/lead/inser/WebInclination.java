@@ -21,8 +21,8 @@ public class WebInclination extends WebSensor {
 	@Override
 	protected void writeOnIntent(BufferedReader reader, Intent i)
 			throws IllegalStateException, IOException {
-		inclination = gson.fromJson(reader,	AngleJson[].class);
-		i.putExtra(sensor,inclination[0].value.rad);		
+		inclination = gson.fromJson(reader, AngleJson[].class);
+		i.putExtra(sensor, inclination[0].value.rad);
 	}
 
 }

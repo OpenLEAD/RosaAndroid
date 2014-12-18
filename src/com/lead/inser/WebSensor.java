@@ -24,63 +24,66 @@ public abstract class WebSensor {
 	protected HttpGet link;
 	protected String sensor;
 	private int base_frequency;
-	
-	protected abstract void writeOnIntent(BufferedReader reader, Intent i) throws IllegalStateException, IOException;
-		
-	public boolean ready(){
-		return ((counter-=1)<=0);
+
+	protected abstract void writeOnIntent(BufferedReader reader, Intent i)
+			throws IllegalStateException, IOException;
+
+	public boolean ready() {
+		return ((counter -= 1) <= 0);
 	}
-	
-	public void reset(){
+
+	public void reset() {
 		counter = base_frequency;
 	}
-	
-	public boolean readToIntent(Intent i) throws IllegalStateException, IOException{
+
+	public boolean readToIntent(Intent i) throws IllegalStateException,
+			IOException {
 		HttpResponse response = httpclient.execute(link);
 		HttpEntity entity = response.getEntity();
-		
-		if (entity != null) {
-			InputStreamReader instream = new InputStreamReader(entity.getContent(),"UTF-8");
-			
-			final BufferedReader reader = new BufferedReader(instream);
-			
-			try {
-				writeOnIntent(reader,i);
-			} catch (JsonSyntaxException e) {
-				
-//				char[] loger = new char[10];
-//				InputStreamReader instreamTester = new InputStreamReader(entity.getContent(),"UTF-8");
-//				instreamTester.read(loger, 0, 10);
-//				Log.d("Good Json",new String(loger));
 
-				Log.e("Bad Json",
-						"Assuming error, rising sample period of "+sensor+".", e);
-				//e.printStackTrace();
+		if (entity != null) {
+			InputStreamReader instream = new InputStreamReader(
+					entity.getContent(), "UTF-8");
+
+			final BufferedReader reader = new BufferedReader(instream);
+
+			try {
+				writeOnIntent(reader, i);
+			} catch (JsonSyntaxException e) {
+
+				// char[] loger = new char[10];
+				// InputStreamReader instreamTester = new
+				// InputStreamReader(entity.getContent(),"UTF-8");
+				// instreamTester.read(loger, 0, 10);
+				// Log.d("Good Json",new String(loger));
+
+				Log.e("Bad Json", "Assuming error, rising sample period of "
+						+ sensor + ".", e);
+				// e.printStackTrace();
 
 				Random n = new Random();
 				counter = base_frequency + 10 + n.nextInt(10);
 				entity.consumeContent();
 				return false;
 			}
-			
+
 			entity.consumeContent();
 			reset();
 			return true;
 		}
 		return false;
-		
+
 	}
-	
-	
-	
-	public String getSensor(){
+
+	public String getSensor() {
 		return sensor;
 	}
-	
-	WebSensor(){
+
+	WebSensor() {
 	}
-	
-	WebSensor(HttpGet linkarg, String sensorarg, int counterarg, int base_frequencyarg){
+
+	WebSensor(HttpGet linkarg, String sensorarg, int counterarg,
+			int base_frequencyarg) {
 		counter = counterarg;
 		link = linkarg;
 		sensor = sensorarg;

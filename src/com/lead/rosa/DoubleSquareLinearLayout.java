@@ -17,7 +17,7 @@ public class DoubleSquareLinearLayout extends LinearLayout {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		super.onMeasure(widthMeasureSpec, widthMeasureSpec/2);
+		super.onMeasure(widthMeasureSpec, widthMeasureSpec / 2);
 	}
 
 	public DoubleSquareLinearLayout(Context context) {
