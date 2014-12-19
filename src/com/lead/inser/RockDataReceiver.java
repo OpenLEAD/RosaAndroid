@@ -28,6 +28,14 @@ public class RockDataReceiver extends BroadcastReceiver {
 				MonitoringDisplay.INDUCTIVE_KEY, false);
 		display.inductive_key(inductive_key_value);
 
+		boolean inductive_key_attached_value = intent.getBooleanExtra(
+				MonitoringDisplay.INDUCTIVE_KEY_ATTACHED, false);
+		display.inductive_key_attached(inductive_key_attached_value);
+
+		boolean inductive_key_detached_value = intent.getBooleanExtra(
+				MonitoringDisplay.INDUCTIVE_KEY_DETACHED, false);
+		display.inductive_key_detached(inductive_key_detached_value);
+
 		double inclination_body_value = intent.getDoubleExtra(
 				MonitoringDisplay.INCLINATION_BODY, DUMMY_ANGLE);
 		if (inclination_body_value != DUMMY_ANGLE)
@@ -45,7 +53,7 @@ public class RockDataReceiver extends BroadcastReceiver {
 
 		double pressure_value = intent.getDoubleExtra(
 				MonitoringDisplay.PRESSURE, -1);
-		if (pressure_value < 0)
+		if (pressure_value > 0)
 			display.pressure(pressure_value);
 
 	}

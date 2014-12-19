@@ -64,6 +64,8 @@ public class BGJloop extends Service {
 			case MonitoringDisplay.INDUCTIVE_RIGHT:
 			case MonitoringDisplay.INDUCTIVE_LEFT:
 			case MonitoringDisplay.INDUCTIVE_KEY:
+			case MonitoringDisplay.INDUCTIVE_KEY_ATTACHED:
+			case MonitoringDisplay.INDUCTIVE_KEY_DETACHED:
 				httpGetpair.add(new WebInductive(
 						new HttpGet(urlString + address.toString()
 								+ "?timeout=0.2&poll_period=0.01"), sensor, 1,
