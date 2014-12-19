@@ -1,20 +1,10 @@
 package com.lead.inser;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.Shader.TileMode;
-import android.graphics.drawable.BitmapDrawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
@@ -22,18 +12,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lead.rosa.R;
 
-public class InsertActivity extends Activity implements SensorEventListener,
-MonitoringDisplay {
+public class InsertActivity extends Activity implements MonitoringDisplay {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,12 +44,9 @@ MonitoringDisplay {
 				@Override
 				public void onClick(DialogInterface dialog,
 						int whichButton) {
-//					key_offset += key.getRotation();
-//					claw_offset += claw_right.getRotation();
 					liftbeam_offset += liftbeam.getRotation();
 					pressure_offset = pressure;
 					if (still.getVisibility() == View.INVISIBLE) {
-						// submerge(water);
 						still.setVisibility(View.VISIBLE);
 						pressure_value.setVisibility(View.INVISIBLE);
 					}
@@ -123,36 +106,15 @@ MonitoringDisplay {
 	}
 
 	public static final double STD_PRESSURE = 100000;
-	private float theta;
 	private double pressure;
 	private double pressure_offset;
-	private SensorManager Smg;
-	@SuppressWarnings("unused")
-	private Sensor gravity;
-	private float[] gdir;
 	private View level;
 	private TextView txt_level;
-	// private ImageView stoplog_still;
-	// private ObjectAnimator anim_fade;
-	// private ObjectAnimator anim_appear;
-	// private AnimatorSet stoplog_move;
-	// private ObjectAnimator submerge1;
-	// private ObjectAnimator submerge2;
-	// private AnimatorSet submerge;
-	// private ImageView stoplog_moving;
-	// private ImageView stoplog_moving_trava;
-	// private ImageView regua_dir;
-	// private ImageView regua_esq;
-
-	// private MarginLayoutParams margins;
 	private final Handler main_handler = new Handler();
 	private ImageView claw_left;
 	private ImageView claw_right;
-	private float claw_offset;
 	private FrameLayout liftbeam;
 	private float liftbeam_offset;
-	private ImageView key;
-	private float key_offset;
 	private ImageView engate_btn;
 	private ImageView engate_fig;
 	private ImageView desengate_btn;
@@ -168,12 +130,7 @@ MonitoringDisplay {
 	private ImageView inductive_left;
 	private boolean inductive_leftvalue;
 	private ImageView still;
-	// private ImageView move_up;
-	// private ImageView move_down;
 	private TextView pressure_value;
-	// private FrameLayout display;
-	// private FrameLayout water;
-	private final float lvlmin = 2 * SensorManager.STANDARD_GRAVITY / 3;
 
 	private RockDataReceiver Monitorreceiver;
 	private Intent mServiceStartIntent;
@@ -186,51 +143,17 @@ MonitoringDisplay {
 		pressure = STD_PRESSURE;
 		pressure_offset = STD_PRESSURE;
 		level = findViewById(R.id.View3);
-
-		// display = (FrameLayout) findViewById(R.id.animationFrame);
-		// water = (FrameLayout) findViewById(R.id.water);
-		//
-		// // stoplog_still = (ImageView) findViewById(R.id.imageView14);
-		// // stoplog_moving = (ImageView) findViewById(R.id.stoplog_base);
-		// // stoplog_moving_trava = (ImageView)
-		// findViewById(R.id.stoplog_travas);
-		//
-		// anim_fade = ObjectAnimator.ofFloat(null, "alpha",
-		// 0f).setDuration(1000);
-		// anim_appear = ObjectAnimator.ofFloat(null, "alpha", 1f).setDuration(
-		// 1000);
-		//
-		// stoplog_move = new AnimatorSet();
-		// stoplog_move.play(anim_fade).with(anim_appear);
-		//
-		// submerge1 = ObjectAnimator.ofFloat(water, "ScaleY", 1)
-		// .setDuration(2000);
-		// submerge2 = ObjectAnimator.ofFloat(water, "TranslationY", 0)
-		// .setDuration(2000);
-		//
-		// submerge = new AnimatorSet();
-		// submerge.play(submerge1).with(submerge2);
-		//
-		// move_down = (ImageView) findViewById(R.id.move_down_depth);
-		// move_up = (ImageView) findViewById(R.id.move_up_depth);
+		
 		pressure_value = (TextView) findViewById(R.id.Profund_text);
 		still = (ImageView) findViewById(R.id.still_depth);
 
 		txt_level = (TextView) findViewById(R.id.textView2);
 
-		// regua_dir = (ImageView) findViewById(R.id.imageView10);
-		// regua_esq = (ImageView) findViewById(R.id.imageView9);
-		// margins = (MarginLayoutParams) regua_esq.getLayoutParams();
 
 		liftbeam = (FrameLayout) findViewById(R.id.relativelayoutgarra);
 		liftbeam_offset = 0;
 		claw_left = (ImageView) findViewById(R.id.claw_left);
 		claw_right = (ImageView) findViewById(R.id.claw_right);
-		claw_offset = 0;
-		// key = (ImageView) findViewById(R.id.key);
-		key_offset = 0;
-
-		theta = 0;
 
 		engate_btn = (ImageView) findViewById(R.id.engate_btn);
 		engate_fig = (ImageView) findViewById(R.id.engate_fig);
@@ -276,10 +199,6 @@ MonitoringDisplay {
 
 		});
 
-		Smg = (SensorManager) getSystemService(SENSOR_SERVICE);
-
-		gravity = Smg.getDefaultSensor(Sensor.TYPE_GRAVITY);
-
 	}
 
 	@Override
@@ -287,60 +206,12 @@ MonitoringDisplay {
 		super.onPause();
 		// Intent mServiceIntent = new Intent(this, BGJloop.class);
 		stopService(mServiceStartIntent);
-		// Smg.unregisterListener(this);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		// Smg.registerListener(this, gravity,SensorManager.SENSOR_DELAY_GAME);
 		startService(mServiceStartIntent);
-	}
-
-	@Override
-	public void onAccuracyChanged(Sensor arg0, int arg1) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onSensorChanged(SensorEvent event) {
-		switch (event.sensor.getType()) {
-
-		case Sensor.TYPE_GRAVITY:
-			gdir = event.values.clone();
-			break;
-
-		default:
-			return;
-		}
-		if (gdir[2] > lvlmin)
-			return;
-
-		float theta = (float) Math.toDegrees(Math.atan2(gdir[0], gdir[1]));
-
-		float abs_theta = Math.abs(theta);
-
-		txt_level.setText(String.valueOf((int) abs_theta) + "°");
-
-		if (abs_theta > 10 && level.getTag().equals("green")) {
-			// level.setImageResource(R.drawable.nivel_vermelho);
-			level.setBackgroundColor(0xFFFF4444);
-			txt_level.setTextColor(0xFFFF4444);
-			level.setTag("red");
-		}
-
-		if (abs_theta < 10 && level.getTag().equals("red")) {
-			// level.setImageResource(R.drawable.nivel_verde);
-			level.setBackgroundColor(0xFF41E020);
-			txt_level.setTextColor(0xFF41E020);
-			level.setTag("green");
-		}
-
-		level.setRotation(theta);
-
-		liftbeam.setRotation(theta);
-
 	}
 
 	@Override
@@ -404,14 +275,12 @@ MonitoringDisplay {
 		txt_level.setText(String.format("%.1f°", inc));
 
 		if (inc > 10 && level.getTag().equals("green")) {
-			// level.setImageResource(R.drawable.nivel_vermelho);
 			level.setBackgroundColor(0xFFFF4444);
 			txt_level.setTextColor(0xFFFF4444);
 			level.setTag("red");
 		}
 
 		if (inc < 10 && level.getTag().equals("red")) {
-			// level.setImageResource(R.drawable.nivel_verde);
 			level.setBackgroundColor(0xFF41E020);
 			txt_level.setTextColor(0xFF41E020);
 			level.setTag("green");
@@ -464,122 +333,6 @@ MonitoringDisplay {
 				}
 			}
 		}
-		// if (inductive_leftvalue ^ value) {
-		// inductive_leftvalue = value;
-		//
-		// if (stoplog_move.isRunning())
-		// stoplog_move.cancel();
-		//
-		// if (inductive_leftvalue) {
-		//
-		// inductive_left.setImageResource(R.drawable.contato_verde);
-		// if (inductive_rightvalue) {
-		// anim_fade.setTarget(stoplog_still);
-		// anim_appear.setTarget(stoplog_moving);
-		//
-		// anim_fade.setFloatValues(0);
-		// anim_appear.setFloatValues(1);
-		// stoplog_moving_trava.animate().alpha(1).setDuration(1000)
-		// .start();
-		// stoplog_move.start();
-		// } else
-		// inductive_right
-		// .setImageResource(R.drawable.contato_amarelo);
-		//
-		// } else {
-		// if (!inductive_rightvalue) {
-		// anim_fade.setTarget(stoplog_moving);
-		// anim_appear.setTarget(stoplog_still);
-		//
-		// anim_fade.setFloatValues(0);
-		// anim_appear.setFloatValues(0);
-		// stoplog_moving_trava.animate().alpha(0).setDuration(1000)
-		// .start();
-		// stoplog_move.start();
-		// inductive_right.setImageResource(R.drawable.contato_cinza);
-		// inductive_left.setImageResource(R.drawable.contato_cinza);
-		// } else
-		// inductive_left.setImageResource(R.drawable.contato_amarelo);
-		// }
-		// }
-
-	}
-
-	@Override
-	public void inductive_key(boolean value) {
-
-		// if (inductive_keyvalue ^ value) {
-		// inductive_keyvalue = value;
-		// if (inductive_keyvalue)
-		// inductive_key.setImageResource(R.drawable.contato_azul);
-		// else
-		// inductive_key.setImageResource(R.drawable.contato_cinza);
-		//
-		// }
-
-	}
-
-	@Override
-	public void inclination_right(double value) {
-
-		float inc = (float) Math.toDegrees(value) - claw_offset;
-		claw_left.animate().rotation(-inc).setDuration(200).start();
-		claw_right.animate().rotation(inc).setDuration(200).start();
-
-	}
-
-	@Override
-	public void inclination_key(double value) {
-
-		float inc = (float) Math.toDegrees(value) - key_offset;
-		key.animate().rotation(inc).setDuration(200).start();
-		int position = -1;
-
-		inc = Math.abs(inc);
-		if (inc < 90)
-			position = 0;
-		else if (inc < 118)
-			position = 1;
-		else if (inc < 180)
-			position = 2;
-		else
-			return;
-
-		if (position == inductive_keyvalue)
-			return;
-
-		switch (inductive_keyvalue) {
-		case 0:
-			engate_fig.animate().alpha(0.3f).setDuration(500).start();
-			engate_btn.setImageResource(R.drawable.btn_desativado_engate);
-			break;
-		case 1:
-			desengate_fig.animate().alpha(0.3f).setDuration(500).start();
-			desengate_btn.setImageResource(R.drawable.btn_desativado_desengate);
-			break;
-		case 2:
-			desengatado_fig.animate().alpha(0.3f).setDuration(500).start();
-			desengatado_btn
-			.setImageResource(R.drawable.btn_desativado_desengatado);
-			break;
-		}
-
-		switch (position) {
-		case 0:
-			engate_fig.animate().alpha(1f).setDuration(500).start();
-			engate_btn.setImageResource(R.drawable.btn_engate);
-			break;
-		case 1:
-			desengate_fig.animate().alpha(1f).setDuration(500).start();
-			desengate_btn.setImageResource(R.drawable.btn_desengate);
-			break;
-		case 2:
-			desengatado_fig.animate().alpha(1f).setDuration(500).start();
-			desengatado_btn.setImageResource(R.drawable.btn_desengatada);
-			break;
-		}
-
-		inductive_keyvalue = position;
 
 	}
 
@@ -588,12 +341,10 @@ MonitoringDisplay {
 
 		if (pressure < pressure_offset * 1.002
 				&& value >= pressure_offset * 1.002) {
-			// submerge(water);
 			still.setVisibility(View.GONE);
 			pressure_value.setVisibility(View.VISIBLE);
 		} else if (pressure > pressure_offset * 1.001
 				&& value <= pressure_offset * 1.001) {
-			// submerge(water);
 			still.setVisibility(View.VISIBLE);
 			pressure_value.setVisibility(View.GONE);
 
@@ -655,5 +406,17 @@ MonitoringDisplay {
 			inductive_keyvalue = DETACHING;
 		}
 
+	}
+
+	@Override
+	public void inductive_key(boolean value) {
+	}
+
+	@Override
+	public void inclination_right(double value) {
+	}
+
+	@Override
+	public void inclination_key(double value) {
 	}
 }
