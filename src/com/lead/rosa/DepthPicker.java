@@ -131,6 +131,7 @@ public class DepthPicker extends DialogPreference {
 		}
 
 		// Standard creator object using an instance of this class
+		@SuppressWarnings("unused")
 		public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
 
 			public SavedState createFromParcel(Parcel in) {
