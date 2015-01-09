@@ -54,6 +54,7 @@
             android:enabled="true"
             android:exported="false" >
         </receiver>
+        <activity android:name="com.lead.rosa.SettingsActivity" android:label="@string/action_settings_page" android:screenOrientation="sensorLandscape"></activity>
     </application>
 
 </manifest>

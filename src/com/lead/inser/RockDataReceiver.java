@@ -16,45 +16,68 @@ public class RockDataReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 
-		boolean inductive_left_value = intent.getBooleanExtra(
-				MonitoringDisplay.INDUCTIVE_LEFT, false);
-		display.inductive_left(inductive_left_value);
+		int error_number = 0;
+		
+		
+		
+		if (intent.getBooleanExtra(MonitoringDisplay.INDUCTIVE_LEFT + MonitoringDisplay.STATUS,
+				false)) {
+			boolean inductive_left_value = intent.getBooleanExtra(
+					MonitoringDisplay.INDUCTIVE_LEFT, false);
+			display.inductive_left(inductive_left_value);
+		}
+		else
+			error_number += 1; /*1*/
 
-		boolean inductive_right_value = intent.getBooleanExtra(
-				MonitoringDisplay.INDUCTIVE_RIGHT, false);
-		display.inductive_right(inductive_right_value);
+		if (intent.getBooleanExtra(MonitoringDisplay.INDUCTIVE_RIGHT + MonitoringDisplay.STATUS,
+				false)) {
+			boolean inductive_right_value = intent.getBooleanExtra(
+					MonitoringDisplay.INDUCTIVE_RIGHT, false);
+			display.inductive_right(inductive_right_value);
+		}
+		else
+			error_number += 1; /*2*/
 
-		boolean inductive_key_value = intent.getBooleanExtra(
-				MonitoringDisplay.INDUCTIVE_KEY, false);
-		display.inductive_key(inductive_key_value);
+		if (intent.getBooleanExtra(MonitoringDisplay.INDUCTIVE_KEY_ATTACHED + MonitoringDisplay.STATUS,
+				false)) {
+			boolean inductive_key_attached_value = intent.getBooleanExtra(
+					MonitoringDisplay.INDUCTIVE_KEY_ATTACHED, false);
+			display.inductive_key_attached(inductive_key_attached_value);
+		}
+		else
+			error_number += 1; /*3*/
 
-		boolean inductive_key_attached_value = intent.getBooleanExtra(
-				MonitoringDisplay.INDUCTIVE_KEY_ATTACHED, false);
-		display.inductive_key_attached(inductive_key_attached_value);
+		if (intent.getBooleanExtra(MonitoringDisplay.INDUCTIVE_KEY_DETACHED + MonitoringDisplay.STATUS,
+				false)) {
+			boolean inductive_key_detached_value = intent.getBooleanExtra(
+					MonitoringDisplay.INDUCTIVE_KEY_DETACHED, false);
+			display.inductive_key_detached(inductive_key_detached_value);
+		}
+		else
+			error_number += 1; /*4*/
 
-		boolean inductive_key_detached_value = intent.getBooleanExtra(
-				MonitoringDisplay.INDUCTIVE_KEY_DETACHED, false);
-		display.inductive_key_detached(inductive_key_detached_value);
+		if (intent.getBooleanExtra(MonitoringDisplay.INCLINATION_BODY + MonitoringDisplay.STATUS,
+				false)) {
+			double inclination_body_value = intent.getDoubleExtra(
+					MonitoringDisplay.INCLINATION_BODY, DUMMY_ANGLE);
+			if (inclination_body_value != DUMMY_ANGLE)
+				display.inclination_body(inclination_body_value);
+		}
+		else
+			error_number += 1; /*5*/
 
-		double inclination_body_value = intent.getDoubleExtra(
-				MonitoringDisplay.INCLINATION_BODY, DUMMY_ANGLE);
-		if (inclination_body_value != DUMMY_ANGLE)
-			display.inclination_body(inclination_body_value);
-
-		double inclination_right_value = intent.getDoubleExtra(
-				MonitoringDisplay.INCLINATION_RIGHT, DUMMY_ANGLE);
-		if (inclination_right_value != DUMMY_ANGLE)
-			display.inclination_right(inclination_right_value);
-
-		double inclination_key_value = intent.getDoubleExtra(
-				MonitoringDisplay.INCLINATION_KEY, DUMMY_ANGLE);
-		if (inclination_key_value != DUMMY_ANGLE)
-			display.inclination_key(inclination_key_value);
-
-		double pressure_value = intent.getDoubleExtra(
-				MonitoringDisplay.PRESSURE, -1);
-		if (pressure_value > 0)
-			display.pressure(pressure_value);
-
+		if (intent.getBooleanExtra(MonitoringDisplay.PRESSURE + MonitoringDisplay.STATUS,
+				false)) {
+			float pressure_value = intent.getFloatExtra(
+					MonitoringDisplay.PRESSURE, -1);
+			if (pressure_value > 0)
+				display.pressure(pressure_value);
+		}
+		else
+			error_number += 1; /*6*/
+		
+		if(error_number>0)
+			display.bad_connection(error_number);
+		
 	}
 }

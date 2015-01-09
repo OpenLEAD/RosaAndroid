@@ -3,10 +3,24 @@
     tools:context="com.lead.rosa.MainInser" >
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_setting_page"
+        android:icon="@drawable/ic_menu_settings"
         android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/action_settings_page">
+    </item>
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_action_network_wifi"
+        android:orderInCategory="90"
         android:showAsAction="ifRoom"
         android:title="@string/action_settings"/>
-    <item android:id="@+id/action_zero" android:showAsAction="ifRoom" android:title="@string/action_zero" android:orderInCategory="90"></item>
+    <item
+        android:id="@+id/action_zero"
+        android:icon="@drawable/ic_menu_inclina_2"
+        android:orderInCategory="80"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_zero">
+    </item>
 
 </menu>

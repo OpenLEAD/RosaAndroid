@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/settings_title_key" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:summaryOff="@string/settings_summary_attach_off"
+            android:summaryOn="@string/settings_summary_attach_on"
+            android:title="@string/settings_title_attach" android:key="attach_sound"/>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:summaryOff="@string/settings_summary_detach_off"
+            android:summaryOn="@string/settings_summary_detach_on"
+            android:title="@string/settings_title_detach" android:key="detach_sound"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:summaryOff="@string/settings_summary_detached_off"
+            android:summaryOn="@string/settings_summary_detached_on"
+            android:title="@string/settings_title_detached" android:key="detached_sound"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_title_claw" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:summaryOff="@string/settings_summary_claw_success_off"
+            android:summaryOn="@string/settings_summary_claw_success_on"
+            android:title="@string/settings_title_claw_success" android:key="claw_success_sound"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:summaryOff="@string/settings_summary_claw_unsuccess_off"
+            android:summaryOn="@string/settings_summary_claw_unsuccess_on"
+            android:title="@string/settings_title_claw_unsuccess" android:key="claw_unsuccess_sound"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_title_liftbeam" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:summaryOff="@string/settings_summary_align_liftbeam_off"
+            android:summaryOn="@string/settings_summary_align_liftbeam_on"
+            android:title="@string/settings_title_align_liftbeam" android:key="align_sound"/>
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:summaryOff="@string/settings_summary_depth_off"
+            android:summaryOn="@string/settings_summary_depth_on"
+            android:title="@string/settings_title_depth_sound" android:key="depth_sound"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

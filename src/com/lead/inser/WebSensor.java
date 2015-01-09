@@ -69,6 +69,7 @@ public abstract class WebSensor {
 
 			entity.consumeContent();
 			reset();
+			i.putExtra(sensor+MonitoringDisplay.STATUS, true);
 			return true;
 		}
 		return false;

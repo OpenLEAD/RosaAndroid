@@ -6,4 +6,39 @@
     <string name="mbinser_desc">Inserção</string>
     <string name="mbremo_desc">Remoção</string>
     <string name="action_zero">Posição zero</string>
+    <string name="action_settings_page">Configuração</string>
+    
+    <string name="settings_title_sound">Som</string>
+    
+    <string name="settings_title_key">Chave</string>
+    <string name="settings_summary_attach_on">O aviso de engate da chave está ativo.</string>
+    <string name="settings_summary_attach_off">O aviso de engate da chave está inativo.</string>
+    <string name="settings_title_attach">Engate</string>
+    <string name="settings_summary_detach_on">O aviso de desengate da chave está ativo.</string>
+    <string name="settings_summary_detach_off">O aviso de desengate da chave está inativo.</string>
+    <string name="settings_title_detach">Desengate</string>
+    <string name="settings_summary_detached_on">O aviso de chave desengatada está ativo.</string>
+    <string name="settings_summary_detached_off">O aviso de chave desengatada está inativo.</string>
+    <string name="settings_title_detached">Desengatada</string>
+    
+    <string name="settings_title_claw">Garra</string>
+    <string name="settings_summary_claw_success_on">O aviso de sucesso da pesca do stoplog está ativo.</string>
+    <string name="settings_summary_claw_success_off">O aviso de sucesso da pesca do stoplog está inativo.</string>
+    <string name="settings_title_claw_success">Sucesso na Pega</string>
+    <string name="settings_summary_claw_unsuccess_on">O aviso de falha na pesca do stoplog está ativo.</string>
+    <string name="settings_summary_claw_unsuccess_off">O aviso de falha na pesca do stoplog está inativo.</string>
+    <string name="settings_title_claw_unsuccess">Falha na Pega</string>
+    
+    <string name="settings_title_liftbeam">Viga Pescadora</string>
+    <string name="settings_summary_align_liftbeam_on">O aviso limite de inclinação da viga pescadora excedido está ativo.</string>
+    <string name="settings_summary_align_liftbeam_off">O aviso limite de inclinação da viga pescadora excedido está inativo.</string>
+    <string name="settings_title_align_liftbeam">Excesso de Inclinação da Viga</string>
+    <string name="settings_summary_depth_off">O aviso de profundidade máxima atingida pela viga está inativo.</string>
+    <string name="settings_summary_depth_on">O aviso de profundidade máxima atingida pela viga está ativo.</string>
+    <string name="settings_title_depth_sound">Profundidade Máxima</string>
+    
+    <string name="settings_title_limit">Limites</string>
+    
+    <string name="settings_title_depth">Profundidade</string>
+    <string name="settings_title_align_limit">Inclinação</string>
 </resources>

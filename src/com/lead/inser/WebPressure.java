@@ -23,7 +23,7 @@ public class WebPressure extends WebSensor {
 			throws IllegalStateException, IOException {
 
 		pressure = gson.fromJson(reader, PressureJson[].class);
-		i.putExtra(sensor, pressure[0].value.pascal);
+		i.putExtra(sensor, (float) pressure[0].value.pascal);
 
 	}
 

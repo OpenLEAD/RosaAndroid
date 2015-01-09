@@ -245,7 +245,7 @@
 
             <View
                 android:id="@+id/View3"
-                android:layout_width="320dp"
+                android:layout_width="325dp"
                 android:layout_height="4dp"
                 android:layout_gravity="center"
                 android:background="#FF41E020"

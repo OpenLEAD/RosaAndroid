@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <com.lead.rosa.DepthPicker
+        android:key="depth_limit"
+        android:title="@string/settings_title_depth"
+        android:defaultValue="20"
+        android:persistent="true"
+    /> 
+
+    <com.lead.rosa.AlignPicker
+        android:key="align_limit"
+        android:title="@string/settings_title_align_limit"
+        android:defaultValue="8"
+        android:persistent="true"
+    /> 
+
+</PreferenceScreen>

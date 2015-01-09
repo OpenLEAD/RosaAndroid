@@ -48,5 +48,6 @@
     <style name="KeysImage">
         <item name="android:layout_marginBottom">40dp</item>
     </style>
+    <color name="warningRed">#FFFF4444</color>
 
 </resources>

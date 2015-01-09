@@ -1,8 +1,5 @@
 package com.lead.inser;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import org.apache.http.client.methods.HttpGet;
@@ -16,7 +13,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.JsonReader;
 import android.util.Log;
 import android.util.TimingLogger;
 import android.widget.Toast;
@@ -164,101 +160,4 @@ public class BGJloop extends Service {
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
-	@SuppressWarnings("unused")
-	private double decodeInclinometer(InputStream instream) throws IOException {
-		JsonReader reader = new JsonReader(new InputStreamReader(instream,
-				"UTF-8"));
-		reader.beginArray();
-		while (reader.hasNext()) {
-			reader.beginObject();
-
-			while (reader.hasNext()) {
-				String propertyname = reader.nextName();
-
-				if (propertyname.equals("value")) {
-
-					reader.beginObject();
-
-					while (reader.hasNext()) {
-						String valuename = reader.nextName();
-
-						if (valuename.equals("rad")) {
-							double value = reader.nextDouble();
-							reader.close();
-							return value;
-						} else {
-							reader.skipValue();
-
-						}
-
-					}
-
-					reader.endObject();
-
-				} else {
-					reader.skipValue();
-
-				}
-
-			}
-
-			reader.endObject();
-		}
-
-		reader.endArray();
-
-		reader.close();
-
-		throw new IllegalArgumentException("No boolean data to read.");
-
-	}
-
-	@SuppressWarnings("unused")
-	private boolean decodeInductive(InputStream instream) throws IOException {
-		JsonReader reader = new JsonReader(new InputStreamReader(instream,
-				"UTF-8"));
-		reader.beginArray();
-		while (reader.hasNext()) {
-			reader.beginObject();
-
-			while (reader.hasNext()) {
-				String propertyname = reader.nextName();
-
-				if (propertyname.equals("value")) {
-
-					reader.beginObject();
-
-					while (reader.hasNext()) {
-						String valuename = reader.nextName();
-
-						if (valuename.equals("data")) {
-							boolean value = reader.nextBoolean();
-							reader.close();
-							return value;
-						} else {
-							reader.skipValue();
-
-						}
-
-					}
-
-					reader.endObject();
-
-				} else {
-					reader.skipValue();
-
-				}
-
-			}
-
-			reader.endObject();
-		}
-
-		reader.endArray();
-
-		reader.close();
-
-		throw new IllegalArgumentException("No boolean data to read.");
-
-	}
 }
