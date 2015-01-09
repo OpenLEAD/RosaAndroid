@@ -31,10 +31,13 @@ import com.lead.rosa.SettingsActivity;
 
 public class InsertActivity extends Activity implements MonitoringDisplay {
 
+	private MenuItem connection_menu;
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main_inser, menu);
+		connection_menu = menu.findItem(R.id.action_settings);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -140,6 +143,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 							}
 							stopService(mServiceStartIntent);
 							startService(mServiceStartIntent);
+							connection_menu.setIcon(R.drawable.ic_action_network_wifi_green);
 						}
 					});
 
@@ -243,17 +247,17 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 		mServiceStartIntent.putExtra("url", url);
 
 		mServiceStartIntent.putExtra(INDUCTIVE_LEFT,
-				"bus1/ports/inductive_left/read.json");
+				"bus1/ports/inductive_left/read.");
 		mServiceStartIntent.putExtra(INDUCTIVE_RIGHT,
-				"bus1/ports/inductive_right/read.json");
+				"bus1/ports/inductive_right/read");
 		mServiceStartIntent.putExtra(INDUCTIVE_KEY_ATTACHED,
-				"bus1/ports/inductive_key_attached/read.json");
+				"bus1/ports/inductive_key_attached/read");
 		mServiceStartIntent.putExtra(INDUCTIVE_KEY_DETACHED,
-				"bus1/ports/inductive_key_detached/read.json");
+				"bus1/ports/inductive_key_detached/read");
 		mServiceStartIntent.putExtra(INCLINATION_BODY,
-				"inclination_body/ports/angle/read.json");
+				"inclination_body/ports/angle/read");
 		mServiceStartIntent.putExtra(PRESSURE,
-				"pressure/ports/pressure_samples/read.json");
+				"pressure/ports/pressure_samples/read");
 
 		liftbeam.post(new Runnable() {
 
@@ -264,6 +268,8 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 			}
 
 		});
+		
+		
 
 	}
 
@@ -316,7 +322,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 										"claw_unsuccess_sound", true)) {
 									mediaPlayer = MediaPlayer.create(
 											getApplicationContext(),
-											R.raw.warning2);
+											R.raw.warning_sound);
 									mediaPlayer.start();
 								}
 
@@ -334,7 +340,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 
 					if (sharedPref.getBoolean("claw_success_sound", true)) {
 						mediaPlayer = MediaPlayer.create(this,
-								R.raw.game_show_winner_bell);
+								R.raw.grab_sound);
 						mediaPlayer.start();
 					}
 				}
@@ -361,7 +367,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 										"claw_unsuccess_sound", true)) {
 									mediaPlayer = MediaPlayer.create(
 											getApplicationContext(),
-											R.raw.warning2);
+											R.raw.warning_sound);
 									mediaPlayer.start();
 								}
 
@@ -397,7 +403,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 					.getDefaultSharedPreferences(this);
 
 			if (sharedPref.getBoolean("align_sound", true)) {
-				mediaPlayer = MediaPlayer.create(this, R.raw.warning2);
+				mediaPlayer = MediaPlayer.create(this, R.raw.warning_sound);
 				mediaPlayer.start();
 			}
 
@@ -439,7 +445,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 										"claw_unsuccess_sound", true)) {
 									mediaPlayer = MediaPlayer.create(
 											getApplicationContext(),
-											R.raw.warning2);
+											R.raw.warning_sound);
 									mediaPlayer.start();
 								}
 
@@ -457,7 +463,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 
 					if (sharedPref.getBoolean("claw_success_sound", true)) {
 						mediaPlayer = MediaPlayer.create(this,
-								R.raw.game_show_winner_bell);
+								R.raw.grab_sound);
 						mediaPlayer.start();
 					}
 				}
@@ -483,7 +489,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 										"claw_unsuccess_sound", true)) {
 									mediaPlayer = MediaPlayer.create(
 											getApplicationContext(),
-											R.raw.warning2);
+											R.raw.warning_sound);
 									mediaPlayer.start();
 								}
 
@@ -531,7 +537,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 						.getDefaultSharedPreferences(this);
 
 				if (sharedPref.getBoolean("depth_sound", false)) {
-					mediaPlayer = MediaPlayer.create(this, R.raw.warning2);
+					mediaPlayer = MediaPlayer.create(this, R.raw.warning_sound);
 					mediaPlayer.start();
 				}
 			}
@@ -559,7 +565,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 
 			if (sharedPref.getBoolean("attach_sound", false)) {
 				mediaPlayer = MediaPlayer.create(this,
-						R.raw.metal_box_impact_hard2);
+						R.raw.key_sound);
 				mediaPlayer.start();
 			}
 
@@ -573,7 +579,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 
 			if (sharedPref.getBoolean("detach_sound", false)) {
 				mediaPlayer = MediaPlayer.create(this,
-						R.raw.metal_box_impact_hard2);
+						R.raw.key_sound);
 				mediaPlayer.start();
 			}
 
@@ -599,7 +605,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 
 			if (sharedPref.getBoolean("detached_sound", true)) {
 				mediaPlayer = MediaPlayer.create(this,
-						R.raw.metal_box_impact_hard2);
+						R.raw.key_sound);
 				mediaPlayer.start();
 			}
 
@@ -614,7 +620,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 
 			if (sharedPref.getBoolean("detach_sound", false)) {
 				mediaPlayer = MediaPlayer.create(this,
-						R.raw.metal_box_impact_hard2);
+						R.raw.key_sound);
 				mediaPlayer.start();
 			}
 
@@ -625,7 +631,8 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 
 	@Override
 	public void bad_connection(int error_number) {
-		stopService(mServiceStartIntent);
+		//stopService(mServiceStartIntent);
 		Toast.makeText(this, "Sistema Offline", Toast.LENGTH_SHORT).show();
+		connection_menu.setIcon(R.drawable.ic_action_network_wifi_red);
 	}
 }
