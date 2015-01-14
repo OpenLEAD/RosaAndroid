@@ -15,18 +15,18 @@ public interface MonitoringDisplay {
 
 	public static final String STATUS = "_STATUS";
 
-	void inductive_left(boolean value);
+	void inductive_left(boolean value, boolean status);
 
-	void inductive_right(boolean value);
+	void inductive_right(boolean value, boolean status);
 	
-	void inductive_key_attached(boolean value);
+	void inductive_key_attached(boolean value, boolean status);
 	
-	void inductive_key_detached(boolean value);
+	void inductive_key_detached(boolean value, boolean status);
 
-	void inclination_body(double value);
+	void inclination_body(double value, boolean status);
 
-	void pressure(float value);
+	void pressure(float value, boolean status);
 	
-	void bad_connection(int error_number);
+	void end_connection();
 
 }

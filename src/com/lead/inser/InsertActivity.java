@@ -31,6 +31,12 @@ import com.lead.rosa.SettingsActivity;
 
 public class InsertActivity extends Activity implements MonitoringDisplay {
 
+	@Override
+	protected void onDestroy() {
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(Monitorreceiver);
+		super.onDestroy();
+	}
+
 	private MenuItem connection_menu;
 
 	@Override
@@ -142,8 +148,9 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 								e.printStackTrace();
 							}
 							stopService(mServiceStartIntent);
+							connection_status = ConnectionStatus.BAD;
+							connection_menu.setIcon(R.drawable.ic_action_network_wifi_yellow);
 							startService(mServiceStartIntent);
-							connection_menu.setIcon(R.drawable.ic_action_network_wifi_green);
 						}
 					});
 
@@ -167,7 +174,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 	}
 
 	public static final float STD_PRESSURE = 100000;
-	public static final float PRESSURE_TO_DEPTH = 1/100000;
+	public static final float PRESSURE_TO_DEPTH = 1 / 100000;
 	private static final int EPSLON_PRESSURE = 1000;
 	private float pressure;
 	private float pressure_offset;
@@ -184,10 +191,19 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 	private ImageView desengate_fig;
 	private ImageView desengatado_btn;
 	private ImageView desengatado_fig;
-	private int inductive_keyvalue;
-	private final int ATTACHED = 2;
-	private final int DETACHING = 1;
-	private final int DETACHED = 0;
+
+	private enum KeyStatus {
+		DETACHED, DETACHING, ATTACHED
+	}
+
+	private KeyStatus inductive_keyvalue;
+
+	private enum ConnectionStatus {
+		GOOD, BAD, DEAD
+	}
+
+	private ConnectionStatus connection_status;
+
 	private ImageView inductive_right;
 	private boolean inductive_rightvalue;
 	private ImageView inductive_left;
@@ -200,6 +216,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 	private float align_max;
 	private int depth_limit;
 	private boolean too_deep;
+	private int bad_sensor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -229,7 +246,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 		inductive_rightvalue = false;
 		inductive_left = (ImageView) findViewById(R.id.inductive_left);
 		inductive_leftvalue = false;
-		inductive_keyvalue = 0;
+		inductive_keyvalue = KeyStatus.DETACHED;
 
 		Monitorreceiver = new RockDataReceiver(this);
 		IntentFilter mStatusIntentFilter = new IntentFilter(
@@ -247,7 +264,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 		mServiceStartIntent.putExtra("url", url);
 
 		mServiceStartIntent.putExtra(INDUCTIVE_LEFT,
-				"bus1/ports/inductive_left/read.");
+				"bus1/ports/inductive_left/read");
 		mServiceStartIntent.putExtra(INDUCTIVE_RIGHT,
 				"bus1/ports/inductive_right/read");
 		mServiceStartIntent.putExtra(INDUCTIVE_KEY_ATTACHED,
@@ -268,8 +285,6 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 			}
 
 		});
-		
-		
 
 	}
 
@@ -295,11 +310,18 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 		depth_limit = sharedPref.getInt("depth_limit", 30);
 		pressure_offset = sharedPref.getFloat("pressure_offset", STD_PRESSURE);
 		liftbeam_offset = sharedPref.getFloat("liftbeam_offset", 0);
+		connection_status = ConnectionStatus.BAD;
+		bad_sensor = 0;
 		startService(mServiceStartIntent);
 	}
 
 	@Override
-	public void inductive_right(boolean value) {
+	public void inductive_right(boolean value, boolean status) {
+		if (!status) {
+			bad_sensor += 1;
+			return;
+		}
+
 		if (inductive_rightvalue ^ value) {
 
 			if (inductive_rightvalue = value) {
@@ -339,8 +361,8 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 							.getDefaultSharedPreferences(this);
 
 					if (sharedPref.getBoolean("claw_success_sound", true)) {
-						mediaPlayer = MediaPlayer.create(this,
-								R.raw.grab_sound);
+						mediaPlayer = MediaPlayer
+								.create(this, R.raw.grab_sound);
 						mediaPlayer.start();
 					}
 				}
@@ -386,7 +408,11 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 	}
 
 	@Override
-	public void inclination_body(double value) {
+	public void inclination_body(double value, boolean status) {
+		if (!status) {
+			bad_sensor += 1;
+			return;
+		}
 
 		float inc = (float) Math.toDegrees(value) - liftbeam_offset;
 
@@ -421,7 +447,12 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 	}
 
 	@Override
-	public void inductive_left(boolean value) {
+	public void inductive_left(boolean value, boolean status) {
+		if (!status) {
+			bad_sensor += 1;
+			return;
+		}
+
 		if (inductive_leftvalue ^ value) {
 
 			if (inductive_leftvalue = value) {
@@ -462,8 +493,8 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 							.getDefaultSharedPreferences(this);
 
 					if (sharedPref.getBoolean("claw_success_sound", true)) {
-						mediaPlayer = MediaPlayer.create(this,
-								R.raw.grab_sound);
+						mediaPlayer = MediaPlayer
+								.create(this, R.raw.grab_sound);
 						mediaPlayer.start();
 					}
 				}
@@ -508,7 +539,11 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 	}
 
 	@Override
-	public void pressure(float value) {
+	public void pressure(float value, boolean status) {
+		if (!status) {
+			bad_sensor += 1;
+			return;
+		}
 
 		if (pressure < pressure_offset * 1.002
 				&& value >= pressure_offset * 1.002) {
@@ -541,7 +576,8 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 					mediaPlayer.start();
 				}
 			}
-		} else if (depth < (depth_limit - EPSLON_PRESSURE*PRESSURE_TO_DEPTH) && too_deep) {
+		} else if (depth < (depth_limit - EPSLON_PRESSURE * PRESSURE_TO_DEPTH)
+				&& too_deep) {
 			too_deep = false;
 			pressure_value.setTextColor(getResources().getColor(R.color.white));
 		}
@@ -549,8 +585,13 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 	}
 
 	@Override
-	public void inductive_key_attached(boolean value) {
-		if (!(value ^ inductive_keyvalue == ATTACHED))
+	public void inductive_key_attached(boolean value, boolean status) {
+		if (!status) {
+			bad_sensor += 1;
+			return;
+		}
+
+		if (!(value ^ inductive_keyvalue == KeyStatus.ATTACHED))
 			return;
 
 		SharedPreferences sharedPref = PreferenceManager
@@ -564,12 +605,11 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 			desengate_btn.setImageResource(R.drawable.btn_desengate_inativo);
 
 			if (sharedPref.getBoolean("attach_sound", false)) {
-				mediaPlayer = MediaPlayer.create(this,
-						R.raw.key_sound);
+				mediaPlayer = MediaPlayer.create(this, R.raw.key_sound);
 				mediaPlayer.start();
 			}
 
-			inductive_keyvalue = ATTACHED;
+			inductive_keyvalue = KeyStatus.ATTACHED;
 		} else {
 			engate_fig.setImageResource(R.drawable.chave_sombra);
 			engate_btn.setImageResource(R.drawable.btn_engate_inativo);
@@ -578,19 +618,23 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 			desengate_btn.setImageResource(R.drawable.btn_desengate_ativo);
 
 			if (sharedPref.getBoolean("detach_sound", false)) {
-				mediaPlayer = MediaPlayer.create(this,
-						R.raw.key_sound);
+				mediaPlayer = MediaPlayer.create(this, R.raw.key_sound);
 				mediaPlayer.start();
 			}
 
-			inductive_keyvalue = DETACHING;
+			inductive_keyvalue = KeyStatus.DETACHING;
 		}
 
 	}
 
 	@Override
-	public void inductive_key_detached(boolean value) {
-		if (!(value ^ inductive_keyvalue == DETACHED))
+	public void inductive_key_detached(boolean value, boolean status) {
+		if (!status) {
+			bad_sensor += 1;
+			return;
+		}
+
+		if (!(value ^ inductive_keyvalue == KeyStatus.DETACHED))
 			return;
 
 		SharedPreferences sharedPref = PreferenceManager
@@ -604,12 +648,11 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 			desengate_btn.setImageResource(R.drawable.btn_desengate_inativo);
 
 			if (sharedPref.getBoolean("detached_sound", true)) {
-				mediaPlayer = MediaPlayer.create(this,
-						R.raw.key_sound);
+				mediaPlayer = MediaPlayer.create(this, R.raw.key_sound);
 				mediaPlayer.start();
 			}
 
-			inductive_keyvalue = DETACHED;
+			inductive_keyvalue = KeyStatus.DETACHED;
 		} else {
 			desengatado_fig.setImageResource(R.drawable.chave_sombra);
 			desengatado_btn
@@ -619,20 +662,55 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 			desengate_btn.setImageResource(R.drawable.btn_desengate_ativo);
 
 			if (sharedPref.getBoolean("detach_sound", false)) {
-				mediaPlayer = MediaPlayer.create(this,
-						R.raw.key_sound);
+				mediaPlayer = MediaPlayer.create(this, R.raw.key_sound);
 				mediaPlayer.start();
 			}
 
-			inductive_keyvalue = DETACHING;
+			inductive_keyvalue = KeyStatus.DETACHING;
 		}
 
 	}
 
 	@Override
-	public void bad_connection(int error_number) {
-		//stopService(mServiceStartIntent);
-		Toast.makeText(this, "Sistema Offline", Toast.LENGTH_SHORT).show();
-		connection_menu.setIcon(R.drawable.ic_action_network_wifi_red);
+	public void end_connection() {
+		
+		if (bad_sensor == 0 && connection_status != ConnectionStatus.GOOD){
+			connection_status = ConnectionStatus.GOOD;
+			connection_menu.setIcon(R.drawable.ic_action_network_wifi_green);
+			bad_sensor = 0;
+			Toast.makeText(this, "Sistema Online", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		if (bad_sensor > 0 && connection_status == ConnectionStatus.GOOD){
+			connection_status = ConnectionStatus.BAD;
+			connection_menu.setIcon(R.drawable.ic_action_network_wifi_yellow);
+			bad_sensor = 0;
+			return;
+		}
+
+		if (bad_sensor == 6) {
+			bad_sensor = 0;
+			
+			if(connection_status == ConnectionStatus.DEAD)
+				return;
+			
+			connection_status = ConnectionStatus.DEAD;
+			
+//			main_handler.postDelayed(new Runnable() {
+//				public void run() {
+//					if(connection_status == ConnectionStatus.DEAD)
+//					stopService(mServiceStartIntent);
+//				}
+//			}, 5000);
+			
+			Toast.makeText(this, "Sistema Offline", Toast.LENGTH_SHORT).show();
+			connection_menu.setIcon(R.drawable.ic_action_network_wifi_red);
+			return;
+		}
+		
+		bad_sensor = 0;
+
+		
 	}
 }
