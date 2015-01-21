@@ -174,7 +174,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 	}
 
 	public static final float STD_PRESSURE = 100000;
-	public static final float PRESSURE_TO_DEPTH = 1 / 100000;
+	public static final float PRESSURE_TO_DEPTH = 1 / 10000;
 	private static final int EPSLON_PRESSURE = 1000;
 	private float pressure;
 	private float pressure_offset;
@@ -556,7 +556,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 
 		}
 
-		float depth = (value - pressure_offset) / 100000;
+		float depth = (value - pressure_offset) * PRESSURE_TO_DEPTH;
 
 		pressure_value.setText(String.format("%.1f m", depth));
 
