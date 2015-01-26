@@ -174,7 +174,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 	}
 
 	public static final float STD_PRESSURE = 100000;
-	public static final float PRESSURE_TO_DEPTH = 1 / 10000;
+	public static final float PRESSURE_TO_DEPTH = 1 / 10000f;
 	private static final int EPSLON_PRESSURE = 1000;
 	private float pressure;
 	private float pressure_offset;
@@ -408,45 +408,6 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 	}
 
 	@Override
-	public void inclination_body(double value, boolean status) {
-		if (!status) {
-			bad_sensor += 1;
-			return;
-		}
-
-		float inc = (float) Math.toDegrees(value) - liftbeam_offset;
-
-		level.animate().rotation(inc).setDuration(200).start();
-		liftbeam.animate().rotation(inc).setDuration(200).start();
-
-		inc = Math.abs(inc);
-
-		txt_level.setText(String.format("%.1f°", inc));
-
-		if (inc > align_max && level.getTag().equals("green")) {
-
-			SharedPreferences sharedPref = PreferenceManager
-					.getDefaultSharedPreferences(this);
-
-			if (sharedPref.getBoolean("align_sound", true)) {
-				mediaPlayer = MediaPlayer.create(this, R.raw.warning_sound);
-				mediaPlayer.start();
-			}
-
-			level.setBackgroundColor(0xFFFF4444);
-			txt_level.setTextColor(0xFFFF4444);
-			level.setTag("red");
-		}
-
-		if (inc < align_max && level.getTag().equals("red")) {
-			level.setBackgroundColor(0xFF41E020);
-			txt_level.setTextColor(0xFF41E020);
-			level.setTag("green");
-		}
-
-	}
-
-	@Override
 	public void inductive_left(boolean value, boolean status) {
 		if (!status) {
 			bad_sensor += 1;
@@ -539,18 +500,57 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 	}
 
 	@Override
+	public void inclination_body(double value, boolean status) {
+		if (!status) {
+			bad_sensor += 1;
+			return;
+		}
+
+		float inc = (float) Math.toDegrees(value) - liftbeam_offset;
+
+		level.animate().rotation(inc).setDuration(200).start();
+		liftbeam.animate().rotation(inc).setDuration(200).start();
+
+		inc = Math.abs(inc);
+
+		txt_level.setText(String.format("%.1f°", inc));
+
+		if (inc > align_max && level.getTag().equals("green")) {
+
+			SharedPreferences sharedPref = PreferenceManager
+					.getDefaultSharedPreferences(this);
+
+			if (sharedPref.getBoolean("align_sound", true)) {
+				mediaPlayer = MediaPlayer.create(this, R.raw.warning_sound);
+				mediaPlayer.start();
+			}
+
+			level.setBackgroundColor(0xFFFF4444);
+			txt_level.setTextColor(0xFFFF4444);
+			level.setTag("red");
+		}
+
+		if (inc < align_max && level.getTag().equals("red")) {
+			level.setBackgroundColor(0xFF41E020);
+			txt_level.setTextColor(0xFF41E020);
+			level.setTag("green");
+		}
+
+	}
+
+	@Override
 	public void pressure(float value, boolean status) {
 		if (!status) {
 			bad_sensor += 1;
 			return;
 		}
 
-		if (pressure < pressure_offset * 1.002
-				&& value >= pressure_offset * 1.002) {
+		if (pressure < pressure_offset - EPSLON_PRESSURE
+				&& value >= pressure_offset - EPSLON_PRESSURE) {
 			still.setVisibility(View.GONE);
 			pressure_value.setVisibility(View.VISIBLE);
-		} else if (pressure > pressure_offset * 1.001
-				&& value <= pressure_offset * 1.001) {
+		} else if (pressure > pressure_offset
+				&& value <= pressure_offset) {
 			still.setVisibility(View.VISIBLE);
 			pressure_value.setVisibility(View.GONE);
 
