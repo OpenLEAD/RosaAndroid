@@ -99,8 +99,8 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 		case R.id.action_settings:
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-			alert.setTitle("Novo endereço IP");
-			alert.setMessage("Endereço IP:");
+			alert.setTitle("Novo endereï¿½o IP");
+			alert.setMessage("Endereï¿½o IP:");
 
 			// Set an EditText view to get user input
 			final EditText input = new EditText(this);
@@ -139,7 +139,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 								new AlertDialog.Builder(getBaseContext())
 										.setTitle("IP errado")
 										.setMessage(
-												"O IP digitado possuí caracteres inválidos.")
+												"O IP digitado possuï¿½ caracteres invï¿½lidos.")
 										.setNeutralButton("Fechar", null)
 										.setIcon(
 												android.R.drawable.ic_dialog_alert)
@@ -259,7 +259,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 		SharedPreferences sharedPref = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		String url = sharedPref.getString("url",
-				"http://192.168.1.75:9292/api/tasks/localhost/");
+				"http://192.168.1.75:9292/api/tasks/*/");
 
 		mServiceStartIntent.putExtra("url", url);
 
@@ -513,7 +513,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 
 		inc = Math.abs(inc);
 
-		txt_level.setText(String.format("%.1f°", inc));
+		txt_level.setText(String.format("%.1fï¿½", inc));
 
 		if (inc > align_max && level.getTag().equals("green")) {
 
