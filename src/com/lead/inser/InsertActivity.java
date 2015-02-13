@@ -75,11 +75,13 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 							editor.putFloat("liftbeam_offset", liftbeam_offset);
 							editor.putFloat("pressure_offset", pressure_offset);
 							editor.commit();
-
-							if (still.getVisibility() == View.INVISIBLE) {
-								still.setVisibility(View.VISIBLE);
-								pressure_value.setVisibility(View.INVISIBLE);
-							}
+							
+							inclination_body(Math.toRadians(liftbeam_offset), true);
+							
+							still.setVisibility(View.VISIBLE);
+							pressure_value.setVisibility(View.GONE);
+							depth_status = DepthStatus.AIR;
+							
 						}
 					});
 
