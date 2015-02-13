@@ -99,14 +99,14 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 		case R.id.action_settings:
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-			alert.setTitle("Novo endere�o IP");
-			alert.setMessage("Endere�o IP:");
+			alert.setTitle("Novo endereço IP");
+			alert.setMessage("Endereço IP:");
 
 			// Set an EditText view to get user input
 			final EditText input = new EditText(this);
 			try {
 				input.setText(new URL(sharedPref.getString("url",
-						"http://192.168.1.75:9292/api/tasks/localhost/"))
+						"http://192.168.100.10:9292/api/tasks/*/"))
 						.getHost());
 			} catch (MalformedURLException e1) {
 				// TODO Auto-generated catch block
@@ -126,7 +126,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 								String url = "http://"
 										+ URLEncoder.encode(
 												ip.replace(" ", ""), "UTF-8")
-										+ ":9292/api/tasks/localhost/";
+										+ ":9292/api/tasks/*/";
 
 								mServiceStartIntent.putExtra("url", url);
 
@@ -139,7 +139,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 								new AlertDialog.Builder(getBaseContext())
 										.setTitle("IP errado")
 										.setMessage(
-												"O IP digitado possu� caracteres inv�lidos.")
+												"O IP digitado possui caracteres inválidos.")
 										.setNeutralButton("Fechar", null)
 										.setIcon(
 												android.R.drawable.ic_dialog_alert)
@@ -175,7 +175,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 
 	public static final float STD_PRESSURE = 100000;
 	public static final float PRESSURE_TO_DEPTH = 1 / 10000f;
-	private static final int EPSLON_PRESSURE = 1000;
+	public static final int EPSLON_PRESSURE = 1000;
 	private float pressure;
 	private float pressure_offset;
 	private View level;
@@ -191,6 +191,12 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 	private ImageView desengate_fig;
 	private ImageView desengatado_btn;
 	private ImageView desengatado_fig;
+	
+	private enum DepthStatus{
+		WATER, AIR, TOO_DEEP
+	}
+	
+	private DepthStatus depth_status;
 
 	private enum KeyStatus {
 		DETACHED, DETACHING, ATTACHED
@@ -247,6 +253,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 		inductive_left = (ImageView) findViewById(R.id.inductive_left);
 		inductive_leftvalue = false;
 		inductive_keyvalue = KeyStatus.DETACHED;
+		depth_status = DepthStatus.AIR;
 
 		Monitorreceiver = new RockDataReceiver(this);
 		IntentFilter mStatusIntentFilter = new IntentFilter(
@@ -259,7 +266,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 		SharedPreferences sharedPref = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		String url = sharedPref.getString("url",
-				"http://192.168.1.75:9292/api/tasks/*/");
+				"http://192.168.100.10:9292/api/tasks/*/");
 
 		mServiceStartIntent.putExtra("url", url);
 
@@ -513,7 +520,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 
 		inc = Math.abs(inc);
 
-		txt_level.setText(String.format("%.1f�", inc));
+		txt_level.setText(String.format("%.1f°", inc));
 
 		if (inc > align_max && level.getTag().equals("green")) {
 
@@ -545,14 +552,18 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 			return;
 		}
 
-		if (pressure < pressure_offset - EPSLON_PRESSURE
-				&& value >= pressure_offset - EPSLON_PRESSURE) {
+		if ( depth_status == DepthStatus.AIR && value >= pressure_offset + EPSLON_PRESSURE ) {
+			
 			still.setVisibility(View.GONE);
 			pressure_value.setVisibility(View.VISIBLE);
-		} else if (pressure > pressure_offset
-				&& value <= pressure_offset) {
+			depth_status = DepthStatus.WATER;
+			
+		} else if (depth_status == DepthStatus.WATER && value <= pressure_offset) {
+			
 			still.setVisibility(View.VISIBLE);
 			pressure_value.setVisibility(View.GONE);
+			depth_status = DepthStatus.AIR;
+			return;
 
 		}
 
@@ -560,25 +571,24 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 
 		pressure_value.setText(String.format("%.1f m", depth));
 
-		pressure = value;
+		if (depth > depth_limit && depth_status == DepthStatus.WATER) {
+			
+			depth_status = DepthStatus.TOO_DEEP;
+			pressure_value.setTextColor(getResources().getColor(
+					R.color.warningRed));
 
-		if (depth > depth_limit) {
-			if (!too_deep) {
-				too_deep = true;
-				pressure_value.setTextColor(getResources().getColor(
-						R.color.warningRed));
+			SharedPreferences sharedPref = PreferenceManager
+					.getDefaultSharedPreferences(this);
 
-				SharedPreferences sharedPref = PreferenceManager
-						.getDefaultSharedPreferences(this);
-
-				if (sharedPref.getBoolean("depth_sound", false)) {
-					mediaPlayer = MediaPlayer.create(this, R.raw.warning_sound);
-					mediaPlayer.start();
-				}
+			if (sharedPref.getBoolean("depth_sound", false)) {
+				mediaPlayer = MediaPlayer.create(this, R.raw.warning_sound);
+				mediaPlayer.start();
 			}
-		} else if (depth < (depth_limit - EPSLON_PRESSURE * PRESSURE_TO_DEPTH)
-				&& too_deep) {
-			too_deep = false;
+				
+		} else if ( depth_status == DepthStatus.TOO_DEEP && depth < (depth_limit - EPSLON_PRESSURE * PRESSURE_TO_DEPTH)) 
+		{
+			
+			depth_status = DepthStatus.WATER;
 			pressure_value.setTextColor(getResources().getColor(R.color.white));
 		}
 
