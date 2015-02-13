@@ -221,7 +221,6 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 	private Intent mServiceStartIntent;
 	private float align_max;
 	private int depth_limit;
-	private boolean too_deep;
 	private int bad_sensor;
 
 	@Override
@@ -230,7 +229,6 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 		setContentView(R.layout.activity_inser);
 
 		pressure = STD_PRESSURE;
-		too_deep = false;
 		level = findViewById(R.id.View3);
 
 		pressure_value = (TextView) findViewById(R.id.Profund_text);
@@ -552,6 +550,8 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 			return;
 		}
 
+		pressure = value;
+		
 		if ( depth_status == DepthStatus.AIR && value >= pressure_offset + EPSLON_PRESSURE ) {
 			
 			still.setVisibility(View.GONE);
