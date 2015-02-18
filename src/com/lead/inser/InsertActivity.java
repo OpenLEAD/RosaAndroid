@@ -694,7 +694,8 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 			return;
 		}
 		
-		if (bad_sensor > 0 && connection_status == ConnectionStatus.GOOD){
+		if ((bad_sensor > 0 && connection_status == ConnectionStatus.GOOD)
+				|| (connection_status == ConnectionStatus.DEAD && bad_sensor < 6)){
 			connection_status = ConnectionStatus.BAD;
 			connection_menu.setIcon(R.drawable.ic_action_network_wifi_yellow);
 			bad_sensor = 0;
