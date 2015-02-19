@@ -60,7 +60,7 @@ public class InsertActivity extends Activity implements MonitoringDisplay {
 			AlertDialog.Builder alert_zero = new AlertDialog.Builder(this);
 
 			alert_zero.setTitle("Configurar tara");
-			alert_zero.setMessage("Usar os valores atuais como posicao zero?");
+			alert_zero.setMessage("Usar os valores atuais como posição zero?");
 
 			alert_zero.setPositiveButton("Ok",
 					new DialogInterface.OnClickListener() {

@@ -45,7 +45,7 @@ public class DepthPicker extends DialogPreference {
 			persistInt(depth);
 		}
 
-		setSummary("O limite seguro de profundidate est· configurado para "
+		setSummary("O limite seguro de profundidate est√° configurado para "
 				+ String.valueOf(depth) + "m.");
 
 		super.onSetInitialValue(restorePersistedValue, defaultValue);
@@ -56,7 +56,7 @@ public class DepthPicker extends DialogPreference {
 		if (positiveResult) {
 			depth = depthPick.getValue();
 			persistInt(depth);
-			setSummary("O limite seguro de profundidate est· configurado para "
+			setSummary("O limite seguro de profundidate est√° configurado para "
 					+ String.valueOf(depth) + "m.");
 		}
 		super.onDialogClosed(positiveResult);

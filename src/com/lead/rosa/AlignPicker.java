@@ -45,8 +45,8 @@ public class AlignPicker extends DialogPreference {
 			persistInt(angle);
 		}
 
-		setSummary("O limite seguro para inclinação da viga pescadora está configurado para "
-				+ String.valueOf(angle) + "°.");
+		setSummary("O limite seguro para inclinaÃ§Ã£o da viga pescadora estÃ¡ configurado para "
+				+ String.valueOf(angle) + "Â°.");
 
 		super.onSetInitialValue(restorePersistedValue, defaultValue);
 	}
@@ -56,8 +56,8 @@ public class AlignPicker extends DialogPreference {
 		if (positiveResult) {
 			angle = alignPick.getValue();
 			persistInt(angle);
-			setSummary("O limite seguro para inclinação da viga pescadora está configurado para "
-					+ String.valueOf(angle) + "°.");
+			setSummary("O limite seguro para inclinaÃ§Ã£o da viga pescadora estÃ¡ configurado para "
+					+ String.valueOf(angle) + "Â°.");
 		}
 		super.onDialogClosed(positiveResult);
 	}
